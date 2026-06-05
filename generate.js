@@ -625,8 +625,8 @@ function engagement() {
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
-  txt(s, "Retainer + success fees + carried interest", 3.6, 2.06, 5.4, 0.4, { font: HEAD, size: 14, bold: true, color: C.white });
-  txt(s, "Aligned to lot-sale value created — not a flat consulting check.", 3.6, 2.46, 5.6, 0.35, { font: BODY, size: 10, color: C.cream });
+  txt(s, "$15K/mo + expenses, then success fees + carry", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13.5, bold: true, color: C.white });
+  txt(s, "Aligned to lot-sale value created — not a flat consulting check.", 3.6, 2.46, 5.85, 0.35, { font: BODY, size: 10, color: C.cream });
   txt(s, "Skin in\nthe game", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
   const cols = [
