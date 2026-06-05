@@ -635,15 +635,16 @@ function engagement() {
     { w: 5.93, color: C.plum, size: 9.5, lh: 12 },
   ];
   const rows = [
-    ["Advisory retainer", "$15–25K / mo", "Funds entitlement strategy, underwriting & capital sourcing during an initial term (creditable against success fees)"],
+    ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term; creditable against success fees"],
+    ["Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately, not netted from fees"],
     ["Capital placement fee", "1% debt · 2–3% equity", "Success fee if and when we place debt or equity for a parcel"],
     ["Carried interest", "Co-GP promote", "Share of value created on lot sales; JAL co-invests its own capital alongside"],
   ];
-  table(s, ML, 3.15, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.78 });
+  table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
   callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);
   s.addNotes(
-    "Directly answers Bob's comp question. He said skin in the game; I agree and propose a hybrid — " +
-    "modest, creditable retainer + carry on lot-sale value. All numbers are opening positions."
+    "Directly answers Bob's comp question. Hybrid: $15K/mo creditable retainer (≈ one day/week) + expenses " +
+    "reimbursed, then placement fees and the promote. Lead with alignment — the retainer is a floor, the carry is the prize."
   );
 }
 
