@@ -1,0 +1,12 @@
+{
+  "name": "accountable-equity-proposal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JAL Strategies — Development & Capital Partnership proposal deck for Robert A. Connell / Accountable Equity",
+  "scripts": {
+    "build": "node generate.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^3.12.0"
+  }
+}
