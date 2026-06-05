@@ -20,6 +20,9 @@
  */
 
 const pptxgen = require("pptxgenjs");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const nodePath = require("path");
 
 // ----- Design tokens -------------------------------------------------------
 const C = {
@@ -41,11 +44,31 @@ const ML = 0.5;
 const CW = 12.33;
 const TOTAL = 15;
 
-const DECK_LABEL = "QUEENSTOWN HARBOR  |  CONFIDENTIAL";
+const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
   "JAL Strategies  |  Justin A. Levine, Founder & CEO  |  jlevine@jalstrategies.com";
 
-const pptx = new pptxgen();
+// ----- Render-agnostic deck proxy ------------------------------------------
+// Content/helpers call the familiar pptxgenjs slide API (addText / addShape /
+// addNotes / background). We record those calls and replay them to BOTH a
+// pptxgenjs deck and a pdfkit document, so the .pptx and .pdf stay identical.
+class SlideProxy {
+  constructor() { this.calls = []; this.background = undefined; this.notes = ""; }
+  addText(text, opts) { this.calls.push(["text", text, opts]); }
+  addShape(type, opts) { this.calls.push(["shape", type, opts]); }
+  addNotes(t) { this.notes = t; }
+}
+class Deck {
+  constructor() { this.slides = []; this.props = {}; }
+  defineLayout() {}
+  set layout(v) {}
+  set author(v) { this.props.author = v; }
+  set company(v) { this.props.company = v; }
+  set title(v) { this.props.title = v; }
+  addSlide() { const s = new SlideProxy(); this.slides.push(s); return s; }
+}
+
+const pptx = new Deck();
 pptx.defineLayout({ name: "W16", width: PAGE_W, height: PAGE_H });
 pptx.layout = "W16";
 pptx.author = "JAL Strategies";
@@ -121,7 +144,7 @@ const SRC = {
 
 // Small hyperlinked source footnote, just above the footer rule.
 function footnote(s, y, items) {
-  const runs = [{ text: "Sources:  ", options: { color: C.plum, bold: true } }];
+  const runs = [{ text: "Sources (own research; subject to change & confirmation):  ", options: { color: C.plum, bold: true } }];
   items.forEach((it, i) => {
     if (i) runs.push({ text: "    ·    ", options: { color: C.mauve } });
     runs.push({ text: it.label, options: { color: C.aubergine, underline: true, hyperlink: { url: it.url, tooltip: it.label } } });
@@ -225,12 +248,15 @@ function cover() {
   txt(s,
     "Queenstown, Maryland  ·  Eastern Shore  ·  36 holes on the Chesapeake",
     0.75, 5.52, 12.0, 0.35, { font: BODY, size: 12, color: C.mauve });
+  txt(s,
+    "Preliminary discussion document — not a final proposal or commitment. Figures compiled from public sources and independent research; subject to change and confirmation in further conversations.",
+    0.75, 6.0, 11.6, 0.6, { font: BODY, size: 9.5, color: C.slate, lh: 12, valign: "top" });
 
   rect(s, 0, 6.9, PAGE_W, 0.6, C.aubergine);
   txt(s, "PREPARED FOR ROBERT A. CONNELL, CFP   |   ACCOUNTABLE EQUITY · CAPITAL H6",
     0.5, 7.0, 9.6, 0.4, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 1.5 });
-  txt(s, "JUNE 2026  |  CONFIDENTIAL", 9.7, 7.0, 3.13, 0.4, {
-    font: HEAD, size: 9, bold: true, color: C.mauve, spc: 1.5, align: "right",
+  txt(s, "JUNE 2026  ·  DISCUSSION DRAFT", 9.7, 7.0, 3.13, 0.4, {
+    font: HEAD, size: 9, bold: true, color: C.mauve, spc: 1.2, align: "right",
   });
   s.addNotes(
     "Cover. Scoped to the land around Queenstown Harbor — the asset Capital H6 just acquired. " +
@@ -530,7 +556,7 @@ function capitalAccess() {
     page: 10,
   });
   const cards = [
-    ["$14M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
+    ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
     ["$19.5M", "Debt already secured", "Lender committed on the same transaction"],
     ["Mid-20s%", "Target development IRR", "Investors expect mid-to-high 20s out-of-state"],
     ["$6.1B", "Career transaction volume", "Across debt & equity — Blackstone + Levcor"],
@@ -547,7 +573,7 @@ function capitalAccess() {
       "The bar for out-of-state development is mid-to-high-20s IRR — the fresh land basis helps clear it.",
     ]);
   s.addNotes(
-    "Bob's inbound was about capital access. Lead with the live Houston deal ($14M / $19.5M) as proof I close, " +
+    "Bob's inbound was about capital access. Lead with the live Houston deal ($15M / $19.5M) as proof I close, " +
     "then the network. Even capital-light, this is why I'm useful."
   );
 }
@@ -784,5 +810,111 @@ whyJAL();
 path();
 thankYou();
 
-const OUT = "JAL_Queenstown_Harbor_Proposal.pptx";
-pptx.writeFile({ fileName: OUT }).then((f) => console.log("Wrote", f));
+const OUT_PPTX = "JAL_Queenstown_Harbor_Proposal.pptx";
+const OUT_PDF = "JAL_Queenstown_Harbor_Proposal.pdf";
+
+// ----- Renderer: PPTX (replay recorded calls to pptxgenjs) -----------------
+function renderPptx(deck) {
+  const p = new pptxgen();
+  p.defineLayout({ name: "W16", width: PAGE_W, height: PAGE_H });
+  p.layout = "W16";
+  p.author = deck.props.author;
+  p.company = deck.props.company;
+  p.title = deck.props.title;
+  deck.slides.forEach((S) => {
+    const s = p.addSlide();
+    if (S.background) s.background = S.background;
+    S.calls.forEach(([kind, a, b]) => {
+      if (kind === "shape") s.addShape(a, b);
+      else if (kind === "text") s.addText(a, b);
+    });
+    if (S.notes) s.addNotes(S.notes);
+  });
+  return p.writeFile({ fileName: OUT_PPTX });
+}
+
+// ----- Renderer: PDF (replay the same calls to pdfkit) ---------------------
+const PT = 72; // inches -> points
+function loadFonts(doc) {
+  const dir = nodePath.join(__dirname, "fonts");
+  const reg = (key, file, builtin) => {
+    const fp = nodePath.join(dir, file);
+    if (fs.existsSync(fp)) { doc.registerFont(key, fp); return key; }
+    return builtin; // fall back to a PDF base font if the TTF is missing
+  };
+  return {
+    MontReg: reg("MontReg", "Montserrat-Regular.ttf", "Helvetica"),
+    MontBold: reg("MontBold", "Montserrat-Bold.ttf", "Helvetica-Bold"),
+    DMReg: reg("DMReg", "DMSans-Regular.ttf", "Helvetica"),
+    DMBold: reg("DMBold", "DMSans-Bold.ttf", "Helvetica-Bold"),
+  };
+}
+const pickFont = (F, face, bold) =>
+  face === HEAD ? (bold ? F.MontBold : F.MontReg) : (bold ? F.DMBold : F.DMReg);
+const normMargin = (m) =>
+  m == null ? [0, 0, 0, 0] : typeof m === "number" ? [m, m, m, m] : m; // [t,r,b,l]
+
+function drawRect(doc, o) {
+  const x = o.x * PT, y = o.y * PT, w = o.w * PT, h = o.h * PT;
+  if (o.fill && o.fill.color) doc.rect(x, y, w, h).fill("#" + o.fill.color);
+  if (o.line && o.line.color && o.line.type !== "none")
+    doc.rect(x, y, w, h).lineWidth(o.line.width || 1).stroke("#" + o.line.color);
+}
+function drawText(doc, F, text, o) {
+  const m = normMargin(o.margin);
+  const x = o.x * PT + m[3];
+  const w = o.w * PT - m[1] - m[3];
+  const yb = o.y * PT + m[0];
+  const hb = o.h * PT - m[0] - m[2];
+  const size = o.fontSize || 11;
+  if (Array.isArray(text)) return drawRich(doc, F, text, o, x, w, yb, hb, size);
+  doc.font(pickFont(F, o.fontFace, o.bold)).fontSize(size).fillColor("#" + (o.color || "000000"));
+  const opts = { width: w, align: o.align || "left", characterSpacing: o.charSpacing || 0, lineBreak: o.wrap !== false };
+  if (o.lineSpacing) opts.lineGap = Math.max(0, o.lineSpacing - size);
+  if (o.underline) opts.underline = true;
+  if (o.hyperlink && o.hyperlink.url) opts.link = o.hyperlink.url;
+  let ty = yb;
+  const va = o.valign || "middle";
+  if (va !== "top") {
+    const th = doc.heightOfString(text, { width: w, characterSpacing: opts.characterSpacing, lineGap: opts.lineGap || 0 });
+    const slack = Math.max(0, hb - th);
+    ty = yb + (va === "bottom" ? slack : slack / 2);
+  }
+  doc.text(text, x, ty, opts);
+}
+function drawRich(doc, F, runs, o, x, w, yb, hb, size) {
+  const ty = yb + Math.max(0, (hb - size) / 2);
+  runs.forEach((run, i) => {
+    const ro = run.options || {};
+    doc.font(pickFont(F, o.fontFace, ro.bold)).fontSize(size).fillColor("#" + (ro.color || o.color || "000000"));
+    const opts = { continued: i < runs.length - 1, characterSpacing: o.charSpacing || 0, underline: !!ro.underline };
+    if (ro.hyperlink && ro.hyperlink.url) opts.link = ro.hyperlink.url;
+    if (i === 0) doc.text(run.text, x, ty, opts);
+    else doc.text(run.text, opts);
+  });
+}
+function renderPdf(deck) {
+  return new Promise((resolve, reject) => {
+    const sz = [PAGE_W * PT, PAGE_H * PT];
+    const doc = new PDFDocument({ size: sz, margin: 0, autoFirstPage: false,
+      info: { Title: deck.props.title, Author: deck.props.author } });
+    const stream = fs.createWriteStream(OUT_PDF);
+    doc.pipe(stream);
+    const F = loadFonts(doc);
+    deck.slides.forEach((S) => {
+      doc.addPage({ size: sz, margin: 0 });
+      doc.rect(0, 0, sz[0], sz[1]).fill("#" + ((S.background && S.background.color) || "FFFFFF"));
+      S.calls.forEach(([kind, a, b]) => {
+        if (kind === "shape" && a === "rect") drawRect(doc, b);
+        else if (kind === "text") drawText(doc, F, a, b);
+      });
+    });
+    doc.end();
+    stream.on("finish", resolve);
+    stream.on("error", reject);
+  });
+}
+
+Promise.all([renderPptx(pptx), renderPdf(pptx)])
+  .then(() => console.log("Wrote", OUT_PPTX, "and", OUT_PDF))
+  .catch((e) => { console.error(e); process.exit(1); });

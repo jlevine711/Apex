@@ -10,20 +10,34 @@ Queenstown Harbor is the 36-hole Eastern Shore waterfront resort that
 Accountable Equity / VIVÂMEE acquired via **Capital H6** in May 2026 (with The
 Golf Club at South River, ~$25M, from The Brick Companies).
 
-The deck is generated with [PptxGenJS](https://gitbrent.github.io/PptxGenJS/)
-and reuses the visual design system of JAL's *Republic Square* deck:
+It reuses the visual design system of JAL's *Republic Square* deck:
 
 - 16:9 (13.33" × 7.5")
 - Montserrat (headings) / DM Sans (body)
 - Palette — navy `#0B163C`, aubergine `#3A243A`, plum `#6B5A6B`, mauve `#C4B8C4`,
   cream `#F4F2ED`, slate `#8C9BB5`
 
+> **Status: discussion draft — not final.** Framed throughout as a preliminary
+> discussion document; figures are compiled from public sources and independent
+> research and are subject to change and confirmation in further conversations.
+
 ## Build
 
 ```bash
 npm install
-npm run build      # writes JAL_Queenstown_Harbor_Proposal.pptx
+npm run build      # writes both the .pptx and the .pdf
 ```
+
+`generate.js` records the deck once (a small render-agnostic proxy) and replays
+it to **both** [PptxGenJS](https://gitbrent.github.io/PptxGenJS/) and
+[PDFKit](https://pdfkit.org/), so the two outputs stay identical:
+
+- `JAL_Queenstown_Harbor_Proposal.pptx`
+- `JAL_Queenstown_Harbor_Proposal.pdf`
+
+The PDF embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
+[SIL OFL](https://openfontlicense.org/)); if those files are absent it falls
+back to Helvetica.
 
 ## Slides
 
