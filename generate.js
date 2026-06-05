@@ -104,6 +104,31 @@ function callout(s, text, y = 6.5) {
   });
 }
 
+// Source map — verified public sources for the figures used in the deck.
+const SRC = {
+  cr:    { label: "Club + Resort Business", url: "https://clubandresortbusiness.com/vivamee-hospitality-acquires-two-maryland-golf-locations-for-25m/" },
+  eoa:   { label: "Eye On Annapolis", url: "https://www.eyeonannapolis.net/2026/05/vivamee-hospitality-acquires-golf-club-at-south-river-queenstown-harbor-in-25m-deal/" },
+  qh:    { label: "qhgolf.com", url: "https://qhgolf.com/golf/" },
+  qhwho: { label: "qhgolf.com/who-we-are", url: "https://qhgolf.com/who-we-are/" },
+  gd:    { label: "GolfDigest", url: "https://www.golfdigest.com/courses/md/queenstown-harbor-the-river" },
+  vm:    { label: "VisitMaryland", url: "https://www.visitmaryland.org/listing/sports/queenstown-harbor-golf-links" },
+  qac:   { label: "Queen Anne's Co. — Critical Area", url: "https://www.qac.org/398/Chesapeake-Bay-Critical-Area" },
+  dnr:   { label: "MD DNR — Critical Area", url: "https://dnr.maryland.gov/criticalarea/Pages/compliance.aspx" },
+  dist:  { label: "distance-cities.com", url: "https://www.distance-cities.com/distance-queenstown-md-to-washington-dc" },
+  sr:    { label: "golfclubsr.com", url: "https://www.golfclubsr.com/faq" },
+  ft:    { label: "foretee.com", url: "https://foretee.com/courses/maryland/edgewater/usa/the-golf-club-at-south-river/6925" },
+};
+
+// Small hyperlinked source footnote, just above the footer rule.
+function footnote(s, y, items) {
+  const runs = [{ text: "Sources:  ", options: { color: C.plum, bold: true } }];
+  items.forEach((it, i) => {
+    if (i) runs.push({ text: "    ·    ", options: { color: C.mauve } });
+    runs.push({ text: it.label, options: { color: C.aubergine, underline: true, hyperlink: { url: it.url, tooltip: it.label } } });
+  });
+  s.addText(runs, { x: ML, y, w: CW, h: 0.26, fontFace: BODY, fontSize: 7, color: C.plum, align: "left", valign: "middle", margin: 0 });
+}
+
 function statCard(s, x, y, num, label, sub, o = {}) {
   const w = o.w || 6.0;
   const auto = num.length > 9 ? 19 : num.length > 6 ? 22 : 27;
@@ -239,6 +264,7 @@ function opportunity() {
       "Minutes over the Bay Bridge to Annapolis; ~1 hour to D.C. & Baltimore.",
       "Golf and water frontage on the Chesapeake commands a premium — and sells quickly.",
     ]);
+  footnote(s, 6.66, [SRC.cr, SRC.eoa]);
   s.addNotes(
     "Anchor on the fresh acquisition (H6 — Bob's fund). The land bank is additive to the hospitality: " +
     "monetize the developable acreage the golf doesn't need, capital-light."
@@ -271,6 +297,7 @@ function theAsset() {
       "36 holes of championship golf since 1991 — traffic, brand and demand already here.",
       "198 acres under permanent conservation — stewardship credibility, and an envelope to plan around.",
     ]);
+  footnote(s, 6.66, [SRC.qh, SRC.gd, SRC.vm]);
   s.addNotes(
     "Shows the homework Bob asked for. Accurate specs: River (par 72, 7,096) + Lakes (par 71, 6,569), " +
     "Lindsay Ervin, River House & Tavern, cottages. Conservation acreage is real — flag it honestly."
@@ -303,6 +330,7 @@ function theLandBank() {
       "Golf-frontage and water-view lots command premium pricing and faster absorption.",
       "Recycle proceeds into the broader Capital H6 program — including South River.",
     ]);
+  footnote(s, 6.66, [SRC.cr, SRC.qhwho]);
   s.addNotes(
     "Honest framing: 870+ ac, minus 198 ac conservation (plus wetlands/course), leaves the developable " +
     "envelope — the first diligence item. The land bank is upside on top of an operating resort."
@@ -377,6 +405,7 @@ function mathLand() {
     "≈ $29M illustrative net from ~140 developable acres — net of conservation & Critical Area, additive to the resort.",
     ML + 0.2, 5.9, CW - 0.4, 0.5,
     { font: HEAD, size: 12, bold: true, color: C.white, align: "center" });
+  footnote(s, 6.62, [SRC.qhwho, SRC.qac, SRC.dnr]);
   s.addNotes(
     "Now derived, not guessed: 700 gross − 198 conservation − ~300 golf complex − ~60 Critical Area/wetlands " +
     "≈ 140 developable acres. Maryland's Chesapeake Bay Critical Area (1,000-ft zone, ~1 unit/20 ac in RCA) is the " +
@@ -411,6 +440,7 @@ function whySells() {
   ];
   table(s, ML, 2.15, cols, ["Driver", "Detail", "Why it lifts value"], rows, { rowH: 0.62 });
   callout(s, "Demand is already here — we're entitling supply to meet it, not creating a market.", 6.5);
+  footnote(s, 5.82, [SRC.dist, SRC.qac]);
   s.addNotes(
     "Mirrors the reference competitive-supply slide. Eastern-Shore + Bay-Bridge demand, Chesapeake scarcity, " +
     "builder appetite, and the fresh $25M basis all support lot sales."
@@ -443,6 +473,7 @@ function southRiver() {
       "The Bistro, fitness, simulator lounge & range already drive non-golf revenue.",
       "Assess limited parcel entitlement without disturbing the member experience.",
     ]);
+  footnote(s, 6.66, [SRC.sr, SRC.ft, SRC.cr]);
   s.addNotes(
     "South River is the second H6 asset — but it's a built-out private club (165 ac, 8 lakes, 14 protected " +
     "areas, 600+ families). Frame honestly: membership + events upside first, land only where diligence supports it."

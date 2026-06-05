@@ -59,7 +59,11 @@ npm run build      # writes JAL_Queenstown_Harbor_Proposal.pptx
   protected areas, clubhouse (The Bistro), fitness, simulator lounge, range
 
 Sources: qhgolf.com, VisitMaryland.org, Club + Resort Business, Connect CRE,
-Eye On Annapolis, GolfDigest, golfclubsr.com.
+Eye On Annapolis, GolfDigest, golfclubsr.com, foretee.com, Queen Anne's County,
+MD DNR.
+
+Each data slide (2, 3, 4, 6, 7, 8) carries a small **hyperlinked source
+footnote** just above the footer, citing where its figures come from.
 
 ## Accuracy note
 
