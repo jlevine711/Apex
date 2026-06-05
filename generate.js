@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 15;
+const TOTAL = 16;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -140,6 +140,8 @@ const SRC = {
   dist:  { label: "distance-cities.com", url: "https://www.distance-cities.com/distance-queenstown-md-to-washington-dc" },
   sr:    { label: "golfclubsr.com", url: "https://www.golfclubsr.com/faq" },
   ft:    { label: "foretee.com", url: "https://foretee.com/courses/maryland/edgewater/usa/the-golf-club-at-south-river/6925" },
+  tbc:   { label: "The Brick Companies", url: "https://www.thebrickcompanies.com/legacy" },
+  w2g:   { label: "Where2Golf", url: "https://www.where2golf.com/usa-mid-atlantic/queenstown-harbor-river-course/" },
 };
 
 // Small hyperlinked source footnote, just above the footer rule.
@@ -330,14 +332,49 @@ function theAsset() {
   );
 }
 
-// ====================================================== SLIDE 4 — THE LAND BANK
+// ====================================================== SLIDE 4 — PROVENANCE & HISTORY
+function provenance() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "PROVENANCE & HISTORY",
+    title: "Four centuries to a 36-hole resort.",
+    desc: "A colonial land grant, a dairy farm, and ~30 years of Brick Companies stewardship — the land you now own through Capital H6 carries real provenance, and a conservation ethic to plan around.",
+    page: 4,
+  });
+  const cols = [
+    { w: 1.7, font: HEAD, bold: true, color: C.aubergine, size: 12 },
+    { w: 3.1, font: HEAD, bold: true, color: C.navy, size: 10.5 },
+    { w: 7.53, color: C.plum, size: 9.5, lh: 12 },
+  ];
+  const rows = [
+    ["1600s", "“My Lord’s Gift”", "Surveyor Henry deCoursey is granted the tract by Cecil Calvert, 2nd Lord Baltimore — remembered for centuries as the “thumb grant” (the property’s own lore)."],
+    ["1970s", "Dairy farm acquired", "The Brick Companies — a private Maryland firm founded 1892 — buys the working farm to open its land and wildlife to the public as golf."],
+    ["1991", "River Course opens", "Lindsay Ervin’s design debuts along the Chester River; a construction-era archaeological dig preserves millions of artifacts (Maryland Historical Trust)."],
+    ["1996", "36 holes complete", "The Lakes Course is added — reaching today’s two-course, par-72 / par-71 waterfront resort on the Chesapeake."],
+    ["May 2026", "Capital H6 acquires", "Accountable Equity / VIVÂMEE buy Queenstown Harbor (with South River) for ~$25M from The Brick Companies — your fresh, low basis."],
+  ];
+  table(s, ML, 2.12, cols, ["Era", "Milestone", "What happened"], rows, { rowH: 0.66 });
+  rect(s, ML, 5.86, CW, 0.5, C.navy);
+  txt(s,
+    "Four centuries of provenance, ~30 years of Brick Companies stewardship — now a freshly acquired, low-basis asset under Capital H6.",
+    ML + 0.2, 5.86, CW - 0.4, 0.5,
+    { font: HEAD, size: 12, bold: true, color: C.white, align: "center" });
+  footnote(s, 6.6, [SRC.qhwho, SRC.tbc, SRC.w2g, SRC.cr]);
+  s.addNotes(
+    "Credibility / story slide. Provenance reinforces two things Bob cares about: the land’s premium narrative " +
+    "(colonial grant → conservation stewardship) and the fresh low basis (just transferred to H6). " +
+    "The thumb-grant story is the club’s own telling — present it as lore, not surveyed fact."
+  );
+}
+
+// ====================================================== SLIDE 5 — THE LAND BANK
 function theLandBank() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE LAND BANK",
     title: "The upside is the land around the golf.",
     desc: "The resort operates; the value-creation is entitling the developable, non-conservation acreage and selling finished lots to homebuilders. Capital-light, and additive to the hospitality.",
-    page: 4,
+    page: 5,
   });
   const cards = [
     ["870+ ac", "Portfolio land", "Across Queenstown + South River"],
@@ -363,14 +400,14 @@ function theLandBank() {
   );
 }
 
-// ======================================================== SLIDE 5 — PLAYBOOK
+// ======================================================== SLIDE 6 — PLAYBOOK
 function playbook() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE PLAYBOOK",
     title: "Four moves that turn land into cash.",
     desc: "Capital-light by sequence — soft costs first, then builders carry the infrastructure and construction risk, and the proceeds recycle into the next parcel.",
-    page: 5,
+    page: 6,
   });
   const items = [
     ["01", "Entitle", "Approvals for lots",
@@ -401,14 +438,14 @@ function playbook() {
   );
 }
 
-// ========================================== SLIDE 6 — THE MATH (ILLUSTRATIVE)
+// ========================================== SLIDE 7 — THE MATH (ILLUSTRATIVE)
 function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
     title: "From 700 acres to the developable envelope.",
     desc: "Built down from real constraints — the recorded conservation easement, the golf footprint, and Maryland's Chesapeake Bay Critical Area. Developable acreage is survey-dependent; figures illustrative.",
-    page: 6,
+    page: 7,
   });
   const cols = [
     { w: 3.2, font: HEAD, bold: true, color: C.navy, size: 10 },
@@ -439,14 +476,14 @@ function mathLand() {
   );
 }
 
-// ===================================================== SLIDE 7 — WHY IT SELLS
+// ===================================================== SLIDE 8 — WHY IT SELLS
 function whySells() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "WHY IT SELLS",
     title: "These lots sell — here's why.",
     desc: "Course and water frontage, Bay Bridge proximity, and builder appetite for entitled lots all push price and absorption. We're meeting demand that already exists.",
-    page: 7,
+    page: 8,
   });
   const cols = [
     { w: 3.0, font: HEAD, bold: true, color: C.navy, size: 10.5 },
@@ -473,14 +510,14 @@ function whySells() {
   );
 }
 
-// ===================================================== SLIDE 8 — SOUTH RIVER
+// ===================================================== SLIDE 9 — SOUTH RIVER
 function southRiver() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE SISTER ASSET",
     title: "South River — the Annapolis-side anchor.",
     desc: "Acquired in the same $25M Capital H6 deal: an established 18-hole private club near Annapolis with 600+ member families — a membership and events engine, and the next place to run the playbook.",
-    page: 8,
+    page: 9,
   });
   const cards = [
     ["18 holes", "Private club (Brian Ault, 1996)", "Edgewater, MD — on the South River"],
@@ -506,14 +543,14 @@ function southRiver() {
   );
 }
 
-// ============================================== SLIDE 9 — CAPITAL: LIGHT
+// ============================================== SLIDE 10 — CAPITAL: LIGHT
 function capitalLight() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL STRATEGY",
     title: "Capital-light by design.",
     desc: "The land bank barely needs capital: soft costs to entitle, then builders fund the horizontal work and buy the lots. Cash in is small; proceeds come fast.",
-    page: 9,
+    page: 10,
   });
   statCard(s, ML, 2.05, "$1–3M", "Soft costs to start",
     "Entitlements, planning & approvals", { w: 6.05 });
@@ -546,14 +583,14 @@ function capitalLight() {
   );
 }
 
-// =============================================== SLIDE 9 — CAPITAL ACCESS
+// =============================================== SLIDE 11 — CAPITAL ACCESS
 function capitalAccess() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 10,
+    page: 11,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -578,14 +615,14 @@ function capitalAccess() {
   );
 }
 
-// =============================================== SLIDE 10 — THE STRUCTURE
+// =============================================== SLIDE 12 — THE STRUCTURE
 function structure() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 11,
+    page: 12,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -639,14 +676,14 @@ function structure() {
   );
 }
 
-// ==================================== SLIDE 11 — ENGAGEMENT & COMPENSATION
+// ==================================== SLIDE 13 — ENGAGEMENT & COMPENSATION
 function engagement() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 12,
+    page: 13,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -674,14 +711,14 @@ function engagement() {
   );
 }
 
-// =============================================== SLIDE 12 — WHY JAL (BIO)
+// =============================================== SLIDE 14 — WHY JAL (BIO)
 function whyJAL() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 13,
+    page: 14,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -722,14 +759,14 @@ function whyJAL() {
   );
 }
 
-// =============================================== SLIDE 13 — THE PATH
+// =============================================== SLIDE 15 — THE PATH
 function path() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 14,
+    page: 15,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -774,7 +811,7 @@ function path() {
   );
 }
 
-// =============================================== SLIDE 14 — THANK YOU
+// =============================================== SLIDE 16 — THANK YOU
 function thankYou() {
   const s = pptx.addSlide();
   s.background = { color: C.navy };
@@ -797,6 +834,7 @@ function thankYou() {
 cover();
 opportunity();
 theAsset();
+provenance();
 theLandBank();
 playbook();
 mathLand();
