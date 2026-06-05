@@ -1,8 +1,10 @@
-# Accountable Equity — Development & Capital Partnership Proposal
+# Accountable Equity — Golf-Course Land Development Partnership
 
 A pitch deck prepared for **Robert A. Connell, CFP** (Apex Financial Advisors /
 Accountable Equity), proposing **JAL Strategies** as development & capital partner
-for Accountable Equity's land holdings.
+for the **land bank around Accountable Equity's golf courses** — entitle the
+developable acreage, sell finished lots to homebuilders (builders fund the
+horizontal infrastructure), and recycle the proceeds. Led by Queenstown Harbor.
 
 The deck is generated programmatically with [PptxGenJS](https://gitbrent.github.io/PptxGenJS/)
 and reuses the visual design system of JAL's *Republic Square* deck:
@@ -22,15 +24,15 @@ npm run build      # writes JAL_Accountable_Equity_Proposal.pptx
 ## Slides
 
 1. Cover
-2. The Opportunity — the 1,000-acre land bank
-3. The Portfolio — asset-by-asset inventory
-4. The Playbook — four monetization levers
-5. Flagship — Queenstown Harbor
-6. The Math — land / lot monetization *(illustrative)*
-7. The Math — hospitality overflow capture *(illustrative)*
-8. Capital Strategy — debt-led, land-as-equity, phased
+2. The Opportunity — sell the land around the courses you own
+3. The Land — golf-course parcels (Queenstown, LBI National, pipeline)
+4. The Playbook — entitle → sell to builders → golf premium → recycle
+5. Flagship — Queenstown Harbor (700 acres near D.C.)
+6. The Math — lot entitlement value *(illustrative)*
+7. Why It Sells — golf frontage, metro demand, builder appetite
+8. Capital — capital-light by design (soft costs in; builders fund infra)
 9. Capital Access — JAL's debt & equity network
-10. The Structure — the development vehicle
+10. The Structure — the land-development vehicle
 11. Engagement & Compensation — hybrid, skin in the game
 12. Why JAL — Justin A. Levine
 13. The Path — diligence → July meeting → mandate
