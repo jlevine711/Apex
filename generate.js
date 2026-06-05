@@ -1,19 +1,22 @@
 /**
- * JAL Strategies — Golf-Course Land Development Partnership
- * Prepared for Robert A. Connell, CFP (Apex Financial Advisors / Accountable Equity)
+ * JAL Strategies — Queenstown Harbor Land Development Partnership
+ * Prepared for Robert A. Connell, CFP (Apex Financial Advisors / Accountable Equity · Capital H6)
  *
- * Scope: the developable LAND BANK around Accountable Equity's golf courses —
- * entitle the acreage, sell finished lots to homebuilders (builders fund the
- * horizontal infrastructure), recycle proceeds. Led by Queenstown Harbor.
+ * Scope: monetize the developable LAND around Queenstown Harbor — the 36-hole
+ * Eastern Shore resort that Accountable Equity / VIVÂMEE acquired via Capital H6
+ * (May 2026, with The Golf Club at South River, $25M, from The Brick Companies).
+ * Entitle the developable, non-conservation acreage and sell finished lots to
+ * homebuilders (builders fund horizontal infrastructure); recycle proceeds.
  *
  * Design system reverse-engineered from the JAL "Republic Square" pitch deck:
  *   - 16:9 (13.33" x 7.5"); Montserrat (headings) / DM Sans (body)
  *   - Palette: navy #0B163C, aubergine #3A243A, plum #6B5A6B,
  *     mauve #C4B8C4, cream #F4F2ED, slate #8C9BB5, white
  *
- * Content grounded in the 6/5/2026 Levine–Connell call (Plaud transcript).
- * Figures on "THE MATH" / capital slides are clearly labelled ILLUSTRATIVE —
- * to be recalibrated against Accountable Equity survey / entitlement data.
+ * Verified facts from public sources (qhgolf.com, VisitMaryland, Club+Resort
+ * Business, Eye On Annapolis, GolfDigest). Figures on the "THE MATH" slide are
+ * clearly labelled ILLUSTRATIVE — to be recalibrated against survey, conservation
+ * easement and entitlement data.
  */
 
 const pptxgen = require("pptxgenjs");
@@ -38,7 +41,7 @@ const ML = 0.5;
 const CW = 12.33;
 const TOTAL = 14;
 
-const DECK_LABEL = "ACCOUNTABLE EQUITY  |  CONFIDENTIAL";
+const DECK_LABEL = "QUEENSTOWN HARBOR  |  CONFIDENTIAL";
 const FOOTER_LEFT =
   "JAL Strategies  |  Justin A. Levine, Founder & CEO  |  jlevine@jalstrategies.com";
 
@@ -48,7 +51,7 @@ pptx.layout = "W16";
 pptx.author = "JAL Strategies";
 pptx.company = "JAL Strategies";
 pptx.title =
-  "Accountable Equity — Golf-Course Land Development Partnership (for Robert A. Connell)";
+  "Queenstown Harbor — Land Development Partnership (for Robert A. Connell)";
 
 // ----- Low-level helpers ---------------------------------------------------
 const rect = (s, x, y, w, h, color, opts = {}) =>
@@ -72,7 +75,6 @@ const txt = (s, text, x, y, w, h, o = {}) =>
     wrap: o.wrap !== false,
   });
 
-// Content-slide chrome: cream bg, header band, eyebrow/title/desc, footer.
 function chrome(s, { eyebrow, title, desc, page }) {
   s.background = { color: C.cream };
   rect(s, 0, 0, PAGE_W, 0.04, C.navy);
@@ -134,7 +136,6 @@ function sidePanel(s, x, y, w, h, heading, lead, items) {
   });
 }
 
-// Shape-grid table. colDefs: [{w, align, color, font, bold, size, lh}].
 function table(s, x, y, colDefs, header, rows, o = {}) {
   const rowH = o.rowH || 0.5;
   const headH = o.headH || 0.4;
@@ -183,32 +184,32 @@ function cover() {
   txt(s, "Disciplined Real Estate Investing, Development & Capital Formation",
     0.75, 1.0, 9.5, 0.3, { font: BODY, size: 11, color: C.slate });
 
-  txt(s, "ACCOUNTABLE", 0.72, 2.18, 12.2, 1.05, {
-    font: HEAD, size: 67, bold: true, color: C.white, spc: 1,
+  txt(s, "QUEENSTOWN", 0.72, 2.18, 12.2, 1.05, {
+    font: HEAD, size: 64, bold: true, color: C.white, spc: 1,
   });
-  txt(s, "EQUITY", 0.72, 3.12, 12.2, 1.05, {
-    font: HEAD, size: 67, bold: true, color: C.mauve, spc: 1,
+  txt(s, "HARBOR", 0.72, 3.12, 12.2, 1.05, {
+    font: HEAD, size: 64, bold: true, color: C.mauve, spc: 1,
   });
 
   hline(s, 0.78, 4.42, 3.5, C.slate, 0.03);
-  txt(s, "Golf-Course Land Development Partnership", 0.75, 4.58, 12.0, 0.45, {
+  txt(s, "Land Development & Lot-Monetization Partnership", 0.75, 4.58, 12.0, 0.45, {
     font: HEAD, size: 22, bold: true, color: C.white,
   });
-  txt(s, "Entitling and selling the residential land around the courses you already own",
+  txt(s, "Entitling and monetizing the developable land around the River & Lakes courses",
     0.75, 5.12, 12.0, 0.35, { font: BODY, size: 14, color: C.slate });
   txt(s,
-    "Queenstown Harbor  ·  LBI National  ·  700+ acres of golf-frontage land",
+    "Queenstown, Maryland  ·  Eastern Shore  ·  36 holes on the Chesapeake",
     0.75, 5.52, 12.0, 0.35, { font: BODY, size: 12, color: C.mauve });
 
   rect(s, 0, 6.9, PAGE_W, 0.6, C.aubergine);
-  txt(s, "PREPARED FOR ROBERT A. CONNELL, CFP   |   APEX FINANCIAL ADVISORS · ACCOUNTABLE EQUITY",
+  txt(s, "PREPARED FOR ROBERT A. CONNELL, CFP   |   ACCOUNTABLE EQUITY · CAPITAL H6",
     0.5, 7.0, 9.6, 0.4, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 1.5 });
   txt(s, "JUNE 2026  |  CONFIDENTIAL", 9.7, 7.0, 3.13, 0.4, {
     font: HEAD, size: 9, bold: true, color: C.mauve, spc: 1.5, align: "right",
   });
   s.addNotes(
-    "Cover. The discussion document Bob asked for on our 6/5 call — scoped to the land bank " +
-    "around the golf courses: entitle, sell lots to builders, recycle. Capital-light, JAL-led."
+    "Cover. Scoped to the land around Queenstown Harbor — the asset Capital H6 just acquired. " +
+    "Bob is a GP in H6, so this is squarely his lane: entitle the developable acreage, sell lots, recycle."
   );
 }
 
@@ -217,89 +218,115 @@ function opportunity() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE OPPORTUNITY",
-    title: "Sell the land around the courses you own.",
-    desc: "Bob — the fastest, lowest-risk money here is the developable land wrapped around the golf courses: entitle it, sell finished lots to homebuilders, recycle the proceeds.",
+    title: "You just bought it. Now monetize the land.",
+    desc: "Bob — Capital H6 just closed Queenstown Harbor. The resort runs itself; the upside is the developable land around the 36 holes — entitle it, sell lots to builders, recycle the proceeds.",
     page: 2,
   });
   const cards = [
-    ["700 ac", "At Queenstown Harbor", "3 courses · ~45 min to Annapolis & D.C."],
-    ["~175 ac", "Developable to lots", "Around the fairways (illustrative)"],
-    ["~350 lots", "Entitlement potential", "Sold to regional homebuilders (illustrative)"],
+    ["$25M", "Just acquired (May 2026)", "Queenstown + South River, via Capital H6"],
+    ["36 holes", "River & Lakes courses", "Waterfront resort on the Eastern Shore"],
+    ["870+ ac", "Across the two properties", "Waterfront + conservation land (to verify)"],
     ["Soft costs", "To begin", "Builders fund the horizontal infrastructure"],
   ];
   let cy = 2.05;
   cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
 
-  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "WHY THE LAND BANK FIRST",
-    "The equity is already in the ground — you own the land free and clear.",
+  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "WHY NOW",
+    "You own it free and clear — Capital H6 just closed the purchase.",
     [
+      "Fresh, low basis: $25M for two courses across 870+ acres — the land value is the upside.",
       "Builders fund sewer, roads and utilities — you carry approvals, not construction risk.",
-      "Golf frontage commands a premium — lots on a course sell faster and for more.",
-      "One town has offered to contribute land — the entitlement tailwinds are real.",
-      "Proceeds recycle — lot sales can seed the broader Accountable Equity program.",
+      "Minutes over the Bay Bridge to Annapolis; ~1 hour to D.C. & Baltimore.",
+      "Golf and water frontage on the Chesapeake commands a premium — and sells quickly.",
     ]);
   s.addNotes(
-    "Frame the land bank as the first move: owned land, builder-funded infrastructure, golf premium, " +
-    "town tailwinds. Capital-light and fast — exactly the play Bob leaned toward on the call."
+    "Anchor on the fresh acquisition (H6 — Bob's fund). The land bank is additive to the hospitality: " +
+    "monetize the developable acreage the golf doesn't need, capital-light."
   );
 }
 
-// ========================================================== SLIDE 3 — THE LAND
-function theLand() {
+// ========================================================== SLIDE 3 — THE ASSET
+function theAsset() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "THE LAND",
-    title: "Golf-course land, course by course.",
-    desc: "Each course already amenitizes the land around it. We entitle the developable acreage and sell finished lots — and the same playbook repeats on every course in the portfolio.",
+    eyebrow: "THE ASSET",
+    title: "Queenstown Harbor, by the numbers.",
+    desc: "A 36-hole waterfront destination on Maryland's Eastern Shore — acquired from The Brick Companies in May 2026, with established golf, an event venue and cottages already in place.",
     page: 3,
   });
-  const E = (t, color = C.navy) => ({ text: t, bold: true, color, font: HEAD });
-  const cols = [
-    { w: 2.5, font: HEAD, bold: true, color: C.navy, size: 10 },
-    { w: 2.0, color: C.plum, size: 9.5 },
-    { w: 3.6, color: C.navy, size: 9.5, lh: 11 },
-    { w: 4.23, color: C.navy, size: 9.5, lh: 11 },
+  const cards = [
+    ["River", "Course · par 72", "Lindsay Ervin design · 7,096 yds · opened 1991"],
+    ["Lakes", "Course · par 71", "Lindsay Ervin design · 6,569 yds · opened 1996"],
+    ["310", "Links Lane, Queenstown MD", "Chester River at the Chesapeake Bay"],
+    ["$25M", "Acquired with South River", "From The Brick Companies · via Capital H6"],
   ];
-  const rows = [
-    ["Queenstown Harbor", "Queenstown, MD", "700 ac · 3 courses · ~45 min to Annapolis / D.C.",
-      "Entitle & sell residential lots around the fairways; builder-funded infrastructure"],
-    ["LBI National Golf", "Long Beach Island, NJ", "Coastal golf in a high-barrier shore market",
-      "Scarce Jersey-Shore lots; premium entitled-lot sales"],
-    ["Recently acquired course", "Mid-Atlantic", "Newly added to the golf portfolio",
-      "Repeat the entitle-and-sell template on fresh acreage"],
-    [E("Across the portfolio"), E("MD · NJ", C.aubergine),
-      E("700+ developable acres around owned courses"),
-      E("One repeatable, capital-light playbook", C.aubergine)],
-  ];
-  table(s, ML, 2.05, cols, ["Course", "Location", "Setting", "Land-bank thesis"], rows,
-    { rowH: 0.82 });
-  callout(s,
-    "Start at Queenstown — the largest parcel, closest to D.C. — then repeat the template course by course.",
-    6.5);
+  let cy = 2.05;
+  cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
+
+  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "ALREADY IN PLACE",
+    "An operating resort — not a raw land play.",
+    [
+      "River House & Tavern — newly renovated wedding, event and corporate venue.",
+      "On-site cottages — existing overnight lodging and a hospitality base.",
+      "36 holes of championship golf since 1991 — traffic, brand and demand already here.",
+      "198 acres under permanent conservation — stewardship credibility, and an envelope to plan around.",
+    ]);
   s.addNotes(
-    "Keep it golf-only. Queenstown is the anchor (700 ac, 3 courses near D.C.); LBI National is the " +
-    "shore-scarcity play; the recently-acquired course is pipeline. Same template each time."
+    "Shows the homework Bob asked for. Accurate specs: River (par 72, 7,096) + Lakes (par 71, 6,569), " +
+    "Lindsay Ervin, River House & Tavern, cottages. Conservation acreage is real — flag it honestly."
   );
 }
 
-// ======================================================== SLIDE 4 — PLAYBOOK
+// ====================================================== SLIDE 4 — THE LAND BANK
+function theLandBank() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "THE LAND BANK",
+    title: "The upside is the land around the golf.",
+    desc: "The resort operates; the value-creation is entitling the developable, non-conservation acreage and selling finished lots to homebuilders. Capital-light, and additive to the hospitality.",
+    page: 4,
+  });
+  const cards = [
+    ["870+ ac", "Portfolio land", "Across Queenstown + South River"],
+    ["198 ac", "Under conservation", "Permanent easement at Queenstown — plan around it"],
+    ["Net", "Developable land", "Balance after conservation, wetlands & course (to verify)"],
+    ["Lots", "Entitle & sell", "Finished lots to regional homebuilders"],
+  ];
+  let cy = 2.05;
+  cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
+
+  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "THE THESIS",
+    "Monetize the land the golf doesn't need.",
+    [
+      "Identify developable parcels at the course edges — away from conservation, wetlands and play.",
+      "Entitle for residential; sell finished lots to builders who fund the horizontal work.",
+      "Golf-frontage and water-view lots command premium pricing and faster absorption.",
+      "Recycle proceeds into the broader Capital H6 program — including South River.",
+    ]);
+  s.addNotes(
+    "Honest framing: 870+ ac, minus 198 ac conservation (plus wetlands/course), leaves the developable " +
+    "envelope — the first diligence item. The land bank is upside on top of an operating resort."
+  );
+}
+
+// ======================================================== SLIDE 5 — PLAYBOOK
 function playbook() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE PLAYBOOK",
     title: "Four moves that turn land into cash.",
-    desc: "Capital-light by sequence — soft costs first, then builders carry the infrastructure and the construction risk, and the proceeds recycle into the next course.",
-    page: 4,
+    desc: "Capital-light by sequence — soft costs first, then builders carry the infrastructure and construction risk, and the proceeds recycle into the next parcel.",
+    page: 5,
   });
   const items = [
     ["01", "Entitle", "Approvals for lots",
       "Secure zoning and subdivision approvals for the developable acreage around the fairways."],
     ["02", "Sell to Builders", "Finished lots → homebuilders",
       "Sell entitled lots to regional builders and let them fund sewer, roads and utilities."],
-    ["03", "Golf Premium", "Frontage sells higher",
-      "Lots on or near a course command a premium and absorb faster than a comparable raw subdivision."],
-    ["04", "Recycle & Repeat", "Course by course",
-      "Roll proceeds into the next course's land bank — and seed the broader Accountable Equity program."],
+    ["03", "Golf & Water Premium", "Frontage sells higher",
+      "Lots on a course or with Chesapeake water views command a premium and absorb faster."],
+    ["04", "Recycle & Repeat", "Parcel by parcel",
+      "Roll proceeds into the next parcel — and seed the broader Capital H6 program."],
   ];
   const cardW = 2.94, gap = 0.18;
   let x = ML;
@@ -307,7 +334,7 @@ function playbook() {
     rect(s, x, 2.1, cardW, 4.1, C.navy);
     rect(s, x, 2.1, cardW, 0.1, C.aubergine);
     txt(s, num, x + 0.25, 2.35, cardW - 0.5, 0.9, { font: HEAD, size: 44, bold: true, color: C.mauve });
-    txt(s, head, x + 0.25, 3.35, cardW - 0.5, 0.4, { font: HEAD, size: 15, bold: true, color: C.white });
+    txt(s, head, x + 0.25, 3.35, cardW - 0.5, 0.4, { font: HEAD, size: 14, bold: true, color: C.white });
     txt(s, sub, x + 0.25, 3.78, cardW - 0.5, 0.3, { font: HEAD, size: 10, bold: true, color: C.slate, spc: 1 });
     hline(s, x + 0.25, 4.18, cardW - 0.5, C.aubergine, 0.02);
     txt(s, body, x + 0.25, 4.32, cardW - 0.5, 1.75, { font: BODY, size: 10.5, color: C.cream, lh: 14, valign: "top" });
@@ -315,51 +342,18 @@ function playbook() {
   });
   callout(s, "Move 01 is mostly soft costs — the fastest path to proof, and to first cash.", 6.5);
   s.addNotes(
-    "The sequencing IS the pitch: entitle (soft costs) → sell to builders (they fund infra) → " +
-    "golf premium → recycle. Matches Bob's 'let the developer handle the infrastructure.'"
+    "Sequencing IS the pitch: entitle (soft costs) → sell to builders (they fund infra) → golf/water " +
+    "premium → recycle. Matches Bob's 'let the developer handle the infrastructure.'"
   );
 }
 
-// ============================================== SLIDE 5 — FLAGSHIP: QUEENSTOWN
-function flagship() {
-  const s = pptx.addSlide();
-  chrome(s, {
-    eyebrow: "FLAGSHIP PARCEL",
-    title: "Queenstown Harbor — 700 acres near D.C.",
-    desc: "The anchor of the land bank: an established 36-hole destination with developable acreage around the courses and drive-to demand from Annapolis, Baltimore & Washington.",
-    page: 5,
-  });
-  const cards = [
-    ["700", "Acres owned", "36 holes already in the ground"],
-    ["~45 min", "To Annapolis", "≈ 90 min to D.C. & Baltimore metros"],
-    ["3", "Golf courses", "Established destination, existing traffic"],
-    ["Soft costs", "To begin", "Entitlement-led; minimal capital at risk in Phase 1"],
-  ];
-  let cy = 2.05;
-  cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
-
-  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "THE MOVE",
-    "Entitle residential lots around the existing courses and sell to a regional homebuilder.",
-    [
-      "Let the builder fund sewer, roads and infrastructure — we keep the upside, not the burden.",
-      "Golf-frontage lots near Annapolis & D.C. command a premium and absorb quickly.",
-      "Location pull is real — a recent week-long corporate buyout signals premium demand for the setting.",
-      "Capital-light entry: Phase 1 is approvals and lot sales, not vertical construction.",
-    ]);
-  s.addNotes(
-    "Queenstown is the wedge: 700 owned acres, established golf, an hour from D.C. " +
-    "Lead with entitlement + lot sales. The corporate-buyout note is the Palantir week Bob mentioned — " +
-    "kept generic; name it if Bob's comfortable."
-  );
-}
-
-// ========================================== SLIDE 6 — THE MATH: LAND (ILLUS.)
+// ========================================== SLIDE 6 — THE MATH (ILLUSTRATIVE)
 function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
     title: "How lot entitlement creates value.",
-    desc: "Illustrative only — to be calibrated with Accountable Equity's survey, entitlement status and absorption data. The method matters here, not the placeholder numbers.",
+    desc: "Illustrative only — developable acreage is subject to survey, conservation easements and entitlement. The method matters here, not the placeholder numbers.",
     page: 6,
   });
   const cols = [
@@ -369,22 +363,22 @@ function mathLand() {
     { w: 3.0, color: C.aubergine, bold: true, font: HEAD, size: 11, align: "right" },
   ];
   const rows = [
-    ["Developable land", "~25% of 700 ac to lots", "700 × 0.25", "175 ac"],
-    ["Lot yield", "~2.0 lots / acre", "175 × 2.0", "350 lots"],
-    ["Finished lot price", "$120,000 / lot", "350 × $120,000", "$42.0M"],
-    ["Less land-dev / soft costs", "~30% of gross", "× 0.70", "$29.4M"],
+    ["Developable land", "net of conservation & course", "to verify by survey", "~150 ac"],
+    ["Lot yield", "~2.0 lots / acre", "150 × 2.0", "300 lots"],
+    ["Finished lot price", "$150,000 / lot (water/golf)", "300 × $150,000", "$45.0M"],
+    ["Less land-dev / soft costs", "~30% of gross", "× 0.70", "$31.5M"],
     [{ text: "NET LOT PROCEEDS (illustrative)", bold: true, font: HEAD, color: C.navy },
-      { text: "Queenstown alone", color: C.plum }, "", "≈ $29M"],
+      { text: "Queenstown developable parcels", color: C.plum }, "", "≈ $31M"],
   ];
   table(s, ML, 2.15, cols, ["Step", "Assumption", "Calculation", "= Value"], rows, { rowH: 0.62 });
   rect(s, ML, 5.85, CW, 0.55, C.navy);
   txt(s,
-    "≈ $29M net proceeds from Queenstown lots alone — recyclable into LBI National and the next course.",
+    "≈ $31M illustrative net from lots — net of conservation, additive to the resort, and recyclable into South River.",
     ML + 0.2, 5.85, CW - 0.4, 0.55,
     { font: HEAD, size: 12, bold: true, color: C.white, align: "center" });
   s.addNotes(
-    "Be explicit these are illustrative placeholders. The method: developable acres × lot yield × " +
-    "price, net of land-dev cost. Swap in real survey / absorption data. Builders typically fund the horizontal."
+    "Be explicit these are placeholders, deliberately conservative on developable acreage (~150 of 870) " +
+    "to respect conservation/wetlands. Method: dev acres × lot yield × price, net of land-dev. Builders fund horizontal."
   );
 }
 
@@ -393,8 +387,8 @@ function whySells() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "WHY IT SELLS",
-    title: "Golf-course lots sell — here's why.",
-    desc: "Course frontage, drive-to metro demand and builder appetite for entitled lots all push price and absorption. We're meeting demand that already exists.",
+    title: "These lots sell — here's why.",
+    desc: "Course and water frontage, Bay Bridge proximity, and builder appetite for entitled lots all push price and absorption. We're meeting demand that already exists.",
     page: 7,
   });
   const cols = [
@@ -403,22 +397,21 @@ function whySells() {
     { w: 4.53, color: C.plum, size: 9.5, lh: 11 },
   ];
   const rows = [
-    ["Golf-course frontage", "Lots on or adjacent to an established course",
+    ["Golf & water frontage", "Lots on the River / Lakes courses & Chester River",
       "Premium pricing and faster absorption vs. a raw subdivision"],
-    ["Queenstown location", "~45 min to Annapolis; ~90 to D.C. & Baltimore",
-      "Commuter + second-home demand from three metros"],
-    ["LBI National scarcity", "Limited developable land on the Jersey Shore",
-      "High barriers → durable, premium shore-market lot values"],
+    ["Bay Bridge location", "Minutes to Annapolis; ~1 hr to D.C. & Baltimore",
+      "Commuter, second-home and weekend demand from three metros"],
+    ["Chesapeake scarcity", "Limited new waterfront-adjacent lots on the Shore",
+      "High barriers → durable, premium lot values"],
     ["Builder appetite", "Regional homebuilders want entitled / finished lots",
       "They pay to avoid entitlement risk — and fund the infrastructure"],
-    ["Owned land basis", "Acreage already on the balance sheet",
-      "No land-acquisition cost to recover — margin starts higher"],
+    ["Fresh owned basis", "$25M for 870+ ac just closed", "Low land basis → development margin starts higher"],
   ];
   table(s, ML, 2.15, cols, ["Driver", "Detail", "Why it lifts value"], rows, { rowH: 0.62 });
   callout(s, "Demand is already here — we're entitling supply to meet it, not creating a market.", 6.5);
   s.addNotes(
-    "Mirrors the reference's competitive-supply slide. Point: golf frontage + metro demand + builder " +
-    "appetite + owned-land basis = lots that sell. Land development is a good business when the strategy is right."
+    "Mirrors the reference competitive-supply slide. Eastern-Shore + Bay-Bridge demand, Chesapeake scarcity, " +
+    "builder appetite, and the fresh $25M basis all support lot sales."
   );
 }
 
@@ -434,7 +427,7 @@ function capitalLight() {
   statCard(s, ML, 2.05, "$1–3M", "Soft costs to start",
     "Entitlements, planning & approvals", { w: 6.05 });
   statCard(s, ML, 3.12, "Land", "= the equity",
-    "Owned acreage carries the deal — no acquisition cost", { w: 6.05 });
+    "Acreage held by Capital H6 — already acquired", { w: 6.05 });
 
   rect(s, 7.0, 2.05, 5.83, 2.02, C.navy);
   rect(s, 7.0, 2.05, 0.12, 2.02, C.aubergine);
@@ -450,15 +443,15 @@ function capitalLight() {
     { w: 3.83, color: C.plum, size: 9 },
   ];
   const rows = [
-    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "JAL + Bob's dev co (skin in the game)"],
+    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "JAL + H6 dev co (skin in the game)"],
     ["Phase 2 — Builder takedown", "Horizontal + lot purchase", "~$0 to you", "Regional homebuilder funds & buys"],
-    ["Phase 3 — Recycle", "Proceeds redeployed", "Self-funding", "Next course / broader AE program"],
+    ["Phase 3 — Recycle", "Proceeds redeployed", "Self-funding", "Next parcel / South River / H6 program"],
   ];
   table(s, ML, 4.3, cols, ["Phase", "Approach", "Your capital", "Who funds"], rows, { rowH: 0.5 });
   callout(s, "Minimal capital at risk — and the land bank seeds everything that comes after.", 6.5);
   s.addNotes(
-    "Reframed from the $100M hospitality line. For the land bank, the honest story is capital-light: " +
-    "soft costs in, builders fund infra and buy lots. Bob said as much — they may only need soft costs."
+    "For the land bank the honest story is capital-light: soft costs in, builders fund infra and buy lots. " +
+    "Land is already owned via H6 — no acquisition capital needed."
   );
 }
 
@@ -486,11 +479,11 @@ function capitalAccess() {
       "Family offices (Texas) — my core equity base; they'll travel for the right risk-adjusted return.",
       "Institutional equity — Angelo Gordon and peer private-equity relationships.",
       "National debt — Goldman Sachs (met two weeks ago; national platform, Dallas team) + specialty lenders.",
-      "The bar for out-of-state development is mid-to-high-20s IRR — owned land helps the deal clear it.",
+      "The bar for out-of-state development is mid-to-high-20s IRR — the fresh land basis helps clear it.",
     ]);
   s.addNotes(
-    "Bob's inbound was literally about capital access. Lead with the live Houston deal ($14M / $19.5M) " +
-    "as proof I close, then the network. Even capital-light, this is why I'm useful."
+    "Bob's inbound was about capital access. Lead with the live Houston deal ($14M / $19.5M) as proof I close, " +
+    "then the network. Even capital-light, this is why I'm useful."
   );
 }
 
@@ -499,29 +492,29 @@ function structure() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE STRUCTURE",
-    title: "A vehicle: your dev co + JAL.",
-    desc: "Formalize the development entity you're standing up — scoped to the course-adjacent land. Accountable Equity contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
+    title: "A vehicle inside the H6 platform.",
+    desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
     page: 10,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
-  txt(s, "ACCOUNTABLE LAND PARTNERS, LLC", ML + 0.35, 2.06, 8.5, 0.4, { font: HEAD, size: 17, bold: true, color: C.white });
+  txt(s, "QUEENSTOWN HARBOR LAND PARTNERS, LLC", ML + 0.35, 2.06, 8.7, 0.4, { font: HEAD, size: 16, bold: true, color: C.white });
   txt(s, "Working name", ML + 0.35, 2.46, 8.5, 0.3, { font: BODY, size: 10, color: C.mauve });
-  txt(s, "Land-development vehicle for the golf-course acreage", 9.2, 1.95, 3.6, 0.86,
+  txt(s, "Land-development vehicle under Capital H6", 9.4, 1.95, 3.4, 0.86,
     { font: BODY, size: 10, color: C.mauve, align: "right", valign: "middle", margin: [2, 10, 2, 6] });
 
   const px = [ML, 4.62, 8.74], pw = 3.93;
   rect(s, px[0], 3.0, pw, 2.85, C.white, { line: { color: C.hair, width: 0.75 } });
   txt(s, "LAND = EQUITY", px[0] + 0.25, 3.18, pw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
   txt(s, "Owned", px[0] + 0.25, 3.5, pw - 0.5, 0.6, { font: HEAD, size: 30, bold: true, color: C.navy });
-  txt(s, "Course-adjacent acreage contributed at appraised value forms the equity base — already owned, no acquisition cost.",
+  txt(s, "Developable acreage contributed by Capital H6 at appraised value — just acquired, at a low basis.",
     px[0] + 0.25, 4.2, pw - 0.5, 1.5, { font: BODY, size: 10.5, color: C.plum, lh: 14, valign: "top" });
 
   rect(s, px[1], 3.0, pw, 2.85, C.white, { line: { color: C.hair, width: 0.75 } });
   txt(s, "CAPITAL STACK", px[1] + 0.25, 3.18, pw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
   txt(s, "Illustrative", px[1] + 0.25, 3.46, pw - 0.5, 0.25, { font: BODY, size: 9, color: C.plum });
   const stack = [
-    ["Land equity (AE)", "Contributed"],
+    ["Land equity (H6)", "Contributed"],
     ["Builder-funded infra", "Horizontal"],
     ["Cash equity (JAL + LP)", "Soft costs"],
   ];
@@ -537,21 +530,21 @@ function structure() {
   rect(s, px[2], 3.0, 0.1, 2.85, C.aubergine);
   txt(s, "ROLES", px[2] + 0.25, 3.18, pw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: C.mauve, spc: 2 });
   const roles = [
-    ["Josh McCallan / AE", "Land owner"],
-    ["Bob Connell", "Development lead"],
+    ["Josh McCallen / VIVÂMEE", "Resort owner-operator"],
+    ["Bob Connell / Capital H6", "Development lead (H6 GP)"],
     ["JAL Strategies", "Capital, entitlement & sales — co-invests"],
   ];
   let ry = 3.62;
   roles.forEach(([a, b]) => {
-    txt(s, a, px[2] + 0.25, ry, pw - 0.5, 0.28, { font: HEAD, size: 11, bold: true, color: C.white });
+    txt(s, a, px[2] + 0.25, ry, pw - 0.5, 0.28, { font: HEAD, size: 10.5, bold: true, color: C.white });
     txt(s, b, px[2] + 0.25, ry + 0.27, pw - 0.5, 0.34, { font: BODY, size: 9.5, color: C.cream, lh: 11 });
     ry += 0.72;
   });
 
   callout(s, "JAL takes skin in the game — co-investing alongside, not just advising.", 6.5);
   s.addNotes(
-    "Formalize Bob's dev co as a land JV. AE contributes course-adjacent land = equity; JAL co-invests " +
-    "and runs entitlement + capital + lot sales. Builders fund the horizontal."
+    "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL co-invests " +
+    "and runs entitlement + capital + lot sales. VIVÂMEE keeps operating the resort."
   );
 }
 
@@ -584,8 +577,8 @@ function engagement() {
   table(s, ML, 3.15, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.78 });
   callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);
   s.addNotes(
-    "Directly answers Bob's comp question. He said his preference is skin in the game; I agree and propose " +
-    "a hybrid — modest, creditable retainer + carry on lot-sale value. All numbers are opening positions."
+    "Directly answers Bob's comp question. He said skin in the game; I agree and propose a hybrid — " +
+    "modest, creditable retainer + carry on lot-sale value. All numbers are opening positions."
   );
 }
 
@@ -643,22 +636,22 @@ function path() {
   chrome(s, {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
-    desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcel.",
+    desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
     page: 13,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
-      ["Review the courses (web, maps & visits)",
-       "You send parcel data (survey, entitlement status, zoning, encumbrances)",
-       "JAL refines the lot-monetization model per course",
-       "Draft engagement & vehicle terms"]],
-    ["STAGE 2", "IN PERSON", "July 2026", "Philadelphia / Yardley",
-      ["Meet in person while I'm in the NY / Philly area",
-       "Walk the priority parcels (Queenstown / LBI)",
-       "Align on first course, capital plan & comp",
-       "Meet Josh & key stakeholders"]],
+      ["Confirm developable vs. conservation acreage (survey + easements)",
+       "Pull entitlement & zoning status (Queen Anne's County)",
+       "Model lot yield & absorption for the developable parcels",
+       "Confirm the H6 ownership & contribution mechanics"]],
+    ["STAGE 2", "IN PERSON", "July 2026", "Walk the site",
+      ["Meet while I'm in the NY / Philly area — train down or drive to the Shore",
+       "Walk Queenstown (River House & the course edges)",
+       "Meet Josh / VIVÂMEE",
+       "Align on first parcels, capital plan & comp"]],
     ["STAGE 3", "MANDATE", "H2 2026", "Engage & execute",
-      ["Stand up the land-development vehicle",
+      ["Stand up the land vehicle under Capital H6",
        "Launch Phase 1 entitlements + soft-cost budget",
        "Open regional-homebuilder conversations",
        "First entitled-lot sales underwritten"]],
@@ -681,11 +674,11 @@ function path() {
     x += colW + gap;
   });
   callout(s,
-    "What I need to sharpen the model: survey / plat & acreage · entitlement & zoning status · any debt on the land · target timeline.",
+    "What I need to sharpen the model: survey / plat & conservation easements · entitlement & zoning status · H6 structure · target timeline.",
     6.5);
   s.addNotes(
-    "Close on logistics. The July in-person is real (wife's family on Long Island). " +
-    "The callout is the data ask — restate it so Bob knows exactly what to send."
+    "Close on logistics. The July in-person is real (wife's family on Long Island) — Queenstown is a doable " +
+    "drive from Philly. The callout is the data ask — restate it so Bob knows exactly what to send."
   );
 }
 
@@ -699,21 +692,21 @@ function thankYou() {
   txt(s, "YOU", 0.72, 3.38, 12.0, 1.05, { font: HEAD, size: 72, bold: true, color: C.mauve });
   hline(s, 0.78, 4.62, 3.5, C.slate, 0.03);
   txt(s, "Bob — appreciate the call, and the résumé read.", 0.75, 4.78, 12.0, 0.45, { font: HEAD, size: 21, bold: true, color: C.white });
-  txt(s, "Looking forward to entitling and monetizing the course lands with you and the Accountable Equity team — let's find time in July.",
+  txt(s, "Looking forward to monetizing the land around Queenstown Harbor with you, Josh and the H6 team — let's find time in July.",
     0.75, 5.3, 12.0, 0.4, { font: BODY, size: 14, color: C.slate });
   txt(s, "Justin A. Levine  |  jlevine@jalstrategies.com  |  JAL Strategies", 0.75, 5.74, 12.0, 0.4, { font: BODY, size: 12, color: C.mauve });
   rect(s, 0, 6.9, PAGE_W, 0.6, C.aubergine);
   txt(s, DECK_LABEL, 0.5, 7.0, 9.0, 0.4, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2 });
   txt(s, `${TOTAL} / ${TOTAL}`, 9.7, 7.0, 3.13, 0.4, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2, align: "right" });
-  s.addNotes("Close warm. Reference his email ('review your resume'). Lock the July meeting.");
+  s.addNotes("Close warm. Reference his email ('review your resume'). Lock the July meeting at Queenstown.");
 }
 
 // ----- Build ---------------------------------------------------------------
 cover();
 opportunity();
-theLand();
+theAsset();
+theLandBank();
 playbook();
-flagship();
 mathLand();
 whySells();
 capitalLight();
@@ -724,5 +717,5 @@ whyJAL();
 path();
 thankYou();
 
-const OUT = "JAL_Accountable_Equity_Proposal.pptx";
+const OUT = "JAL_Queenstown_Harbor_Proposal.pptx";
 pptx.writeFile({ fileName: OUT }).then((f) => console.log("Wrote", f));
