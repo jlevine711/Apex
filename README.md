@@ -81,12 +81,20 @@ footnote** just above the footer, citing where its figures come from.
 
 ## Accuracy note
 
-Figures on **slide 6 (THE MATH)** are **illustrative** but now *derived from
-real constraints* rather than guessed: ~700 gross acres, less the **198-acre**
-conservation easement, less the golf/range/lodging footprint (~300 ac), less
-Maryland's **Chesapeake Bay Critical Area** buffer and tidal wetlands (~60 ac)
-≈ **~140 developable acres** → ~280 lots → ≈ $29M net. Recalibrate against
-survey, easement and entitlement (Queen Anne's County) data before sharing
-externally.
+Figures on **slide 6 (THE MATH)** are **illustrative** but *derived from real
+constraints* and **internally consistent** on an entitled-lot basis (the
+homebuilder funds the horizontal, so the JV sells paper lots):
+
+- ~700 gross acres − **198-ac** conservation easement − golf/range/lodging
+  footprint (~300 ac) − **Chesapeake Bay Critical Area** + wetlands (~60 ac)
+  ≈ **~140 developable acres** → ~280 entitled lots
+- value per entitled lot = $150K finished − $60K builder-funded horizontal −
+  $22K builder margin ≈ **$68K**
+- 280 × $68K = $19.0M, less ~10% JV soft costs ≈ **$17M net**
+
+Only the 198-ac easement and the 9-ac range are sourced; the 700 ac is the
+owner's verbal figure and the golf/Critical-Area haircuts, lot density, price
+and cost load are estimates. Recalibrate against survey, easement and
+entitlement (Queen Anne's County) data before sharing externally.
 
 > Confidential — for discussion purposes only.

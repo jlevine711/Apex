@@ -406,8 +406,8 @@ function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
-    title: "From 700 acres to the developable envelope.",
-    desc: "Built down from real constraints — the recorded conservation easement, the golf footprint, and Maryland's Chesapeake Bay Critical Area. Developable acreage is survey-dependent; figures illustrative.",
+    title: "From 700 acres to ~$17M of entitled-lot value.",
+    desc: "Capital-light, entitled-lot basis: the JV sells entitled lots and the homebuilder funds the horizontal. Each lot equals the finished-lot price less the builder's horizontal cost and margin. Illustrative — survey-dependent.",
     page: 6,
   });
   const cols = [
@@ -417,25 +417,27 @@ function mathLand() {
     { w: 2.83, color: C.aubergine, bold: true, font: HEAD, size: 11, align: "right" },
   ];
   const rows = [
-    ["Queenstown land (gross)", "per ownership estimate", "—", "~700 ac"],
+    ["Gross Queenstown land", "per ownership (to confirm)", "—", "~700 ac"],
     ["Less permanent conservation", "recorded easement", "700 − 198", "502 ac"],
     ["Less golf, range, water & lodging", "two 18s + 9-ac range + cottages", "502 − ~300", "~200 ac"],
     ["Less Critical Area & wetlands", "Chesapeake 1,000-ft zone", "200 − ~60", "~140 ac"],
-    ["Net developable → lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
-    [{ text: "FINISHED LOT VALUE (net, illustrative)", bold: true, font: HEAD, color: C.navy },
-      { text: "$150K / lot, less ~30% costs", color: C.plum }, "280 × $150K × 0.70", "≈ $29M"],
+    ["Entitled lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
+    ["Value per entitled lot", "builder funds the horizontal", "$150K − $60K − $22K", "~$68K"],
+    ["Gross land proceeds", "paid by the homebuilder", "280 × $68K", "$19.0M"],
+    [{ text: "Less JV soft costs (~10%)", bold: true, font: HEAD, color: C.navy },
+      { text: "entitlement · legal · broker", color: C.plum }, "× 0.90", "≈ $17M"],
   ];
-  table(s, ML, 2.12, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.55 });
-  rect(s, ML, 5.9, CW, 0.5, C.navy);
+  table(s, ML, 2.1, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.43 });
+  rect(s, ML, 6.0, CW, 0.45, C.navy);
   txt(s,
-    "≈ $29M illustrative net from ~140 developable acres — net of conservation & Critical Area, additive to the resort.",
-    ML + 0.2, 5.9, CW - 0.4, 0.5,
-    { font: HEAD, size: 12, bold: true, color: C.white, align: "center" });
+    "≈ $17M net to the JV — capital-light: the homebuilder funds the horizontal, so only entitlement & soft costs come out.",
+    ML + 0.2, 6.0, CW - 0.4, 0.45,
+    { font: HEAD, size: 11.5, bold: true, color: C.white, align: "center" });
   footnote(s, 6.62, [SRC.qhwho, SRC.qac, SRC.dnr]);
   s.addNotes(
-    "Now derived, not guessed: 700 gross − 198 conservation − ~300 golf complex − ~60 Critical Area/wetlands " +
-    "≈ 140 developable acres. Maryland's Chesapeake Bay Critical Area (1,000-ft zone, ~1 unit/20 ac in RCA) is the " +
-    "real constraint on the waterfront land. All figures illustrative until survey / easement review."
+    "Internally consistent entitled-lot basis: the builder funds the horizontal, so the JV sells paper lots. " +
+    "Per lot = $150K finished − $60K horizontal − $22K builder margin ≈ $68K. 280 × $68K = $19.0M, less ~10% soft " +
+    "costs ≈ $17M. (Earlier $29M double-counted a finished price with a low cost load.) Illustrative until survey / entitlement."
   );
 }
 
