@@ -32,15 +32,16 @@ npm run build      # writes JAL_Queenstown_Harbor_Proposal.pptx
 3. The Asset — Queenstown Harbor, by the numbers
 4. The Land Bank — developable vs. conservation acreage
 5. The Playbook — entitle → sell to builders → golf/water premium → recycle
-6. The Math — lot entitlement value *(illustrative)*
+6. The Math — 700 ac → developable envelope → lot value *(illustrative)*
 7. Why It Sells — frontage, Bay Bridge demand, builder appetite
-8. Capital — capital-light by design
-9. Capital Access — JAL's debt & equity network
-10. The Structure — a land vehicle under Capital H6
-11. Engagement & Compensation — hybrid, skin in the game
-12. Why JAL — Justin A. Levine
-13. The Path — diligence → July site visit → mandate
-14. Thank You
+8. South River — the sister H6 asset (Annapolis-side private club)
+9. Capital — capital-light by design
+10. Capital Access — JAL's debt & equity network
+11. The Structure — a land vehicle under Capital H6
+12. Engagement & Compensation — hybrid, skin in the game
+13. Why JAL — Justin A. Levine
+14. The Path — diligence → July site visit → mandate
+15. Thank You
 
 ## Verified facts (public sources)
 
@@ -53,15 +54,21 @@ npm run build      # writes JAL_Queenstown_Harbor_Proposal.pptx
   with The Golf Club at South River); ~**870+ acres** across the two properties,
   incl. **198 acres** under permanent conservation
 - ~1 hr to D.C. / Baltimore; minutes over the Bay Bridge to Annapolis
+- **The Golf Club at South River** (Edgewater, MD): private 18-hole course
+  (Brian Ault, 1996), ~**165 acres**, **600+ member families**, 8 lakes + 14
+  protected areas, clubhouse (The Bistro), fitness, simulator lounge, range
 
 Sources: qhgolf.com, VisitMaryland.org, Club + Resort Business, Connect CRE,
-Eye On Annapolis, GolfDigest.
+Eye On Annapolis, GolfDigest, golfclubsr.com.
 
 ## Accuracy note
 
-Figures on **slide 6 (THE MATH)** are **illustrative placeholders** (labelled
-on-slide) — deliberately conservative on developable acreage (~150 of 870+) to
-respect conservation easements and wetlands. Recalibrate against survey,
-easement and entitlement (Queen Anne's County) data before sharing externally.
+Figures on **slide 6 (THE MATH)** are **illustrative** but now *derived from
+real constraints* rather than guessed: ~700 gross acres, less the **198-acre**
+conservation easement, less the golf/range/lodging footprint (~300 ac), less
+Maryland's **Chesapeake Bay Critical Area** buffer and tidal wetlands (~60 ac)
+≈ **~140 developable acres** → ~280 lots → ≈ $29M net. Recalibrate against
+survey, easement and entitlement (Queen Anne's County) data before sharing
+externally.
 
 > Confidential — for discussion purposes only.

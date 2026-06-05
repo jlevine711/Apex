@@ -39,7 +39,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 14;
+const TOTAL = 15;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  |  CONFIDENTIAL";
 const FOOTER_LEFT =
@@ -352,33 +352,35 @@ function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
-    title: "How lot entitlement creates value.",
-    desc: "Illustrative only — developable acreage is subject to survey, conservation easements and entitlement. The method matters here, not the placeholder numbers.",
+    title: "From 700 acres to the developable envelope.",
+    desc: "Built down from real constraints — the recorded conservation easement, the golf footprint, and Maryland's Chesapeake Bay Critical Area. Developable acreage is survey-dependent; figures illustrative.",
     page: 6,
   });
   const cols = [
-    { w: 3.0, font: HEAD, bold: true, color: C.navy, size: 10 },
-    { w: 3.0, color: C.navy, size: 10 },
-    { w: 3.3, color: C.plum, size: 9, font: BODY },
-    { w: 3.0, color: C.aubergine, bold: true, font: HEAD, size: 11, align: "right" },
+    { w: 3.2, font: HEAD, bold: true, color: C.navy, size: 10 },
+    { w: 3.4, color: C.navy, size: 9.5 },
+    { w: 2.9, color: C.plum, size: 9, font: BODY },
+    { w: 2.83, color: C.aubergine, bold: true, font: HEAD, size: 11, align: "right" },
   ];
   const rows = [
-    ["Developable land", "net of conservation & course", "to verify by survey", "~150 ac"],
-    ["Lot yield", "~2.0 lots / acre", "150 × 2.0", "300 lots"],
-    ["Finished lot price", "$150,000 / lot (water/golf)", "300 × $150,000", "$45.0M"],
-    ["Less land-dev / soft costs", "~30% of gross", "× 0.70", "$31.5M"],
-    [{ text: "NET LOT PROCEEDS (illustrative)", bold: true, font: HEAD, color: C.navy },
-      { text: "Queenstown developable parcels", color: C.plum }, "", "≈ $31M"],
+    ["Queenstown land (gross)", "per ownership estimate", "—", "~700 ac"],
+    ["Less permanent conservation", "recorded easement", "700 − 198", "502 ac"],
+    ["Less golf, range, water & lodging", "two 18s + 9-ac range + cottages", "502 − ~300", "~200 ac"],
+    ["Less Critical Area & wetlands", "Chesapeake 1,000-ft zone", "200 − ~60", "~140 ac"],
+    ["Net developable → lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
+    [{ text: "FINISHED LOT VALUE (net, illustrative)", bold: true, font: HEAD, color: C.navy },
+      { text: "$150K / lot, less ~30% costs", color: C.plum }, "280 × $150K × 0.70", "≈ $29M"],
   ];
-  table(s, ML, 2.15, cols, ["Step", "Assumption", "Calculation", "= Value"], rows, { rowH: 0.62 });
-  rect(s, ML, 5.85, CW, 0.55, C.navy);
+  table(s, ML, 2.12, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.55 });
+  rect(s, ML, 5.9, CW, 0.5, C.navy);
   txt(s,
-    "≈ $31M illustrative net from lots — net of conservation, additive to the resort, and recyclable into South River.",
-    ML + 0.2, 5.85, CW - 0.4, 0.55,
+    "≈ $29M illustrative net from ~140 developable acres — net of conservation & Critical Area, additive to the resort.",
+    ML + 0.2, 5.9, CW - 0.4, 0.5,
     { font: HEAD, size: 12, bold: true, color: C.white, align: "center" });
   s.addNotes(
-    "Be explicit these are placeholders, deliberately conservative on developable acreage (~150 of 870) " +
-    "to respect conservation/wetlands. Method: dev acres × lot yield × price, net of land-dev. Builders fund horizontal."
+    "Now derived, not guessed: 700 gross − 198 conservation − ~300 golf complex − ~60 Critical Area/wetlands " +
+    "≈ 140 developable acres. Maryland's Chesapeake Bay Critical Area (1,000-ft zone, ~1 unit/20 ac in RCA) is the " +
+    "real constraint on the waterfront land. All figures illustrative until survey / easement review."
   );
 }
 
@@ -415,14 +417,46 @@ function whySells() {
   );
 }
 
-// ============================================== SLIDE 8 — CAPITAL: LIGHT
+// ===================================================== SLIDE 8 — SOUTH RIVER
+function southRiver() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "THE SISTER ASSET",
+    title: "South River — the Annapolis-side anchor.",
+    desc: "Acquired in the same $25M Capital H6 deal: an established 18-hole private club near Annapolis with 600+ member families — a membership and events engine, and the next place to run the playbook.",
+    page: 8,
+  });
+  const cards = [
+    ["18 holes", "Private club (Brian Ault, 1996)", "Edgewater, MD — on the South River"],
+    ["600+", "Member families", "Recurring dues + a built-in events base"],
+    ["165 ac", "Club grounds", "8 lakes · 14 environmentally protected areas"],
+    ["Same deal", "Part of the $25M H6 buy", "One platform, two assets"],
+  ];
+  let cy = 2.05;
+  cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
+
+  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "THE ANGLE",
+    "Membership and events first; land where diligence supports it.",
+    [
+      "600+ member families — recurring dues, plus an events / dining base to grow.",
+      "Annapolis-side, west of the Bay — an affluent, supply-constrained catchment.",
+      "The Bistro, fitness, simulator lounge & range already drive non-golf revenue.",
+      "Assess limited parcel entitlement without disturbing the member experience.",
+    ]);
+  s.addNotes(
+    "South River is the second H6 asset — but it's a built-out private club (165 ac, 8 lakes, 14 protected " +
+    "areas, 600+ families). Frame honestly: membership + events upside first, land only where diligence supports it."
+  );
+}
+
+// ============================================== SLIDE 9 — CAPITAL: LIGHT
 function capitalLight() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL STRATEGY",
     title: "Capital-light by design.",
     desc: "The land bank barely needs capital: soft costs to entitle, then builders fund the horizontal work and buy the lots. Cash in is small; proceeds come fast.",
-    page: 8,
+    page: 9,
   });
   statCard(s, ML, 2.05, "$1–3M", "Soft costs to start",
     "Entitlements, planning & approvals", { w: 6.05 });
@@ -462,7 +496,7 @@ function capitalAccess() {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 9,
+    page: 10,
   });
   const cards = [
     ["$14M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -494,7 +528,7 @@ function structure() {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 10,
+    page: 11,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -555,7 +589,7 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 11,
+    page: 12,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -589,7 +623,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 12,
+    page: 13,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -637,7 +671,7 @@ function path() {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 13,
+    page: 14,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -709,6 +743,7 @@ theLandBank();
 playbook();
 mathLand();
 whySells();
+southRiver();
 capitalLight();
 capitalAccess();
 structure();
