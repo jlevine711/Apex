@@ -50,12 +50,14 @@ back to Helvetica.
 7. Why It Sells — frontage, Bay Bridge demand, builder appetite
 8. South River — the sister H6 asset (Annapolis-side private club)
 9. Capital — capital-light by design
-10. Capital Access — JAL's debt & equity network
-11. The Structure — a land vehicle under Capital H6
-12. Engagement & Compensation — hybrid, skin in the game
-13. Why JAL — Justin A. Levine
-14. The Path — diligence → July site visit → mandate
-15. Thank You
+10. Pro Forma & Returns — development budget, profit, IRR / equity multiple *(illustrative)*
+11. Basis & Sources — every pro-forma assumption, its reasoning and source
+12. Capital Access — JAL's debt & equity network
+13. The Structure — a land vehicle under Capital H6
+14. Engagement & Compensation — hybrid, skin in the game
+15. Why JAL — Justin A. Levine
+16. The Path — diligence → July site visit → mandate
+17. Thank You
 
 ## Verified facts (public sources)
 
@@ -74,10 +76,12 @@ back to Helvetica.
 
 Sources: qhgolf.com, VisitMaryland.org, Club + Resort Business, Connect CRE,
 Eye On Annapolis, GolfDigest, golfclubsr.com, foretee.com, Queen Anne's County,
-MD DNR.
+MD DNR, Redfin, Land.com, Zillow, HomeGuide.
 
-Each data slide (2, 3, 4, 6, 7, 8) carries a small **hyperlinked source
-footnote** just above the footer, citing where its figures come from.
+Each data slide (2, 3, 4, 6, 7, 8, 11) carries a small **hyperlinked source
+footnote** just above the footer, citing where its figures come from. The
+**Basis & Sources** slide (11) backs every pro-forma assumption with its
+reasoning and a citation.
 
 ## Accuracy note
 

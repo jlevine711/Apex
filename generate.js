@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 15;
+const TOTAL = 17;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -140,6 +140,9 @@ const SRC = {
   dist:  { label: "distance-cities.com", url: "https://www.distance-cities.com/distance-queenstown-md-to-washington-dc" },
   sr:    { label: "golfclubsr.com", url: "https://www.golfclubsr.com/faq" },
   ft:    { label: "foretee.com", url: "https://foretee.com/courses/maryland/edgewater/usa/the-golf-club-at-south-river/6925" },
+  qacLots: { label: "Land.com — QAC lots", url: "https://www.land.com/Queen-Annes-County-MD/" },
+  newcon:  { label: "Zillow — QAC new homes", url: "https://www.zillow.com/queen-annes-county-md/new-homes/" },
+  devcost: { label: "HomeGuide — land dev cost", url: "https://homeguide.com/costs/cost-to-develop-land" },
 };
 
 // Small hyperlinked source footnote, just above the footer rule.
@@ -548,14 +551,120 @@ function capitalLight() {
   );
 }
 
-// =============================================== SLIDE 9 — CAPITAL ACCESS
+// ============================================ SLIDE 10 — PRO FORMA & RETURNS
+function proForma() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "PRO FORMA  ·  ILLUSTRATIVE",
+    title: "The budget, and the returns.",
+    desc: "A capital-light, entitled-lot merchant model: Capital H6 contributes the land, a small equity raise funds entitlement, and ~280 lots sell to a homebuilder who funds the horizontal. Illustrative — for discussion.",
+    page: 10,
+  });
+  const usesCols = [
+    { w: 3.95, color: C.navy, size: 9.5 },
+    { w: 1.55, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
+  ];
+  const uses = [
+    ["Land contribution (~140 dev. ac)", "$4.0M"],
+    ["Entitlement, civil & environmental", "$1.1M"],
+    ["Legal, zoning & approvals", "$0.4M"],
+    ["Marketing & brokerage (~3%)", "$0.6M"],
+    ["Predevelopment carry & financing", "$0.2M"],
+    ["Contingency", "$0.2M"],
+    [{ text: "TOTAL PROJECT COST", bold: true, font: HEAD, color: C.navy },
+      { text: "$6.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+  ];
+  table(s, ML, 2.0, usesCols, ["USES OF CAPITAL", ""], uses, { rowH: 0.48 });
+
+  const srcCols = [
+    { w: 2.05, color: C.navy, size: 9.5 },
+    { w: 1.05, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
+  ];
+  const sources = [
+    ["Land equity (H6)", "$4.0M"],
+    ["Cash equity (JAL + LP)", "$2.0M"],
+    ["Predev facility", "$0.5M"],
+    [{ text: "TOTAL", bold: true, font: HEAD, color: C.navy },
+      { text: "$6.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+  ];
+  table(s, 6.1, 2.0, srcCols, ["SOURCES OF CAPITAL", ""], sources, { rowH: 0.48 });
+
+  rect(s, 6.1, 4.35, 3.1, 1.41, C.navy);
+  rect(s, 6.1, 4.35, 0.1, 1.41, C.aubergine);
+  txt(s, "KEY ASSUMPTIONS", 6.32, 4.45, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
+  txt(s, "$68K net / lot  ·  ~280 lots over Yr 2–4  ·  builder funds horizontal  ·  8% pref + co-GP promote  ·  land at appraised value",
+    6.32, 4.72, 2.78, 1.0, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
+
+  rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
+  rect(s, 9.3, 2.0, 0.12, 3.76, C.aubergine);
+  txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
+  const mets = [
+    ["$19.0M", "Gross lot revenue"],
+    ["$12.5M", "Net development profit"],
+    ["~3.0×", "Equity multiple"],
+    ["~32%", "Project IRR (phased)"],
+    ["~24%", "LP IRR (after promote)"],
+  ];
+  let my = 2.5;
+  mets.forEach(([v, l]) => {
+    txt(s, v, 9.55, my, 3.1, 0.32, { font: HEAD, size: 17, bold: true, color: C.white });
+    txt(s, l, 9.55, my + 0.31, 3.1, 0.22, { font: BODY, size: 8.5, color: C.mauve });
+    my += 0.63;
+  });
+
+  rect(s, ML, 5.95, CW, 0.45, C.aubergine);
+  txt(s, "Illustrative: ~$12.5M profit on ~$6.5M cost — ~3.0× equity, ~32% project IRR. Builder funds the horizontal; JAL co-invests.",
+    ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
+  txt(s, "Illustrative pro forma for discussion only — basis and sources on the following slide; figures subject to confirmation.",
+    ML, 6.58, CW, 0.26, { font: BODY, size: 7.5, color: C.plum });
+  s.addNotes(
+    "Capital-light merchant land pro forma, consistent with slide 6. $19.0M lot revenue − $6.5M cost " +
+    "($4.0M contributed land + ~$2.5M soft) ≈ $12.5M profit. On ~$6.0M equity ≈ 3.0x / ~32% IRR (phased Yr 2–4); " +
+    "LP ~24% after an 8% pref + JAL co-GP promote. Land basis and lot price are the big swing factors. All illustrative."
+  );
+}
+
+// ====================================== SLIDE 11 — PRO FORMA BASIS & SOURCES
+function basis() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "PRO FORMA  ·  BASIS & SOURCES",
+    title: "What the pro forma assumes — and why.",
+    desc: "Every input, its value, and the reasoning. Market figures are from public sources; deal-specific figures (acreage, land basis, density) are to be confirmed in diligence.",
+    page: 11,
+  });
+  const cols = [
+    { w: 2.9, font: HEAD, bold: true, color: C.navy, size: 9.5 },
+    { w: 1.7, color: C.aubergine, bold: true, font: HEAD, size: 9.5, align: "center" },
+    { w: 7.73, color: C.plum, size: 9, lh: 11 },
+  ];
+  const rows = [
+    ["Net developable acreage", "~140 ac", "700 gross − 198 conservation − ~300 golf − ~60 Critical Area; survey to confirm"],
+    ["Lot density", "~2.0 / ac", "Blended for the developable (non-Critical-Area) land; Queen Anne's County zoning to confirm"],
+    ["Finished lot value", "$150K", "Conservative — QAC building lots average ~$237K; new homes $600–705K (lot ≈ 24% of home)"],
+    ["Builder-funded horizontal", "$60K / lot", "Per-lot land-development benchmark; residential development runs $50–150K / acre"],
+    ["Builder margin", "~$22K (15%)", "Standard return for the builder to carry entitled lots through to finished"],
+    ["JV soft costs", "~10%", "Entitlement, civil & environmental, legal / zoning and brokerage"],
+    ["Land basis (contributed)", "~$4.0M", "Allocated from the $25M H6 purchase (~$29K / ac); joint appraisal to set"],
+    ["Waterfall", "8% pref · co-GP", "Standard JV promote structure — for discussion"],
+  ];
+  table(s, ML, 2.1, cols, ["Assumption", "Value", "Basis / reasoning"], rows, { rowH: 0.48 });
+  footnote(s, 6.6, [SRC.qacLots, SRC.newcon, SRC.devcost, SRC.cr]);
+  s.addNotes(
+    "Backs the pro forma. Market inputs are sourced: QAC home/lot prices (Land.com, Zillow) support a conservative " +
+    "$150K finished lot; $60K/lot horizontal matches national land-dev benchmarks (HomeGuide). Deal-specific inputs — " +
+    "gross acreage, the developable balance, land basis and density — are flagged 'to confirm' pending survey / easement / zoning."
+  );
+}
+
+// =============================================== SLIDE 12 — CAPITAL ACCESS
 function capitalAccess() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 10,
+    page: 12,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -587,7 +696,7 @@ function structure() {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 11,
+    page: 13,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -648,7 +757,7 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 12,
+    page: 14,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -683,7 +792,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 13,
+    page: 15,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -731,7 +840,7 @@ function path() {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 14,
+    page: 16,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -805,6 +914,8 @@ mathLand();
 whySells();
 southRiver();
 capitalLight();
+proForma();
+basis();
 capitalAccess();
 structure();
 engagement();
