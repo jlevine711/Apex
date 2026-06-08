@@ -972,7 +972,7 @@ function capitalAccess() {
     [
       "Family offices (Texas) — my core equity base; they'll travel for the right risk-adjusted return.",
       "Institutional equity — private-equity fund relationships.",
-      "National debt — Goldman Sachs (met two weeks ago; national platform, Dallas team) + specialty lenders.",
+      "National debt — relationships across national bank platforms and specialty construction lenders.",
       "The bar for out-of-state development is mid-to-high-20s IRR — the fresh land basis helps clear it.",
     ]);
   s.addNotes(
@@ -1035,10 +1035,11 @@ function structure() {
     ry += 0.72;
   });
 
-  callout(s, "JAL is a GP member — sharing the promote alongside Capital H6 and Bob, not just advising.", 6.5);
+  callout(s, "JAL is a GP member — sharing the promote with Capital H6 and Bob, and intends to invest in the GP, sized in diligence and structure.", 6.5);
   s.addNotes(
     "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL " +
-    "runs entitlement + capital formation + lot sales. VIVÂMEE keeps operating the resort."
+    "runs entitlement + capital formation + lot sales. VIVÂMEE keeps operating the resort. " +
+    "I also intend to put capital into the GP — amount TBD, to be sized once we've done diligence and set the structure."
   );
 }
 
