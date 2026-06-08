@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 21;
+const TOTAL = 22;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -669,7 +669,7 @@ function waterfall() {
   chrome(s, {
     eyebrow: "RETURNS WATERFALL  ·  PHASE 1",
     title: "How the LP IRR is built.",
-    desc: "A market structure: 8% preferred return, then a tiered promote. At 60% LTC the LP (90% of equity) nets ~27% after the promote; reaching the 30%+ range takes higher leverage or pricing (see the sensitivity). JAL's GP earns the carried interest.",
+    desc: "A market structure: 8% preferred return, then a tiered promote. At 60% LTC the LP (90% of equity) nets ~27% after the promote; reaching the 30%+ range takes higher leverage or pricing (see the sensitivity). The GP — Capital H6, Bob & JAL + partners — earns the carry; JAL shares in it.",
     page: 12,
   });
   const cols = [
@@ -687,7 +687,7 @@ function waterfall() {
   rect(s, ML, 5.0, 6.0, 1.4, C.navy);
   rect(s, ML, 5.0, 0.1, 1.4, C.aubergine);
   txt(s, "CAPITAL STACK  ·  60% LTC", ML + 0.25, 5.1, 5.6, 0.3, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$27.5M cost  =  $16.5M development loan (60%)  +  $11M equity.  Equity: LP 90% ($9.9M)  ·  GP / JAL 10% ($1.1M co-invest).",
+  txt(s, "$27.5M cost  =  $16.5M development loan (60%)  +  $11M equity.  Equity: LP 90% ($9.9M)  ·  GP — H6 · Bob · JAL + partners 10% ($1.1M).",
     ML + 0.25, 5.38, 5.55, 0.95, { font: BODY, size: 10, color: C.cream, lh: 13.5, valign: "top" });
 
   rect(s, 6.83, 2.1, 6.0, 1.98, C.navy);
@@ -698,16 +698,16 @@ function waterfall() {
   txt(s, "$9.9M invested\n→ $20.3M back\n2.05× equity multiple", 9.7, 2.62, 3.0, 1.3, { font: BODY, size: 11, color: C.cream, lh: 15, valign: "middle" });
 
   rect(s, 6.83, 4.28, 6.0, 1.98, C.white, { line: { color: C.hair, width: 0.75 } });
-  txt(s, "GP — JAL  (10% co-invest + carried interest)", 7.1, 4.42, 5.6, 0.3, { font: HEAD, size: 10, bold: true, color: C.aubergine, spc: 1.5 });
+  txt(s, "GP — SPONSOR GROUP  (Capital H6 · Bob · JAL + partners)", 7.1, 4.42, 5.6, 0.3, { font: HEAD, size: 9.5, bold: true, color: C.aubergine, spc: 1 });
   txt(s, "~$4.1M", 7.1, 4.73, 2.6, 0.8, { font: HEAD, size: 32, bold: true, color: C.navy });
-  txt(s, "GP promote / carry", 7.1, 5.55, 2.6, 0.3, { font: BODY, size: 10, color: C.plum });
-  txt(s, "$1.1M co-invest\n→ $5.2M back\n~59% GP IRR", 9.7, 4.78, 3.0, 1.3, { font: BODY, size: 11, color: C.plum, lh: 15, valign: "middle" });
+  txt(s, "GP promote / carry (group)", 7.1, 5.55, 3.0, 0.3, { font: BODY, size: 10, color: C.plum });
+  txt(s, "$1.1M co-invest → $5.2M\n~59% GP IRR\nJAL earns a share", 9.7, 4.78, 3.0, 1.3, { font: BODY, size: 11, color: C.plum, lh: 15, valign: "middle" });
 
-  callout(s, "Market 8% pref + tiered promote → the LP nets ~27% at 60% LTC; JAL earns ~$4.1M of carry. (See the sensitivity for 30%+ paths.)", 6.5);
+  callout(s, "Market 8% pref + tiered promote → the LP nets ~27% at 60% LTC; the GP (H6 · Bob · JAL + partners) earns ~$4.1M of carry — JAL takes a share.", 6.5);
   s.addNotes(
     "Shows how the LP IRR is derived. Project equity IRR (60% LTC) ~31%; through an 8% pref + tiered promote " +
-    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~27% and the GP (JAL) earns ~59% IRR / ~$4.1M carry on a " +
-    "small co-invest. The next slide sensitizes the LP IRR. All derived in the model (Phase 1 sheet)."
+    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~27% and the GP group (Capital H6, Bob, JAL + partners) earns " +
+    "~59% IRR / ~$4.1M carry on a small co-invest — JAL is one member with a share of the promote. Sensitized next. Model = source of truth."
   );
 }
 
@@ -847,14 +847,46 @@ function phase2() {
   );
 }
 
-// =============================================== SLIDE 14 — CAPITAL ACCESS
+// ===================================== SLIDE 16 — PHASE 2 SENSITIVITY
+function phase2sens() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "SENSITIVITY  ·  PHASE 2 BUILD-TO-CORE",
+    title: "How robust is the hotel return?",
+    desc: "Build-to-core IRR (65% LTC, recap at stabilization) across stabilized NOI and exit cap — the two biggest swing factors. Base ($4.65M NOI, 7.5% cap) → ~28%; it holds in the mid-20s+ as long as NOI lands and caps stay sub-8%.",
+    page: 16,
+  });
+  const cols = [
+    { w: 2.4, font: HEAD, bold: true, color: C.navy, size: 9.5 },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+  ];
+  const rows = [
+    ["$4.2M NOI", "24.1%", "19.8%", "15.6%", "11.6%"],
+    ["$4.65M NOI  (base)", "31.7%", { text: "27.6%", bold: true, color: C.aubergine, font: HEAD }, "23.7%", "19.9%"],
+    ["$5.15M NOI", "38.8%", "34.8%", "31.1%", "27.5%"],
+  ];
+  table(s, ML, 2.3, cols, ["BUILD-TO-CORE IRR  (NOI / cap)", "7.0% cap", "7.5% cap", "8.0% cap", "8.5% cap"], rows, { rowH: 0.85, headSize: 9 });
+  callout(s, "Base ~28%. Strong NOI + a sub-8% cap → low-to-high 30s; soft NOI or an 8.5% cap pulls it toward the high-teens / low-20s.", 5.55);
+  txt(s, "Build-to-core project IRR (65% LTC, recap ~Yr 4). VIVÂMEE-led; JAL is the capital partner. Each cell re-runs the model. Illustrative.",
+    ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
+  s.addNotes(
+    "Phase 2 build-to-core IRR sensitized to stabilized NOI × exit cap (the development spread). Base $4.65M NOI / 7.5% cap " +
+    "→ ~28%. Premium NOI ($5.15M) or a 7% cap pushes it to the mid-30s; an 8.5% cap or soft NOI drops it to ~12–20%. " +
+    "65% LTC, recap at stabilization. Model is the source of truth."
+  );
+}
+
+// ===================================== SLIDE 17 — CAPITAL ACCESS
 function capitalAccess() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 16,
+    page: 17,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -886,7 +918,7 @@ function structure() {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 17,
+    page: 18,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -924,7 +956,7 @@ function structure() {
   const roles = [
     ["Josh McCallen / VIVÂMEE", "Resort owner-operator"],
     ["Bob Connell / Capital H6", "Development lead (H6 GP)"],
-    ["JAL Strategies", "Capital, entitlement & sales — co-invests"],
+    ["JAL Strategies", "GP member — capital, entitlement & sales; co-invests"],
   ];
   let ry = 3.62;
   roles.forEach(([a, b]) => {
@@ -933,7 +965,7 @@ function structure() {
     ry += 0.72;
   });
 
-  callout(s, "JAL takes skin in the game — co-investing alongside, not just advising.", 6.5);
+  callout(s, "JAL is a GP member — co-investing and sharing the promote alongside Capital H6 and Bob, not just advising.", 6.5);
   s.addNotes(
     "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL co-invests " +
     "and runs entitlement + capital + lot sales. VIVÂMEE keeps operating the resort."
@@ -947,7 +979,7 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 18,
+    page: 19,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -965,7 +997,7 @@ function engagement() {
     ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term; creditable against success fees"],
     ["Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately, not netted from fees"],
     ["Capital placement fee", "1% debt · 2–3% equity", "Success fee if and when we place debt or equity for a parcel"],
-    ["Carried interest", "Co-GP promote", "Share of value created on lot sales; JAL co-invests its own capital alongside"],
+    ["Carried interest", "Share of GP promote", "JAL's share of the GP promote (alongside H6, Bob & partners); JAL co-invests its own capital"],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
   callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);
@@ -982,7 +1014,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 19,
+    page: 20,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -1030,7 +1062,7 @@ function path() {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 20,
+    page: 21,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -1110,6 +1142,7 @@ waterfall();
 sensitivity();
 builders();
 phase2();
+phase2sens();
 capitalAccess();
 structure();
 engagement();

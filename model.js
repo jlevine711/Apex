@@ -224,8 +224,8 @@ wf.lp.forEach((v, i) => { const c = lpYr.getCell(2 + i); c.value = Math.round(v)
 const gpYr = row(); gpYr.getCell(1).value = "GP cash flow (co-invest + promote)"; gpYr.getCell(1).font = { size: 10, color: { argb: "FF333333" } }; gpYr.getCell(1).alignment = { indent: 1 };
 wf.gp.forEach((v, i) => { const c = gpYr.getCell(2 + i); c.value = Math.round(v); c.numFmt = money; c.font = { size: 10, color: { argb: "FF0B163C" } }; c.alignment = { horizontal: "right" }; });
 line("LP IRR (after promote)", { formula: `IRR(B${lpYr.number}:F${lpYr.number})`, result: lpIRR }, "what the equity investors earn", pct, { bold: true, accent: true });
-line("GP IRR (co-invest + carried interest)", { formula: `IRR(B${gpYr.number}:F${gpYr.number})`, result: gpIRR }, "JAL", pct, { bold: true });
-line("GP net profit (co-invest + promote)", { formula: `SUM(B${gpYr.number}:F${gpYr.number})`, result: Math.round(wf.gp.reduce((a, b) => a + b, 0)) }, "JAL's share of the upside", money, { bold: true });
+line("GP IRR (co-invest + carried interest)", { formula: `IRR(B${gpYr.number}:F${gpYr.number})`, result: gpIRR }, "sponsor group — Capital H6 / Bob / JAL + partners", pct, { bold: true });
+line("GP net profit (co-invest + promote)", { formula: `SUM(B${gpYr.number}:F${gpYr.number})`, result: Math.round(wf.gp.reduce((a, b) => a + b, 0)) }, "GP group total — JAL earns a share", money, { bold: true });
 
 // ---- LP IRR SENSITIVITY ----
 header("LP IRR SENSITIVITY  (finished lot price  ×  LTC)");
@@ -355,6 +355,22 @@ const bcEM = bcf.slice(2).reduce((a, b) => a + b, 0) / -(bcf[0] + bcf[1]);
 qline("Equity multiple (build-to-core)", { formula: `SUM(B${bcfStart + 2}:B${bcfEnd})/-(B${bcfStart}+B${bcfStart + 1})`, result: bcEM }, "distributions / equity, ~4-yr", mult, { bold: true, accent: true });
 qline("Project IRR (build-to-core, ~4-yr)", { formula: `IRR(B${bcfStart}:B${bcfEnd})`, result: bcIRR }, "recap / sell at stabilization", pct, { bold: true, accent: true });
 
+qheader("BUILD-TO-CORE IRR SENSITIVITY  (stabilized NOI  ×  exit cap)");
+const p2IRR = (uplift, cap, ltc = 0.65) => {
+  const cost = 47000000, baseNOI = 3814120, rate = 0.07;
+  const noi = baseNOI * (1 + uplift), loan = cost * ltc, exitEq = noi / cap - loan, lev = noi - loan * rate, c0 = -(cost - loan) * 0.5;
+  return irr([c0, c0, lev * 0.4, lev, lev + exitEq]);
+};
+const p2Up = [[0.10, "$4.2M NOI"], [0.22, "$4.65M NOI (base)"], [0.35, "$5.15M NOI"]];
+const p2Caps = [0.07, 0.075, 0.08, 0.085];
+const ph = qrow(); ph.getCell(1).value = "Stabilized NOI  /  exit cap"; ph.getCell(1).font = { bold: true, size: 9, color: { argb: WHITE } }; ph.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } };
+p2Caps.forEach((cp, i) => { const c = ph.getCell(2 + i); c.value = cp; c.numFmt = "0.0%"; c.font = { bold: true, size: 10, color: { argb: WHITE } }; c.alignment = { horizontal: "center" }; c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; });
+p2Up.forEach(([u, lbl]) => {
+  const rr = qrow(); rr.getCell(1).value = lbl; rr.getCell(1).font = { bold: true, size: 10, color: { argb: "FF0B163C" } }; rr.getCell(1).alignment = { indent: 1 };
+  p2Caps.forEach((cp, i) => { const v = p2IRR(u, cp); const c = rr.getCell(2 + i); c.value = v; c.numFmt = "0.0%"; const base = (u === 0.22 && cp === 0.075); c.font = { size: 10, bold: base, color: { argb: base ? AUB : "FF0B163C" } }; c.alignment = { horizontal: "center" }; if (base) c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } }; });
+});
+const p2sn = qrow(); p2.mergeCells(p2sn.number, 1, p2sn.number, 6); p2sn.getCell(1).value = "Build-to-core project IRR at 65% LTC, recap at stabilization (~Yr 4). Base = $4.65M NOI / 7.5% cap (highlighted). Each cell re-runs the model."; p2sn.getCell(1).font = { name: "Calibri", italic: true, size: 9, color: { argb: "FF6B5A6B" } };
+
 q++;
 const n2 = qrow(); p2.mergeCells(q, 1, q, 6);
 n2.getCell(1).value = "Illustrative. Hospitality is an income / hold play: it develops to roughly cost, so the return is durable cash flow + appreciation (lower IRR than the Phase 1 land, longer hold). VIVAMEE operates; JAL is the capital partner (debt + equity placement fees, co-invest, promote). The resort also lifts Phase 1 lot values. Subject to confirmation.";
@@ -362,5 +378,5 @@ n2.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: 
 n2.getCell(1).alignment = { wrapText: true, vertical: "top" }; n2.height = 50;
 
 wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
-  .then(() => console.log("Wrote model  (P1 60% LTC: unlev ~" + (irrVal * 100).toFixed(1) + "% / levered ~" + (lirr * 100).toFixed(1) + "% / LP ~" + (lpIRR * 100).toFixed(1) + "% / GP ~" + (gpIRR * 100).toFixed(1) + "%; P2 b-t-c ~" + (bcIRR * 100).toFixed(1) + "%)"))
+  .then(() => console.log("Wrote model  (P1 LP ~" + (lpIRR * 100).toFixed(1) + "% / GP ~" + (gpIRR * 100).toFixed(1) + "%; P2 b-t-c base ~" + (bcIRR * 100).toFixed(1) + "%; P2 sens NOI$4.65M: 7%=" + (p2IRR(.22, .07) * 100).toFixed(0) + " 7.5%=" + (p2IRR(.22, .075) * 100).toFixed(0) + " 8.5%=" + (p2IRR(.22, .085) * 100).toFixed(0) + "; lo$4.2M/8.5%=" + (p2IRR(.10, .085) * 100).toFixed(0) + " hi$5.15M/7%=" + (p2IRR(.35, .07) * 100).toFixed(0) + ")"))
   .catch((e) => { console.error(e); process.exit(1); });

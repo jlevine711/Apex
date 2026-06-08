@@ -63,12 +63,13 @@ development) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 13. LP IRR Sensitivity — LP IRR across finished-lot price × LTC
 14. Buyer Universe / Liquidity — named regional + national lot buyers
 15. Phase 2 — Hospitality (hotel + suite of restaurants) *(illustrative)*
-16. Capital Access — JAL's debt & equity network
-17. The Structure — a land vehicle under Capital H6
-18. Engagement & Compensation — hybrid, skin in the game
-19. Why JAL — Justin A. Levine
-20. The Path — diligence → July site visit → mandate
-21. Thank You
+16. Phase 2 Sensitivity — build-to-core IRR across stabilized NOI × exit cap
+17. Capital Access — JAL's debt & equity network
+18. The Structure — a land vehicle under Capital H6
+19. Engagement & Compensation — hybrid, skin in the game
+20. Why JAL — Justin A. Levine
+21. The Path — diligence → July site visit → mandate
+22. Thank You
 
 ## Verified facts (public sources)
 
@@ -108,7 +109,9 @@ consistent:
 - less **$27.5M** cost (incl. **$16.8M** JV-funded horizontal at $60K/lot) =
   **~$14.5M** profit → at **60% LTC**, **~2.3× equity**, **~31% levered
   project IRR** (~24% unlevered) → after an 8% pref + tiered promote
-  (80/20 → 70/30 → 60/40): **LP IRR ~27%**, GP IRR ~59% (~$4.1M carry).
+  (80/20 → 70/30 → 60/40): **LP IRR ~27%**. The **GP** is the sponsor group
+  (Capital H6 · Bob · JAL + partners) — ~59% GP IRR / ~$4.1M carry; **JAL is a
+  GP member with a share**, not the sole GP.
   Sensitivity (slide 13): LP IRR ~25–33% across $150K lots at 55–70% LTC,
   up to ~41% at $170K / 70% LTC
 
