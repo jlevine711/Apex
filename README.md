@@ -39,9 +39,18 @@ embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
 [SIL OFL](https://openfontlicense.org/)); if absent it falls back to Helvetica.
 
 `model.js` writes a backup financial model — `JAL_Queenstown_Harbor_Model.xlsx`
-— with **live formulas** (every output references the INPUTS block) so it shows
-exactly how each number is derived — two sheets, **Phase 1** (finished-lot
-development) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
+— that is **fully dynamic and calculated**: a single `INPUTS` object drives two
+pure calc engines (`calcP1`, `calcP2`) that derive *every* figure — totals, the
+year-by-year cash flows, IRRs, the promote split and the sensitivity grids.
+There are no hardcoded results. In the workbook the **INPUTS block plus the
+cash-flow timing vectors are the only typed numbers**; every other cell is a
+**live Excel formula** that references them (and the file is flagged to
+recalculate on open, so spreadsheet and engine always agree). Edit any input —
+in the code or in the sheet — and everything recomputes. Two sheets, **Phase 1**
+(finished-lot development) and **Phase 2** (hospitality: hotel + restaurants).
+The LP/GP promote split and the sensitivity tables are solved by the model
+engine (an IRR-hurdle waterfall isn't a closed-form cell formula); the IRRs
+above those rows are live. Outputs:
 
 - `JAL_Queenstown_Harbor_Proposal.pptx` · `JAL_Queenstown_Harbor_Proposal.pdf`
 - `JAL_Queenstown_Harbor_Model.xlsx`
