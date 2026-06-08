@@ -59,14 +59,15 @@ development) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 9. Development Plan — entitle, develop, deliver finished lots
 10. Pro Forma & Returns — finished-lot budget, profit, IRR / equity multiple *(illustrative)*
 11. Basis & Sources — every pro-forma assumption, its reasoning and source
-12. Buyer Universe / Liquidity — named regional + national lot buyers
-13. Phase 2 — Hospitality (hotel + suite of restaurants) *(illustrative)*
-14. Capital Access — JAL's debt & equity network
-15. The Structure — a land vehicle under Capital H6
-16. Engagement & Compensation — hybrid, skin in the game
-17. Why JAL — Justin A. Levine
-18. The Path — diligence → July site visit → mandate
-19. Thank You
+12. Returns Waterfall — how the LP IRR is built (8% pref + tiered promote)
+13. Buyer Universe / Liquidity — named regional + national lot buyers
+14. Phase 2 — Hospitality (hotel + suite of restaurants) *(illustrative)*
+15. Capital Access — JAL's debt & equity network
+16. The Structure — a land vehicle under Capital H6
+17. Engagement & Compensation — hybrid, skin in the game
+18. Why JAL — Justin A. Levine
+19. The Path — diligence → July site visit → mandate
+20. Thank You
 
 ## Verified facts (public sources)
 
@@ -104,11 +105,13 @@ consistent:
   acres** → **~280 finished lots**
 - 280 × **$150K** finished lot = **$42.0M** revenue
 - less **$27.5M** cost (incl. **$16.8M** JV-funded horizontal at $60K/lot) =
-  **~$14.5M** profit → **~2.3× equity**, **~32% levered equity IRR**
-  (~24% unlevered)
+  **~$14.5M** profit → at **70% LTC**, **~2.8× equity**, **~39% levered
+  project IRR** (~24% unlevered) → after an 8% pref + tiered promote
+  (80/20 → 70/30 → 60/40): **LP IRR ~33%**, GP IRR ~75% (~$4.6M carry)
 
 `JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
-numbers — Phase 1 (finished-lot: ~24% unlevered / **~32% levered** equity IRR)
+numbers — Phase 1 (finished-lot: ~39% levered project / **~33% LP** after a
+market promote waterfall)
 **and** Phase 2 hospitality (~$47M resort — hold-for-income ~12% IRR, or
 **build-to-core** recap at stabilization **~28% IRR / ~2.3×**; hotel cost/key
 per HVS 2025, ~8% cap). Only the 198-ac easement and the 9-ac
