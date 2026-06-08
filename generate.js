@@ -670,7 +670,7 @@ function waterfall() {
   chrome(s, {
     eyebrow: "RETURNS WATERFALL  ·  PHASE 1",
     title: "How the LP IRR is built.",
-    desc: "A market structure: 8% preferred return, then a tiered promote. At 60% LTC the LP (90% of equity) nets ~27% after the promote; reaching the 30%+ range takes higher leverage or pricing (see the sensitivity). The GP — Capital H6, Bob & JAL + partners — earns the carry; JAL shares in it.",
+    desc: "A market structure: 8% preferred return, then a tiered promote. At 60% LTC the LP (90% of equity) nets ~27% after the promote; reaching the 30%+ range takes higher leverage or pricing (see the sensitivity). The GP — Accountable Equity / Capital H6, Bob & JAL + partners — earns the carry; JAL shares in it.",
     page: 12,
   });
   const cols = [
@@ -688,7 +688,7 @@ function waterfall() {
   rect(s, ML, 5.0, 6.0, 1.4, C.navy);
   rect(s, ML, 5.0, 0.1, 1.4, C.aubergine);
   txt(s, "CAPITAL STACK  ·  60% LTC", ML + 0.25, 5.1, 5.6, 0.3, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$27.5M cost  =  $16.5M development loan (60%)  +  $11M equity.  Equity: LP 90% ($9.9M)  ·  GP — H6 · Bob · JAL + partners 10% ($1.1M).",
+  txt(s, "$27.5M cost  =  $16.5M development loan (60%)  +  $11M equity.  Equity: LP 90% ($9.9M)  ·  GP — Accountable Equity · Bob · JAL + partners 10% ($1.1M).",
     ML + 0.25, 5.38, 5.55, 0.95, { font: BODY, size: 10, color: C.cream, lh: 13.5, valign: "top" });
 
   rect(s, 6.83, 2.1, 6.0, 1.98, C.navy);
@@ -699,15 +699,15 @@ function waterfall() {
   txt(s, "$9.9M invested\n→ $20.3M back\n2.05× equity multiple", 9.7, 2.62, 3.0, 1.3, { font: BODY, size: 11, color: C.cream, lh: 15, valign: "middle" });
 
   rect(s, 6.83, 4.28, 6.0, 1.98, C.white, { line: { color: C.hair, width: 0.75 } });
-  txt(s, "GP — SPONSOR GROUP  (Capital H6 · Bob · JAL + partners)", 7.1, 4.42, 5.6, 0.3, { font: HEAD, size: 9.5, bold: true, color: C.aubergine, spc: 1 });
+  txt(s, "GP — SPONSOR GROUP  (Accountable Equity · Bob · JAL + partners)", 7.1, 4.42, 5.7, 0.3, { font: HEAD, size: 9, bold: true, color: C.aubergine, spc: 0.5 });
   txt(s, "~$4.1M", 7.1, 4.73, 2.6, 0.8, { font: HEAD, size: 32, bold: true, color: C.navy });
   txt(s, "GP promote / carry (group)", 7.1, 5.55, 3.0, 0.3, { font: BODY, size: 10, color: C.plum });
   txt(s, "$1.1M co-invest → $5.2M\n~59% GP IRR\nJAL earns a share", 9.7, 4.78, 3.0, 1.3, { font: BODY, size: 11, color: C.plum, lh: 15, valign: "middle" });
 
-  callout(s, "Market 8% pref + tiered promote → the LP nets ~27% at 60% LTC; the GP (H6 · Bob · JAL + partners) earns ~$4.1M of carry — JAL takes a share.", 6.5);
+  callout(s, "Market 8% pref + tiered promote → the LP nets ~27% at 60% LTC; the GP (Accountable Equity · Bob · JAL + partners) earns ~$4.1M of carry — JAL takes a share.", 6.5);
   s.addNotes(
     "Shows how the LP IRR is derived. Project equity IRR (60% LTC) ~31%; through an 8% pref + tiered promote " +
-    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~27% and the GP group (Capital H6, Bob, JAL + partners) earns " +
+    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~27% and the GP group (Accountable Equity / Capital H6, Bob, JAL + partners) earns " +
     "~59% IRR / ~$4.1M carry on a small co-invest — JAL is one member with a share of the promote. Sensitized next. Model = source of truth."
   );
 }
@@ -805,11 +805,11 @@ function phase2() {
     { w: 0.5, color: C.plum, size: 8, align: "right" },
   ];
   const noi = [
-    ["Hotel NOI", "$3.4M", "10%"],
-    ["Restaurant NOI", "$1.2M", "14%"],
+    ["Hotel NOI", "$2.8M", "8.6%"],
+    ["Restaurant NOI", "$1.0M", "11.5%"],
     [{ text: "STABILIZED NOI", bold: true, font: HEAD, color: C.navy },
-      { text: "$4.7M", bold: true, font: HEAD, color: C.aubergine, align: "right" },
-      { text: "9.9%", color: C.plum, align: "right" }],
+      { text: "$3.8M", bold: true, font: HEAD, color: C.aubergine, align: "right" },
+      { text: "8.1%", color: C.plum, align: "right" }],
   ];
   table(s, 6.1, 2.0, noiCols, ["STABILIZED NOI", "", "YoC"], noi, { rowH: 0.48 });
 
@@ -824,8 +824,8 @@ function phase2() {
   txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
   const mets = [
     ["$47.0M", "Total project cost"],
-    ["$4.7M", "Stabilized NOI (premium)"],
-    ["9.9%", "Yield on cost"],
+    ["$4.7M", "Premium NOI (build-to-core)"],
+    ["9.9%", "Yield on cost (premium)"],
     ["~2.3×", "Equity multiple (~4-yr)"],
     ["~28%", "Build-to-core IRR"],
   ];
@@ -961,7 +961,7 @@ function capitalAccess() {
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
     ["$19.5M", "Debt already secured", "Lender committed on the same transaction"],
-    ["Mid-20s%", "Target development IRR", "Investors expect mid-to-high 20s out-of-state"],
+    ["Mid–high 20s", "Target development IRR", "Investors expect mid-to-high 20s out-of-state"],
     ["$6.1B", "Career transaction volume", "Across debt & equity — Blackstone + Levcor"],
   ];
   let cy = 2.05;
@@ -987,7 +987,7 @@ function structure() {
   chrome(s, {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
-    desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL runs entitlement, capital formation and lot sales alongside your team.",
+    desc: "Accountable Equity's Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL runs entitlement, capital formation and lot sales alongside your team.",
     page: 20,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
@@ -1025,7 +1025,7 @@ function structure() {
   txt(s, "ROLES", px[2] + 0.25, 3.18, pw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: C.mauve, spc: 2 });
   const roles = [
     ["Josh McCallen / VIVÂMEE", "Resort owner-operator"],
-    ["Bob Connell / Capital H6", "Development lead (H6 GP)"],
+    ["Bob Connell / Accountable Equity", "Development lead · Capital H6 GP"],
     ["JAL Strategies", "GP member — capital formation, entitlement & sales"],
   ];
   let ry = 3.62;
@@ -1035,7 +1035,7 @@ function structure() {
     ry += 0.72;
   });
 
-  callout(s, "JAL is a GP member — sharing the promote with Capital H6 and Bob, and intends to invest in the GP, sized in diligence and structure.", 6.5);
+  callout(s, "JAL is a GP member — sharing the promote with Accountable Equity, Bob & partners, and intends to invest in the GP, sized in diligence and structure.", 6.5);
   s.addNotes(
     "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL " +
     "runs entitlement + capital formation + lot sales. VIVÂMEE keeps operating the resort. " +
@@ -1056,7 +1056,7 @@ function engagement() {
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
   txt(s, "$15K/mo + expenses, then success fees + carry", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13.5, bold: true, color: C.white });
-  txt(s, "Aligned to lot-sale value created — not a flat consulting check.", 3.6, 2.46, 5.85, 0.35, { font: BODY, size: 10, color: C.cream });
+  txt(s, "Aligned to value created — and I intend to contribute capital to the GP myself (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
   txt(s, "Aligned\nupside", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
   const cols = [
@@ -1067,8 +1067,8 @@ function engagement() {
   const rows = [
     ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term"],
     ["Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately, not netted from fees"],
-    ["Capital placement fee", "1% debt · 3% equity", "Success fee if and when we place debt or equity for a parcel"],
-    ["Carried interest", "Share of GP promote", "JAL's share of the GP promote (alongside H6, Bob & partners)"],
+    ["Capital placement fee", "1% debt · 2% equity", "Success fee — 2% of equity raised (1% of debt placed) for a parcel"],
+    ["Carried interest", "Share of GP promote", "JAL's share of the GP promote (alongside Accountable Equity, Bob & partners)"],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
   callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);

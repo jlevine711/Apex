@@ -77,7 +77,7 @@ above those rows are live. Outputs:
 18. Phase 2 Cash Flow — build-to-core cash flow; recap / sale at stabilization *(illustrative)*
 19. Capital Access — JAL's debt & equity network
 20. The Structure — a land vehicle under Capital H6
-21. Engagement & Compensation — hybrid; retainer + reimbursed expenses, 1% debt / 3% equity placement, share of the GP promote
+21. Engagement & Compensation — hybrid; retainer + reimbursed expenses, 1% debt / 2% equity placement, share of the GP promote (+ JAL contributes to the GP)
 22. Why JAL — Justin A. Levine
 23. The Path — diligence → July/Aug in-person → mandate
 24. Thank You
@@ -121,8 +121,9 @@ consistent:
   **~$14.5M** profit → at **60% LTC**, **~2.3× equity**, **~31% levered
   project IRR** (~24% unlevered) → after an 8% pref + tiered promote
   (80/20 → 70/30 → 60/40): **LP IRR ~27%**. The **GP** is the sponsor group
-  (Capital H6 · Bob · JAL + partners) — ~59% GP IRR / ~$4.1M carry; **JAL is a
-  GP member with a share**, not the sole GP.
+  (**Accountable Equity** / Capital H6 · Bob · JAL + partners) — ~59% GP IRR /
+  ~$4.1M carry; **JAL is a GP member with a share** (and intends to contribute
+  capital to the GP), not the sole GP.
   Sensitivity (slide 13): LP IRR ~25–33% across $150K lots at 55–70% LTC,
   up to ~41% at $170K / 70% LTC
 - **Year-by-year cash flow** (slides 17–18) lays out the project cash flow for

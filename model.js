@@ -369,7 +369,7 @@ yrHead();
 const lpRow = hrow("LP cash flow (after promote)", P1.wf.lp.map(Math.round), money);
 const gpRow = hrow("GP cash flow (co-invest + promote)", P1.wf.gp.map(Math.round), money);
 line("LP IRR (after promote)", { formula: `IRR(B${lpRow}:F${lpRow})`, result: P1.lpIRR }, "what the equity investors earn", pct, { bold: true, accent: true });
-line("GP IRR (co-invest + carried interest)", { formula: `IRR(B${gpRow}:F${gpRow})`, result: P1.gpIRR }, "sponsor group — Capital H6 / Bob / JAL + partners", pct, { bold: true });
+line("GP IRR (co-invest + carried interest)", { formula: `IRR(B${gpRow}:F${gpRow})`, result: P1.gpIRR }, "sponsor group — Accountable Equity / Capital H6 / Bob / JAL + partners", pct, { bold: true });
 line("GP net profit (co-invest + promote)", { formula: `SUM(B${gpRow}:F${gpRow})`, result: Math.round(P1.gpProfit) }, "GP group total — JAL earns a share", money, { bold: true });
 {
   const a = row(); ws.mergeCells(r, 1, r, 6);
