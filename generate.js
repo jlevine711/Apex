@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 17;
+const TOTAL = 18;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -143,6 +143,10 @@ const SRC = {
   qacLots: { label: "Land.com — QAC lots", url: "https://www.land.com/Queen-Annes-County-MD/" },
   newcon:  { label: "Zillow — QAC new homes", url: "https://www.zillow.com/queen-annes-county-md/new-homes/" },
   devcost: { label: "HomeGuide — land dev cost", url: "https://homeguide.com/costs/cost-to-develop-land" },
+  lax:     { label: "Lacrosse Homes (Centreville, QAC)", url: "https://www.laxhomes.com/communities/" },
+  caruso:  { label: "Caruso Homes", url: "https://www.carusohomes.com/new-homes/md/maryland/floor-plans/" },
+  gem:     { label: "Gemcraft Homes", url: "https://www.gemcrafthomes.com/" },
+  zcom:    { label: "Zillow — MD new communities", url: "https://www.zillow.com/browse/communities/md/" },
 };
 
 // Small hyperlinked source footnote, just above the footer rule.
@@ -345,8 +349,8 @@ function theLandBank() {
   const cards = [
     ["870+ ac", "Portfolio land", "Across Queenstown + South River"],
     ["198 ac", "Under conservation", "Permanent easement at Queenstown — plan around it"],
-    ["Net", "Developable land", "Balance after conservation, wetlands & course (to verify)"],
-    ["Lots", "Entitle & sell", "Finished lots to regional homebuilders"],
+    ["~140 ac", "Developable land", "Net of conservation, wetlands & course (to verify)"],
+    ["~280", "Entitled lots", "Sold to regional homebuilders"],
   ];
   let cy = 2.05;
   cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
@@ -657,14 +661,47 @@ function basis() {
   );
 }
 
-// =============================================== SLIDE 12 — CAPITAL ACCESS
+// ===================================== SLIDE 12 — BUYER UNIVERSE / LIQUIDITY
+function builders() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "LOT LIQUIDITY  ·  BUYER UNIVERSE",
+    title: "A deep pool of lot buyers.",
+    desc: "Regional and national homebuilders are actively building across Queen Anne's County and the Eastern Shore. Entitled, finished lots trade readily — multiple credible takeout buyers let us run a competitive process and de-risk the exit.",
+    page: 12,
+  });
+  const cols = [
+    { w: 3.1, font: HEAD, bold: true, color: C.navy, size: 10 },
+    { w: 2.3, color: C.aubergine, bold: true, font: HEAD, size: 9, align: "center" },
+    { w: 6.93, color: C.plum, size: 9, lh: 11 },
+  ];
+  const rows = [
+    ["NVR / Ryan Homes", "National · public", "Largest builder in Maryland; routine acquirer of finished / entitled lots"],
+    ["D.R. Horton", "National · public", "#1 U.S. homebuilder; active Maryland operations"],
+    ["Lennar", "National · public", "Top-3 U.S. builder; Maryland division"],
+    ["Lacrosse Homes", "Regional", "Centreville, Queen Anne's Co. — Meadow Creek, Kent Island Estates"],
+    ["Caruso Homes", "Regional", "Eastern Shore communities + build-on-your-lot across Maryland"],
+    ["Gemcraft Homes", "Regional", "Mid-Atlantic production builder (MD · DE · VA · PA)"],
+    ["Bay to Beach · Baldwin Homes", "Regional · custom", "Eastern Shore custom / semi-custom builders"],
+  ];
+  table(s, ML, 2.1, cols, ["Builder", "Reach", "Footprint / relevance"], rows, { rowH: 0.46 });
+  callout(s, "Multiple well-capitalized buyers = a liquid exit — phased lot takedowns or a bulk sale, marketed competitively.", 5.9);
+  footnote(s, 6.55, [SRC.lax, SRC.caruso, SRC.gem, SRC.zcom]);
+  s.addNotes(
+    "Answers the exit-liquidity question: the entitled lots have many credible buyers. Nationals (NVR/Ryan, " +
+    "D.R. Horton, Lennar) run land-light and buy finished lots; regionals (Lacrosse, Caruso, Gemcraft) are " +
+    "literally building in Queen Anne's Co. / the Shore. We can run a competitive takedown or bulk sale."
+  );
+}
+
+// =============================================== SLIDE 13 — CAPITAL ACCESS
 function capitalAccess() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 12,
+    page: 13,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -696,7 +733,7 @@ function structure() {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 13,
+    page: 14,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -757,7 +794,7 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 14,
+    page: 15,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -792,7 +829,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 15,
+    page: 16,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -840,7 +877,7 @@ function path() {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 16,
+    page: 17,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -916,6 +953,7 @@ southRiver();
 capitalLight();
 proForma();
 basis();
+builders();
 capitalAccess();
 structure();
 engagement();
