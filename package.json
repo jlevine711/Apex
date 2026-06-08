@@ -1,12 +1,15 @@
 {
-  "name": "accountable-equity-proposal",
+  "name": "queenstown-harbor-proposal",
   "version": "1.0.0",
   "private": true,
-  "description": "JAL Strategies — Development & Capital Partnership proposal deck for Robert A. Connell / Accountable Equity",
+  "description": "JAL Strategies — Queenstown Harbor land-development proposal deck + backup model for Robert A. Connell",
   "scripts": {
-    "build": "node generate.js"
+    "build": "node generate.js",
+    "model": "node model.js",
+    "all": "node generate.js && node model.js"
   },
   "dependencies": {
+    "exceljs": "^4.4.0",
     "pdfkit": "^0.18.0",
     "pptxgenjs": "^3.12.0"
   }

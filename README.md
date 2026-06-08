@@ -3,8 +3,9 @@
 A pitch deck prepared for **Robert A. Connell, CFP** (Apex Financial Advisors /
 Accountable Equity · Capital H6), proposing **JAL Strategies** as development &
 capital partner to **monetize the developable land around Queenstown Harbor** —
-entitle the non-conservation acreage and sell finished lots to homebuilders
-(builders fund the horizontal infrastructure), then recycle the proceeds.
+entitle and develop the non-conservation acreage and sell **finished lots** to
+homebuilders (the JV funds the horizontal; builders just build the homes), then
+recycle the proceeds.
 
 Queenstown Harbor is the 36-hole Eastern Shore waterfront resort that
 Accountable Equity / VIVÂMEE acquired via **Capital H6** in May 2026 (with The
@@ -25,19 +26,24 @@ It reuses the visual design system of JAL's *Republic Square* deck:
 
 ```bash
 npm install
-npm run build      # writes both the .pptx and the .pdf
+npm run all        # deck (.pptx + .pdf) AND the backup model (.xlsx)
+# or individually:
+npm run build      # JAL_Queenstown_Harbor_Proposal.pptx + .pdf
+npm run model      # JAL_Queenstown_Harbor_Model.xlsx
 ```
 
 `generate.js` records the deck once (a small render-agnostic proxy) and replays
 it to **both** [PptxGenJS](https://gitbrent.github.io/PptxGenJS/) and
-[PDFKit](https://pdfkit.org/), so the two outputs stay identical:
+[PDFKit](https://pdfkit.org/), so the `.pptx` and `.pdf` stay identical. The PDF
+embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
+[SIL OFL](https://openfontlicense.org/)); if absent it falls back to Helvetica.
 
-- `JAL_Queenstown_Harbor_Proposal.pptx`
-- `JAL_Queenstown_Harbor_Proposal.pdf`
+`model.js` writes a backup financial model — `JAL_Queenstown_Harbor_Model.xlsx`
+— with **live formulas** (every output references the INPUTS block) so it shows
+exactly how each number is derived. Outputs:
 
-The PDF embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
-[SIL OFL](https://openfontlicense.org/)); if those files are absent it falls
-back to Helvetica.
+- `JAL_Queenstown_Harbor_Proposal.pptx` · `JAL_Queenstown_Harbor_Proposal.pdf`
+- `JAL_Queenstown_Harbor_Model.xlsx`
 
 ## Slides
 
@@ -45,19 +51,20 @@ back to Helvetica.
 2. The Opportunity — you just bought it; now monetize the land
 3. The Asset — Queenstown Harbor, by the numbers
 4. The Land Bank — developable vs. conservation acreage
-5. The Playbook — entitle → sell to builders → golf/water premium → recycle
-6. The Math — 700 ac → developable envelope → lot value *(illustrative)*
+5. The Playbook — entitle → develop finished lots → premium → recycle
+6. The Math — 700 ac → ~280 finished lots → $42M revenue *(illustrative)*
 7. Why It Sells — frontage, Bay Bridge demand, builder appetite
 8. South River — the sister H6 asset (Annapolis-side private club)
-9. Capital — capital-light by design
-10. Pro Forma & Returns — development budget, profit, IRR / equity multiple *(illustrative)*
+9. Development Plan — entitle, develop, deliver finished lots
+10. Pro Forma & Returns — finished-lot budget, profit, IRR / equity multiple *(illustrative)*
 11. Basis & Sources — every pro-forma assumption, its reasoning and source
-12. Capital Access — JAL's debt & equity network
-13. The Structure — a land vehicle under Capital H6
-14. Engagement & Compensation — hybrid, skin in the game
-15. Why JAL — Justin A. Levine
-16. The Path — diligence → July site visit → mandate
-17. Thank You
+12. Buyer Universe / Liquidity — named regional + national lot buyers
+13. Capital Access — JAL's debt & equity network
+14. The Structure — a land vehicle under Capital H6
+15. Engagement & Compensation — hybrid, skin in the game
+16. Why JAL — Justin A. Levine
+17. The Path — diligence → July site visit → mandate
+18. Thank You
 
 ## Verified facts (public sources)
 
@@ -85,20 +92,22 @@ reasoning and a citation.
 
 ## Accuracy note
 
-Figures on **slide 6 (THE MATH)** are **illustrative** but *derived from real
-constraints* and **internally consistent** on an entitled-lot basis (the
-homebuilder funds the horizontal, so the JV sells paper lots):
+The model is a **finished-lot development** (slides 6, 9–11): the JV funds the
+horizontal — roads, sewer, utilities — and sells **finished** lots; the
+homebuilder just builds the homes. Illustrative but derived and internally
+consistent:
 
-- ~700 gross acres − **198-ac** conservation easement − golf/range/lodging
-  footprint (~300 ac) − **Chesapeake Bay Critical Area** + wetlands (~60 ac)
-  ≈ **~140 developable acres** → ~280 entitled lots
-- value per entitled lot = $150K finished − $60K builder-funded horizontal −
-  $22K builder margin ≈ **$68K**
-- 280 × $68K = $19.0M, less ~10% JV soft costs ≈ **$17M net**
+- ~700 gross acres − **198-ac** conservation − golf/range/lodging (~300 ac) −
+  **Chesapeake Bay Critical Area** + wetlands (~60 ac) ≈ **~140 developable
+  acres** → **~280 finished lots**
+- 280 × **$150K** finished lot = **$42.0M** revenue
+- less **$27.5M** cost (incl. **$16.8M** JV-funded horizontal at $60K/lot) =
+  **~$14.5M** profit → **~2.3× equity**, **~24% project IRR**
 
-Only the 198-ac easement and the 9-ac range are sourced; the 700 ac is the
-owner's verbal figure and the golf/Critical-Area haircuts, lot density, price
-and cost load are estimates. Recalibrate against survey, easement and
-entitlement (Queen Anne's County) data before sharing externally.
+`JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
+numbers. Only the 198-ac easement and the 9-ac range are sourced; the 700 ac is
+the owner's verbal figure and the haircuts, density, price and cost loads are
+estimates — recalibrate against survey, easement and entitlement (Queen Anne's
+County) data before sharing externally.
 
 > Confidential — for discussion purposes only.

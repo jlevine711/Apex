@@ -6,7 +6,7 @@
  * Eastern Shore resort that Accountable Equity / VIVÂMEE acquired via Capital H6
  * (May 2026, with The Golf Club at South River, $25M, from The Brick Companies).
  * Entitle the developable, non-conservation acreage and sell finished lots to
- * homebuilders (builders fund horizontal infrastructure); recycle proceeds.
+ * homebuilders — the JV funds the horizontal (builders just build the homes); recycle proceeds.
  *
  * Design system reverse-engineered from the JAL "Republic Square" pitch deck:
  *   - 16:9 (13.33" x 7.5"); Montserrat (headings) / DM Sans (body)
@@ -284,7 +284,7 @@ function opportunity() {
     ["$25M", "Just acquired (May 2026)", "Queenstown + South River, via Capital H6"],
     ["36 holes", "River & Lakes courses", "Waterfront resort on the Eastern Shore"],
     ["870+ ac", "Across the two properties", "Waterfront + conservation land (to verify)"],
-    ["Soft costs", "To begin", "Builders fund the horizontal infrastructure"],
+    ["Soft costs", "To entitle", "Phase 1 is light; we fund the horizontal next"],
   ];
   let cy = 2.05;
   cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
@@ -293,14 +293,14 @@ function opportunity() {
     "You own it free and clear — Capital H6 just closed the purchase.",
     [
       "Fresh, low basis: $25M for two courses across 870+ acres — the land value is the upside.",
-      "Builders fund sewer, roads and utilities — you carry approvals, not construction risk.",
+      "We develop the lots — roads, sewer and utilities — and sell them finished, capturing the full lot value.",
       "Minutes over the Bay Bridge to Annapolis; ~1 hour to D.C. & Baltimore.",
       "Golf and water frontage on the Chesapeake commands a premium — and sells quickly.",
     ]);
   footnote(s, 6.66, [SRC.cr, SRC.eoa]);
   s.addNotes(
     "Anchor on the fresh acquisition (H6 — Bob's fund). The land bank is additive to the hospitality: " +
-    "monetize the developable acreage the golf doesn't need, capital-light."
+    "monetize the developable acreage the golf doesn't need — develop and sell finished lots."
   );
 }
 
@@ -343,7 +343,7 @@ function theLandBank() {
   chrome(s, {
     eyebrow: "THE LAND BANK",
     title: "The upside is the land around the golf.",
-    desc: "The resort operates; the value-creation is entitling the developable, non-conservation acreage and selling finished lots to homebuilders. Capital-light, and additive to the hospitality.",
+    desc: "The resort operates; the value-creation is entitling and developing the non-conservation acreage and selling finished lots to homebuilders — capturing the full lot value, additive to the hospitality.",
     page: 4,
   });
   const cards = [
@@ -359,7 +359,7 @@ function theLandBank() {
     "Monetize the land the golf doesn't need.",
     [
       "Identify developable parcels at the course edges — away from conservation, wetlands and play.",
-      "Entitle for residential; sell finished lots to builders who fund the horizontal work.",
+      "Entitle, then develop finished lots — we fund the roads, sewer and utilities; builders just build.",
       "Golf-frontage and water-view lots command premium pricing and faster absorption.",
       "Recycle proceeds into the broader Capital H6 program — including South River.",
     ]);
@@ -376,14 +376,14 @@ function playbook() {
   chrome(s, {
     eyebrow: "THE PLAYBOOK",
     title: "Four moves that turn land into cash.",
-    desc: "Capital-light by sequence — soft costs first, then builders carry the infrastructure and construction risk, and the proceeds recycle into the next parcel.",
+    desc: "Phased — entitle first (soft costs), then we fund the horizontal and deliver finished lots, recycling proceeds into the next parcel.",
     page: 5,
   });
   const items = [
     ["01", "Entitle", "Approvals for lots",
       "Secure zoning and subdivision approvals for the developable acreage around the fairways."],
     ["02", "Sell to Builders", "Finished lots → homebuilders",
-      "Sell entitled lots to regional builders and let them fund sewer, roads and utilities."],
+      "Develop finished lots — we fund the roads, sewer and utilities; the builder just builds the homes."],
     ["03", "Golf & Water Premium", "Frontage sells higher",
       "Lots on a course or with Chesapeake water views command a premium and absorb faster."],
     ["04", "Recycle & Repeat", "Parcel by parcel",
@@ -413,8 +413,8 @@ function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
-    title: "From 700 acres to ~$17M of entitled-lot value.",
-    desc: "Capital-light, entitled-lot basis: the JV sells entitled lots and the homebuilder funds the horizontal. Each lot equals the finished-lot price less the builder's horizontal cost and margin. Illustrative — survey-dependent.",
+    title: "From 700 acres to $42M of finished-lot revenue.",
+    desc: "Finished-lot basis: we develop the lots — funding roads, sewer and utilities — and sell them finished; the builder just builds the homes. Costs and returns are on the pro forma. Illustrative — survey-dependent.",
     page: 6,
   });
   const cols = [
@@ -428,23 +428,22 @@ function mathLand() {
     ["Less permanent conservation", "recorded easement", "700 − 198", "502 ac"],
     ["Less golf, range, water & lodging", "two 18s + 9-ac range + cottages", "502 − ~300", "~200 ac"],
     ["Less Critical Area & wetlands", "Chesapeake 1,000-ft zone", "200 − ~60", "~140 ac"],
-    ["Entitled lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
-    ["Value per entitled lot", "builder funds the horizontal", "$150K − $60K − $22K", "~$68K"],
-    ["Gross land proceeds", "paid by the homebuilder", "280 × $68K", "$19.0M"],
-    [{ text: "Less JV soft costs (~10%)", bold: true, font: HEAD, color: C.navy },
-      { text: "entitlement · legal · broker", color: C.plum }, "× 0.90", "≈ $17M"],
+    ["Finished lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
+    ["Finished lot price", "we deliver finished lots", "to homebuilders", "$150K"],
+    [{ text: "GROSS LOT REVENUE", bold: true, font: HEAD, color: C.navy },
+      { text: "net profit & returns on the pro forma", color: C.plum }, "280 × $150K", "$42.0M"],
   ];
-  table(s, ML, 2.1, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.43 });
+  table(s, ML, 2.1, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.48 });
   rect(s, ML, 6.0, CW, 0.45, C.navy);
   txt(s,
-    "≈ $17M net to the JV — capital-light: the homebuilder funds the horizontal, so only entitlement & soft costs come out.",
+    "$42.0M gross finished-lot revenue — we develop and deliver finished lots; builders just build. Net profit & returns on the pro forma.",
     ML + 0.2, 6.0, CW - 0.4, 0.45,
-    { font: HEAD, size: 11.5, bold: true, color: C.white, align: "center" });
+    { font: HEAD, size: 11, bold: true, color: C.white, align: "center" });
   footnote(s, 6.62, [SRC.qhwho, SRC.qac, SRC.dnr]);
   s.addNotes(
-    "Internally consistent entitled-lot basis: the builder funds the horizontal, so the JV sells paper lots. " +
-    "Per lot = $150K finished − $60K horizontal − $22K builder margin ≈ $68K. 280 × $68K = $19.0M, less ~10% soft " +
-    "costs ≈ $17M. (Earlier $29M double-counted a finished price with a low cost load.) Illustrative until survey / entitlement."
+    "Finished-lot basis: the JV funds the horizontal and sells finished lots. 280 lots × $150K = $42.0M gross " +
+    "revenue. Costs and returns are on the pro forma (slide 10). This captures the builder's development margin " +
+    "but takes horizontal execution risk and more capital than selling paper lots. Illustrative until survey / entitlement."
   );
 }
 
@@ -519,21 +518,21 @@ function southRiver() {
 function capitalLight() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "CAPITAL STRATEGY",
-    title: "Capital-light by design.",
-    desc: "The land bank barely needs capital: soft costs to entitle, then builders fund the horizontal work and buy the lots. Cash in is small; proceeds come fast.",
+    eyebrow: "DEVELOPMENT PLAN",
+    title: "Entitle, develop, deliver finished lots.",
+    desc: "Start light with entitlement (soft costs), then fund the horizontal — roads, sewer and utilities — and deliver finished lots. The builder just builds the homes, so we capture the full lot value.",
     page: 9,
   });
-  statCard(s, ML, 2.05, "$1–3M", "Soft costs to start",
-    "Entitlements, planning & approvals", { w: 6.05 });
-  statCard(s, ML, 3.12, "Land", "= the equity",
-    "Acreage held by Capital H6 — already acquired", { w: 6.05 });
+  statCard(s, ML, 2.05, "$1–3M", "To entitle (Phase 1)",
+    "Light to start — before the horizontal", { w: 6.05 });
+  statCard(s, ML, 3.12, "$60K / lot", "Horizontal we fund",
+    "Roads, sewer & utilities — lots delivered finished", { w: 6.05 });
 
   rect(s, 7.0, 2.05, 5.83, 2.02, C.navy);
   rect(s, 7.0, 2.05, 0.12, 2.02, C.aubergine);
   txt(s, "THE PRINCIPLE", 7.4, 2.2, 5.4, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 4 });
-  txt(s, "You carry approvals, not construction.", 7.4, 2.5, 5.4, 0.35, { font: HEAD, size: 13, bold: true, color: C.white });
-  txt(s, "Builders take the infrastructure burden — sewer, roads, utilities — and pay for finished lots. Your cash at risk stays small and staged.",
+  txt(s, "We control and capture the full lot.", 7.4, 2.5, 5.4, 0.35, { font: HEAD, size: 13, bold: true, color: C.white });
+  txt(s, "We fund the roads, sewer and utilities and sell finished lots — capturing the builder's development margin and controlling quality, timing and absorption.",
     7.4, 2.96, 5.4, 1.0, { font: BODY, size: 10.5, color: C.cream, lh: 14, valign: "top" });
 
   const cols = [
@@ -543,15 +542,15 @@ function capitalLight() {
     { w: 3.83, color: C.plum, size: 9 },
   ];
   const rows = [
-    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "JAL + H6 dev co (skin in the game)"],
-    ["Phase 2 — Builder takedown", "Horizontal + lot purchase", "~$0 to you", "Regional homebuilder funds & buys"],
-    ["Phase 3 — Recycle", "Proceeds redeployed", "Self-funding", "Next parcel / South River / H6 program"],
+    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "JAL + H6 (soft costs, light)"],
+    ["Phase 2 — Develop", "Roads, sewer & utilities", "~$16.8M", "Development loan + equity (we fund)"],
+    ["Phase 3 — Deliver", "Sell finished lots", "Self-funding", "Builders build homes; proceeds recycle"],
   ];
-  table(s, ML, 4.3, cols, ["Phase", "Approach", "Your capital", "Who funds"], rows, { rowH: 0.5 });
-  callout(s, "Minimal capital at risk — and the land bank seeds everything that comes after.", 6.5);
+  table(s, ML, 4.3, cols, ["Phase", "Approach", "Capital", "Who funds"], rows, { rowH: 0.5 });
+  callout(s, "We carry the development to finished lots — capturing the builder's margin and controlling quality, timing & absorption.", 6.5);
   s.addNotes(
-    "For the land bank the honest story is capital-light: soft costs in, builders fund infra and buy lots. " +
-    "Land is already owned via H6 — no acquisition capital needed."
+    "Finished-lot development: start light (entitlement), then fund the horizontal (roads/sewer/utilities) and " +
+    "deliver finished lots. Captures the builder's development margin and controls quality/timing — more capital, more value."
   );
 }
 
@@ -561,7 +560,7 @@ function proForma() {
   chrome(s, {
     eyebrow: "PRO FORMA  ·  ILLUSTRATIVE",
     title: "The budget, and the returns.",
-    desc: "A capital-light, entitled-lot merchant model: Capital H6 contributes the land, a small equity raise funds entitlement, and ~280 lots sell to a homebuilder who funds the horizontal. Illustrative — for discussion.",
+    desc: "A finished-lot development: Capital H6 contributes the land, a development loan plus equity funds the horizontal, and we sell ~280 finished lots to homebuilders. Illustrative — for discussion.",
     page: 10,
   });
   const usesCols = [
@@ -570,13 +569,13 @@ function proForma() {
   ];
   const uses = [
     ["Land contribution (~140 dev. ac)", "$4.0M"],
-    ["Entitlement, civil & environmental", "$1.1M"],
-    ["Legal, zoning & approvals", "$0.4M"],
-    ["Marketing & brokerage (~3%)", "$0.6M"],
-    ["Predevelopment carry & financing", "$0.2M"],
-    ["Contingency", "$0.2M"],
+    ["Horizontal site development ($60K/lot)", "$16.8M"],
+    ["Soft costs (entitle, civil, env, legal)", "$2.8M"],
+    ["Marketing & brokerage (~3%)", "$1.3M"],
+    ["Contingency (7% of hard)", "$1.2M"],
+    ["Financing / interest carry", "$1.4M"],
     [{ text: "TOTAL PROJECT COST", bold: true, font: HEAD, color: C.navy },
-      { text: "$6.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+      { text: "$27.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
   table(s, ML, 2.0, usesCols, ["USES OF CAPITAL", ""], uses, { rowH: 0.48 });
 
@@ -585,29 +584,29 @@ function proForma() {
     { w: 1.05, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
   ];
   const sources = [
+    ["Development loan (~60% LTC)", "$16.5M"],
     ["Land equity (H6)", "$4.0M"],
-    ["Cash equity (JAL + LP)", "$2.0M"],
-    ["Predev facility", "$0.5M"],
+    ["Cash equity (JAL + LP)", "$7.0M"],
     [{ text: "TOTAL", bold: true, font: HEAD, color: C.navy },
-      { text: "$6.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+      { text: "$27.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
   table(s, 6.1, 2.0, srcCols, ["SOURCES OF CAPITAL", ""], sources, { rowH: 0.48 });
 
   rect(s, 6.1, 4.35, 3.1, 1.41, C.navy);
   rect(s, 6.1, 4.35, 0.1, 1.41, C.aubergine);
   txt(s, "KEY ASSUMPTIONS", 6.32, 4.45, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$68K net / lot  ·  ~280 lots over Yr 2–4  ·  builder funds horizontal  ·  8% pref + co-GP promote  ·  land at appraised value",
+  txt(s, "$150K finished lot  ·  280 lots  ·  we fund the horizontal ($60K/lot)  ·  ~60% LTC loan  ·  8% pref + co-GP promote",
     6.32, 4.72, 2.78, 1.0, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
 
   rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
   rect(s, 9.3, 2.0, 0.12, 3.76, C.aubergine);
   txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
   const mets = [
-    ["$19.0M", "Gross lot revenue"],
-    ["$12.5M", "Net development profit"],
-    ["~3.0×", "Equity multiple"],
-    ["~32%", "Project IRR (phased)"],
-    ["~24%", "LP IRR (after promote)"],
+    ["$42.0M", "Gross lot revenue"],
+    ["$14.5M", "Net development profit"],
+    ["~2.3×", "Equity multiple"],
+    ["~24%", "Project IRR (phased)"],
+    ["~20%", "LP IRR (after promote)"],
   ];
   let my = 2.5;
   mets.forEach(([v, l]) => {
@@ -617,14 +616,14 @@ function proForma() {
   });
 
   rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, "Illustrative: ~$12.5M profit on ~$6.5M cost — ~3.0× equity, ~32% project IRR. Builder funds the horizontal; JAL co-invests.",
+  txt(s, "Illustrative: ~$14.5M profit on ~$27.5M cost — ~2.3× equity, ~24% project IRR. We deliver finished lots; builders just build.",
     ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
   txt(s, "Illustrative pro forma for discussion only — basis and sources on the following slide; figures subject to confirmation.",
     ML, 6.58, CW, 0.26, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
-    "Capital-light merchant land pro forma, consistent with slide 6. $19.0M lot revenue − $6.5M cost " +
-    "($4.0M contributed land + ~$2.5M soft) ≈ $12.5M profit. On ~$6.0M equity ≈ 3.0x / ~32% IRR (phased Yr 2–4); " +
-    "LP ~24% after an 8% pref + JAL co-GP promote. Land basis and lot price are the big swing factors. All illustrative."
+    "Finished-lot development pro forma, consistent with slide 6. $42.0M revenue − $27.5M cost ≈ $14.5M profit. " +
+    "Funded ~60% by a development loan; equity ~$11M (land $4M + cash $7M) → ~2.3x / ~24% project IRR (phased); " +
+    "LP ~20% after an 8% pref + JAL co-GP promote. We capture the builder's margin but take horizontal risk. All illustrative."
   );
 }
 
@@ -645,10 +644,10 @@ function basis() {
   const rows = [
     ["Net developable acreage", "~140 ac", "700 gross − 198 conservation − ~300 golf − ~60 Critical Area; survey to confirm"],
     ["Lot density", "~2.0 / ac", "Blended for the developable (non-Critical-Area) land; Queen Anne's County zoning to confirm"],
-    ["Finished lot value", "$150K", "Conservative — QAC building lots average ~$237K; new homes $600–705K (lot ≈ 24% of home)"],
-    ["Builder-funded horizontal", "$60K / lot", "Per-lot land-development benchmark; residential development runs $50–150K / acre"],
-    ["Builder margin", "~$22K (15%)", "Standard return for the builder to carry entitled lots through to finished"],
-    ["JV soft costs", "~10%", "Entitlement, civil & environmental, legal / zoning and brokerage"],
+    ["Finished lot price", "$150K", "Conservative — QAC building lots average ~$237K; new homes $600–705K (lot ≈ 24% of home)"],
+    ["Horizontal site development", "$60K / lot", "JV-funded — roads, sewer, utilities; national benchmark $50–150K / acre"],
+    ["Soft costs", "~$2.8M", "Entitlement, civil & environmental, legal / zoning and management"],
+    ["Development loan", "~60% LTC", "Standard land-development / A&D financing on the horizontal"],
     ["Land basis (contributed)", "~$4.0M", "Allocated from the $25M H6 purchase (~$29K / ac); joint appraisal to set"],
     ["Waterfall", "8% pref · co-GP", "Standard JV promote structure — for discussion"],
   ];
@@ -656,8 +655,8 @@ function basis() {
   footnote(s, 6.6, [SRC.qacLots, SRC.newcon, SRC.devcost, SRC.cr]);
   s.addNotes(
     "Backs the pro forma. Market inputs are sourced: QAC home/lot prices (Land.com, Zillow) support a conservative " +
-    "$150K finished lot; $60K/lot horizontal matches national land-dev benchmarks (HomeGuide). Deal-specific inputs — " +
-    "gross acreage, the developable balance, land basis and density — are flagged 'to confirm' pending survey / easement / zoning."
+    "$150K finished lot; the $60K/lot horizontal (now JV-funded) matches national land-dev benchmarks (HomeGuide). Deal-specific " +
+    "inputs — gross acreage, the developable balance, land basis and density — are flagged 'to confirm' pending survey / easement / zoning."
   );
 }
 
@@ -894,7 +893,7 @@ function path() {
       ["Stand up the land vehicle under Capital H6",
        "Launch Phase 1 entitlements + soft-cost budget",
        "Open regional-homebuilder conversations",
-       "First entitled-lot sales underwritten"]],
+       "First finished-lot sales underwritten"]],
   ];
   const colW = 3.97, gap = 0.21;
   let x = ML;
