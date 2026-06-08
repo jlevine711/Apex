@@ -126,10 +126,13 @@ consistent:
   capital to the GP), not the sole GP.
   Sensitivity (slide 13): LP IRR ~25–33% across $150K lots at 55–70% LTC,
   up to ~41% at $170K / 70% LTC
-- **Year-by-year cash flow** (slides 17–18) lays out the project cash flow for
-  each phase: Phase 1 land + horizontal up front, lots sell Yr 2–4 (net
-  ~$14.5M); Phase 2 develops to ~cost Yr 0–2, then a **recap / sale ~$62M @ a
-  7.5% cap** at ~Yr 4 (net ~$26.3M). Both tie back to the pro-forma totals.
+- **Year-by-year cash flow** (slides 17–18): Phase 1 shows the **unlevered
+  project** cash flow — land + horizontal up front, lots sell Yr 2–4 (net
+  ~$14.5M, ~24% unlevered). Phase 2 shows the **build-to-core levered equity**
+  cash flow — ~$16.4M equity in, recap / sell ~$62M @ a 7.5% cap on ~$47M cost
+  at ~Yr 4 → net equity CF **[-8.2, -8.2, 1.0, 2.5, 34.0]**, ~28% IRR / ~2.3×.
+  Both tie cell-for-cell to the matching model section (the Phase 2 rows are
+  `bcEq`, `bcStabLevCF`, `bcXEq`, `bcf`).
 
 `JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
 numbers — Phase 1 (finished-lot: ~31% levered project / **~27% LP** after a

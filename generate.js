@@ -919,9 +919,9 @@ function phase1cf() {
 function phase2cf() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "PHASE 2  ·  PRO FORMA CASH FLOW",
-    title: "Phase 2 — pro forma cash flow.",
-    desc: "Hospitality build-to-core, project cash flow ($M). Develop Yr 0–2; stabilize, then recap / sell at ~Yr 4 (~$62M @ a 7.5% cap). VIVÂMEE operates. Illustrative.",
+    eyebrow: "PHASE 2  ·  BUILD-TO-CORE CASH FLOW",
+    title: "Phase 2 — build-to-core equity cash flow.",
+    desc: "Hospitality build-to-core, levered equity cash flow ($M). Build to ~$47M cost at 65% LTC; stabilize at the premium NOI; recap / sell at ~Yr 4 (~$62M @ a 7.5% cap). VIVÂMEE operates. Illustrative.",
     page: 18,
   });
   const cf = (label, vals, opts = {}) => [
@@ -930,23 +930,23 @@ function phase2cf() {
     { text: vals[5] || "", bold: true, font: HEAD, color: C.aubergine, align: "right" },
   ];
   const cols = [
-    { w: 3.0, font: HEAD, bold: true, color: C.navy, size: 9.5 },
-    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.5, color: C.navy, size: 10, align: "center" },
-    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.5, color: C.navy, size: 10, align: "center" },
-    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.8, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
+    { w: 3.4, font: HEAD, bold: true, color: C.navy, size: 9.5 },
+    { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.42, color: C.navy, size: 10, align: "center" },
+    { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.42, color: C.navy, size: 10, align: "center" },
+    { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.78, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
   ];
   const rows = [
-    cf("Net operating income", ["—", "—", "1.9", "4.7", "4.7", "11.3"]),
-    cf("Recap / sale proceeds", ["—", "—", "—", "—", "62.0", "62.0"]),
-    cf("Less: development cost", ["(15.0)", "(20.0)", "(12.0)", "—", "—", "(47.0)"]),
-    cf("Net project cash flow", ["(15.0)", "(20.0)", "(10.1)", "4.7", "66.7", "26.3"], { bold: true }),
-    cf("Cumulative cash flow", ["(15.0)", "(35.0)", "(45.1)", "(40.4)", "26.3", ""]),
+    cf("Equity invested", ["(8.2)", "(8.2)", "—", "—", "—", "(16.4)"]),
+    cf("Operating cash flow (after debt)", ["—", "—", "1.0", "2.5", "2.5", "6.0"]),
+    cf("Recap equity (sale − loan)", ["—", "—", "—", "—", "31.5", "31.5"]),
+    cf("Net equity cash flow", ["(8.2)", "(8.2)", "1.0", "2.5", "34.0", "21.1"], { bold: true }),
+    cf("Cumulative cash flow", ["(8.2)", "(16.4)", "(15.4)", "(12.9)", "21.1", ""]),
   ];
   table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
-  callout(s, "Develops to ~cost; value is created at the recap / sale. Build-to-core (65% LTC) levered IRR ~28% / ~2.3× — see the Phase 2 sensitivity.", 5.8);
-  txt(s, "Project-level cash flow; illustrative phasing. A 120-key resort & spa is already designed (FILLAT+). Figures subject to confirmation.",
+  callout(s, "~$16.4M equity → ~$21M net; build-to-core (65% LTC) levered IRR ~28% / ~2.3× at the Yr-4 recap (~$62M on ~$47M cost). Ties to the model's build-to-core sheet.", 5.8);
+  txt(s, "Levered equity cash flow — the line that drives the ~28% IRR; recap / sale at stabilization. A 120-key resort & spa is already designed (FILLAT+). Illustrative.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes("Phase 2 build-to-core annual cash flow. Develop $47M Yr 0–2; NOI ramps Yr 2–4; recap / sell ~$62M @ a 7.5% cap at Yr 4. Levered build-to-core IRR ~28% (65% LTC).");
+  s.addNotes("Phase 2 build-to-core LEVERED EQUITY cash flow — ties cell-for-cell to the model's Phase 2 sheet: equity $16.4M (bcEq, split Yr 0–1), stabilized levered CF ~$2.5M (NOI − debt; Yr 2 ramps at ~40%), exit equity $31.5M (recap $62M − loan), net equity CF [-8.2, -8.2, 1.0, 2.5, 34.0], IRR ~28% / ~2.3×. Project develops to ~$47M cost, recaps ~$62M @ a 7.5% cap.");
 }
 
 // ===================================== SLIDE 19 — CAPITAL ACCESS
