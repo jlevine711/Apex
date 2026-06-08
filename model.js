@@ -42,6 +42,16 @@ function waterfall(eqCF, lpFrac, pref, tiers) {
   return { lp, gp };
 }
 
+// ---- Phase 1 LP IRR as a function of finished-lot price and LTC (for sensitivity) ----
+function p1LPIRR(lotPrice, ltc) {
+  const lots = 280, land = 4000000, soft = 2800000, fin = 1400000, horiz = lots * 60000;
+  const rev = lots * lotPrice;
+  const cost = land + horiz + soft + rev * 0.03 + horiz * 0.07 + fin;
+  const profit = rev - cost, loan = cost * ltc, equity = cost - loan, dist = equity + profit;
+  const cf = [-equity * 0.607, -equity * 0.393, dist * 0.088, dist * 0.307, dist * 0.605];
+  return irr(waterfall(cf, 0.90, 0.08, [{ irr: 0.15, lp: 0.80 }, { irr: 0.20, lp: 0.70 }, { irr: Infinity, lp: 0.60 }]).lp);
+}
+
 const NAVY = "FF0B163C", AUB = "FF3A243A", CREAM = "FFF4F2ED", WHITE = "FFFFFFFF", MAUVE = "FFC4B8C4";
 
 const wb = new ExcelJS.Workbook();
@@ -124,7 +134,7 @@ const mktPct  = line("Marketing & brokerage (% of revenue)", 0.03, "lot sales", 
 const contPct = line("Contingency (% of hard cost)", 0.07, "on horizontal", pct);
 const fin     = line("Financing / interest carry ($)", 1400000, "development loan interest", money);
 const landBas = line("Land basis — contributed ($)", 4000000, "allocated from $25M H6 purchase (~$29K/ac); appraisal to set", money);
-const ltc     = line("Development loan (% of total cost)", 0.70, "land-development / A&D financing (70% LTC)", pct);
+const ltc     = line("Development loan (% of total cost)", 0.60, "land-development / A&D financing (60% LTC)", pct);
 const pref    = line("Preferred return", 0.08, "to equity, before promote", pct);
 
 const B = (i) => `B${i}`;
@@ -198,13 +208,13 @@ cfnote.value = "entitlement/land Yr 0–1, horizontal Yr 1–2, finished-lot sal
 // ---- LEVERED EQUITY + PROMOTE WATERFALL ----
 header("LEVERED EQUITY RETURN  (70% LTC development loan)");
 const lyr = row(); lyr.getCell(1).value = "Year"; ["Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4"].forEach((y, i) => { const c = lyr.getCell(2 + i); c.value = y; c.font = { bold: true, size: 9, color: { argb: "FF6B5A6B" } }; c.alignment = { horizontal: "right" }; });
-const pcf = [-5000000, -3231000, 2000000, 7000000, 13795000]; // equity in (Yr 0–1) → distributions (Yr 2–4)
+const pcf = [-6661000, -4313000, 2247000, 7840000, 15451000]; // equity in (Yr 0–1) → distributions (Yr 2–4)
 const pcfRow = row(); pcfRow.getCell(1).value = "Project equity cash flow"; pcfRow.getCell(1).font = { size: 10, color: { argb: "FF333333" } }; pcfRow.getCell(1).alignment = { indent: 1 };
 pcf.forEach((v, i) => { const c = pcfRow.getCell(2 + i); c.value = v; c.numFmt = money; c.font = { size: 10, color: { argb: "FF0B163C" } }; c.alignment = { horizontal: "right" }; });
 const lirr = irr(pcf);
 const lirrRow = row(); lirrRow.getCell(1).value = "Project equity IRR (levered)"; lirrRow.getCell(1).font = { bold: true, size: 10, color: { argb: "FF0B163C" } }; lirrRow.getCell(1).alignment = { indent: 1 };
 const lc = lirrRow.getCell(2); lc.value = { formula: `IRR(B${pcfRow.number}:F${pcfRow.number})`, result: lirr }; lc.numFmt = pct; lc.font = { bold: true, size: 10, color: { argb: AUB } }; lc.alignment = { horizontal: "right" };
-const lnn = lirrRow.getCell(3); ws.mergeCells(lirrRow.number, 3, lirrRow.number, 6); lnn.value = "equity ~$8.25M (70% LTC); lot sales Yr 2–4. Unlevered project IRR ~24%."; lnn.font = { italic: true, size: 9, color: { argb: "FF6B5A6B" } };
+const lnn = lirrRow.getCell(3); ws.mergeCells(lirrRow.number, 3, lirrRow.number, 6); lnn.value = "equity ~$11M (60% LTC); lot sales Yr 2–4. Unlevered project IRR ~24%."; lnn.font = { italic: true, size: 9, color: { argb: "FF6B5A6B" } };
 
 header("PROMOTE WATERFALL  (LP 90% / GP 10% · 8% pref · 80/20 to 15% · 70/30 to 20% · 60/40 above)");
 const wf = waterfall(pcf, 0.90, 0.08, [{ irr: 0.15, lp: 0.80 }, { irr: 0.20, lp: 0.70 }, { irr: Infinity, lp: 0.60 }]);
@@ -216,6 +226,18 @@ wf.gp.forEach((v, i) => { const c = gpYr.getCell(2 + i); c.value = Math.round(v)
 line("LP IRR (after promote)", { formula: `IRR(B${lpYr.number}:F${lpYr.number})`, result: lpIRR }, "what the equity investors earn", pct, { bold: true, accent: true });
 line("GP IRR (co-invest + carried interest)", { formula: `IRR(B${gpYr.number}:F${gpYr.number})`, result: gpIRR }, "JAL", pct, { bold: true });
 line("GP net profit (co-invest + promote)", { formula: `SUM(B${gpYr.number}:F${gpYr.number})`, result: Math.round(wf.gp.reduce((a, b) => a + b, 0)) }, "JAL's share of the upside", money, { bold: true });
+
+// ---- LP IRR SENSITIVITY ----
+header("LP IRR SENSITIVITY  (finished lot price  ×  LTC)");
+const sPrices = [130000, 150000, 170000];
+const sLTC = [0.55, 0.60, 0.65, 0.70];
+const shr = row(); shr.getCell(1).value = "Lot price  /  LTC"; shr.getCell(1).font = { bold: true, size: 9, color: { argb: WHITE } }; shr.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } };
+sLTC.forEach((l, i) => { const c = shr.getCell(2 + i); c.value = l; c.numFmt = "0%"; c.font = { bold: true, size: 10, color: { argb: WHITE } }; c.alignment = { horizontal: "center" }; c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; });
+sPrices.forEach(p => {
+  const rr = row(); rr.getCell(1).value = "$" + (p / 1000) + "K / lot"; rr.getCell(1).font = { bold: true, size: 10, color: { argb: "FF0B163C" } }; rr.getCell(1).alignment = { indent: 1 };
+  sLTC.forEach((l, i) => { const v = p1LPIRR(p, l); const c = rr.getCell(2 + i); c.value = v; c.numFmt = "0.0%"; const base = (p === 150000 && l === 0.60); c.font = { size: 10, bold: base, color: { argb: base ? AUB : "FF0B163C" } }; c.alignment = { horizontal: "center" }; if (base) c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } }; });
+});
+const snote = row(); ws.mergeCells(snote.number, 1, snote.number, 6); snote.getCell(1).value = "LP IRR after the 8% pref + tiered promote. Base case = $150K lot / 60% LTC (highlighted). Each cell re-runs the full waterfall."; snote.getCell(1).font = { italic: true, size: 9, color: { argb: "FF6B5A6B" } };
 
 // ---- footer note ----
 r++;
@@ -340,5 +362,5 @@ n2.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: 
 n2.getCell(1).alignment = { wrapText: true, vertical: "top" }; n2.height = 50;
 
 wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
-  .then(() => console.log("Wrote model  (P1 unlev ~" + (irrVal * 100).toFixed(1) + "% / levered ~" + (lirr * 100).toFixed(1) + "% / LP ~" + (lpIRR * 100).toFixed(1) + "% / GP ~" + (gpIRR * 100).toFixed(1) + "%; P2 build-to-core ~" + (bcIRR * 100).toFixed(1) + "%)"))
+  .then(() => console.log("Wrote model  (P1 60% LTC: unlev ~" + (irrVal * 100).toFixed(1) + "% / levered ~" + (lirr * 100).toFixed(1) + "% / LP ~" + (lpIRR * 100).toFixed(1) + "% / GP ~" + (gpIRR * 100).toFixed(1) + "%; P2 b-t-c ~" + (bcIRR * 100).toFixed(1) + "%)"))
   .catch((e) => { console.error(e); process.exit(1); });

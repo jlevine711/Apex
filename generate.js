@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 20;
+const TOTAL = 21;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -587,9 +587,9 @@ function proForma() {
     { w: 1.05, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
   ];
   const sources = [
-    ["Development loan (70% LTC)", "$19.25M"],
+    ["Development loan (60% LTC)", "$16.5M"],
     ["Land equity (H6)", "$4.0M"],
-    ["Cash equity (JAL + LP)", "$4.25M"],
+    ["Cash equity (JAL + LP)", "$7.0M"],
     [{ text: "TOTAL", bold: true, font: HEAD, color: C.navy },
       { text: "$27.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
@@ -598,7 +598,7 @@ function proForma() {
   rect(s, 6.1, 4.35, 3.1, 1.41, C.navy);
   rect(s, 6.1, 4.35, 0.1, 1.41, C.aubergine);
   txt(s, "KEY ASSUMPTIONS", 6.32, 4.45, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$150K finished lot  ·  280 lots  ·  we fund the horizontal ($60K/lot)  ·  70% LTC loan  ·  8% pref + tiered promote (see waterfall)",
+  txt(s, "$150K finished lot  ·  280 lots  ·  we fund the horizontal ($60K/lot)  ·  60% LTC loan  ·  8% pref + tiered promote (see waterfall)",
     6.32, 4.72, 2.78, 1.0, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
 
   rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
@@ -607,9 +607,9 @@ function proForma() {
   const mets = [
     ["$42.0M", "Gross lot revenue"],
     ["$14.5M", "Net development profit"],
-    ["~2.8×", "Project equity multiple"],
-    ["~39%", "Project IRR (levered)"],
-    ["~33%", "LP IRR (after promote)"],
+    ["~2.3×", "Project equity multiple"],
+    ["~31%", "Project IRR (levered)"],
+    ["~27%", "LP IRR (after promote)"],
   ];
   let my = 2.5;
   mets.forEach(([v, l]) => {
@@ -619,14 +619,14 @@ function proForma() {
   });
 
   rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, "Illustrative: ~$14.5M profit on ~$27.5M cost — 70% LTC → ~2.8× equity, ~39% levered (33% LP after promote). We deliver finished lots; builders just build.",
+  txt(s, "Illustrative: ~$14.5M profit on ~$27.5M cost — 60% LTC → ~2.3× equity, ~31% levered (27% LP after promote). We deliver finished lots; builders just build.",
     ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
   txt(s, "Illustrative pro forma for discussion only — basis and sources on the following slide; figures subject to confirmation.",
     ML, 6.58, CW, 0.26, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
     "Finished-lot development pro forma, consistent with slide 6. $42.0M revenue − $27.5M cost ≈ $14.5M profit. " +
-    "70% LTC → equity ~$8.25M (land $4M + cash $4.25M); ~2.8x / ~39% levered project IRR (~24% unlevered). After an " +
-    "8% pref + tiered promote (80/20 → 70/30 → 60/40), LP IRR ~33% / GP IRR ~75% (see the waterfall slide). All illustrative."
+    "60% LTC → equity ~$11M (land $4M + cash $7M); ~2.3x / ~31% levered project IRR (~24% unlevered). After an " +
+    "8% pref + tiered promote (80/20 → 70/30 → 60/40), LP IRR ~27% / GP IRR ~59% (see waterfall + sensitivity). All illustrative."
   );
 }
 
@@ -669,7 +669,7 @@ function waterfall() {
   chrome(s, {
     eyebrow: "RETURNS WATERFALL  ·  PHASE 1",
     title: "How the LP IRR is built.",
-    desc: "A market structure: 8% preferred return, then a tiered promote. The LP funds 90% of the equity and nets ~33% after the promote — clearing the 30% target; JAL's GP earns the carried interest.",
+    desc: "A market structure: 8% preferred return, then a tiered promote. At 60% LTC the LP (90% of equity) nets ~27% after the promote; reaching the 30%+ range takes higher leverage or pricing (see the sensitivity). JAL's GP earns the carried interest.",
     page: 12,
   });
   const cols = [
@@ -686,39 +686,70 @@ function waterfall() {
 
   rect(s, ML, 5.0, 6.0, 1.4, C.navy);
   rect(s, ML, 5.0, 0.1, 1.4, C.aubergine);
-  txt(s, "CAPITAL STACK  ·  70% LTC", ML + 0.25, 5.1, 5.6, 0.3, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$27.5M cost  =  $19.25M development loan (70%)  +  $8.25M equity.  Equity: LP 90% ($7.4M)  ·  GP / JAL 10% ($0.83M co-invest).",
+  txt(s, "CAPITAL STACK  ·  60% LTC", ML + 0.25, 5.1, 5.6, 0.3, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2 });
+  txt(s, "$27.5M cost  =  $16.5M development loan (60%)  +  $11M equity.  Equity: LP 90% ($9.9M)  ·  GP / JAL 10% ($1.1M co-invest).",
     ML + 0.25, 5.38, 5.55, 0.95, { font: BODY, size: 10, color: C.cream, lh: 13.5, valign: "top" });
 
   rect(s, 6.83, 2.1, 6.0, 1.98, C.navy);
   rect(s, 6.83, 2.1, 0.12, 1.98, C.aubergine);
   txt(s, "LP — EQUITY INVESTORS  (90% of equity)", 7.1, 2.24, 5.6, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 1.5 });
-  txt(s, "~33%", 7.1, 2.55, 2.5, 0.85, { font: HEAD, size: 38, bold: true, color: C.white });
+  txt(s, "~27%", 7.1, 2.55, 2.5, 0.85, { font: HEAD, size: 38, bold: true, color: C.white });
   txt(s, "LP IRR\nafter promote", 7.1, 3.42, 2.5, 0.5, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
-  txt(s, "$7.4M invested\n→ $17.3M back\n2.3× equity multiple", 9.7, 2.62, 3.0, 1.3, { font: BODY, size: 11, color: C.cream, lh: 15, valign: "middle" });
+  txt(s, "$9.9M invested\n→ $20.3M back\n2.05× equity multiple", 9.7, 2.62, 3.0, 1.3, { font: BODY, size: 11, color: C.cream, lh: 15, valign: "middle" });
 
   rect(s, 6.83, 4.28, 6.0, 1.98, C.white, { line: { color: C.hair, width: 0.75 } });
   txt(s, "GP — JAL  (10% co-invest + carried interest)", 7.1, 4.42, 5.6, 0.3, { font: HEAD, size: 10, bold: true, color: C.aubergine, spc: 1.5 });
-  txt(s, "~$4.6M", 7.1, 4.73, 2.6, 0.8, { font: HEAD, size: 32, bold: true, color: C.navy });
+  txt(s, "~$4.1M", 7.1, 4.73, 2.6, 0.8, { font: HEAD, size: 32, bold: true, color: C.navy });
   txt(s, "GP promote / carry", 7.1, 5.55, 2.6, 0.3, { font: BODY, size: 10, color: C.plum });
-  txt(s, "$0.83M co-invest\n→ $5.5M back\n~75% GP IRR", 9.7, 4.78, 3.0, 1.3, { font: BODY, size: 11, color: C.plum, lh: 15, valign: "middle" });
+  txt(s, "$1.1M co-invest\n→ $5.2M back\n~59% GP IRR", 9.7, 4.78, 3.0, 1.3, { font: BODY, size: 11, color: C.plum, lh: 15, valign: "middle" });
 
-  callout(s, "Market 8% pref + tiered promote → the LP nets ~33% (past the 30% target); JAL earns ~$4.6M of carry.", 6.5);
+  callout(s, "Market 8% pref + tiered promote → the LP nets ~27% at 60% LTC; JAL earns ~$4.1M of carry. (See the sensitivity for 30%+ paths.)", 6.5);
   s.addNotes(
-    "Shows how the LP IRR is derived. Project equity IRR (70% LTC) ~39%; through an 8% pref + tiered promote " +
-    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~33% and the GP (JAL) earns ~75% IRR / ~$4.6M carry on a " +
-    "small co-invest. Market structure; all derived in the model (Phase 1 sheet)."
+    "Shows how the LP IRR is derived. Project equity IRR (60% LTC) ~31%; through an 8% pref + tiered promote " +
+    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~27% and the GP (JAL) earns ~59% IRR / ~$4.1M carry on a " +
+    "small co-invest. The next slide sensitizes the LP IRR. All derived in the model (Phase 1 sheet)."
   );
 }
 
-// ===================================== SLIDE 13 — BUYER UNIVERSE / LIQUIDITY
+// ===================================== SLIDE 13 — LP IRR SENSITIVITY
+function sensitivity() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "SENSITIVITY  ·  PHASE 1 LP IRR",
+    title: "How robust is the LP IRR?",
+    desc: "LP IRR (after the promote) across finished-lot price and leverage. The base case — $150K lots, 60% LTC — pencils to ~27%; the high-20s / low-30s is reachable with stronger pricing or modestly more leverage.",
+    page: 13,
+  });
+  const cols = [
+    { w: 2.4, font: HEAD, bold: true, color: C.navy, size: 10 },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.475, color: C.navy, size: 12, align: "center" },
+  ];
+  const rows = [
+    ["$130K / lot", "18.1%", "19.7%", "21.6%", "23.9%"],
+    ["$150K / lot  (base)", "24.8%", { text: "26.8%", bold: true, color: C.aubergine, font: HEAD }, "29.4%", "32.8%"],
+    ["$170K / lot", "30.7%", "33.3%", "36.5%", "40.7%"],
+  ];
+  table(s, ML, 2.3, cols, ["LP IRR   (lot price / LTC)", "55% LTC", "60% LTC", "65% LTC", "70% LTC"], rows, { rowH: 0.85, headSize: 9 });
+  callout(s, "Base ($150K, 60% LTC) → ~27% LP. The 30%+ range is realistic — ~$170K lots, or 65–70% LTC.", 5.55);
+  txt(s, "LP IRR after the 8% pref + tiered promote; each cell re-runs the full waterfall in the model. Illustrative — drivers in order of impact: lot price · LTC · absorption pace.",
+    ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
+  s.addNotes(
+    "Sensitivity of the Phase 1 LP IRR to lot price × LTC. Base $150K / 60% LTC → ~27%. To clear 30% LP: ~$170K lots " +
+    "(~33% at 60% LTC) or 65–70% LTC at $150K (~29–33%). Each cell re-runs cost → profit → equity → the promote waterfall in the model."
+  );
+}
+
+// ===================================== SLIDE 14 — BUYER UNIVERSE / LIQUIDITY
 function builders() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "LOT LIQUIDITY  ·  BUYER UNIVERSE",
     title: "A deep pool of lot buyers.",
     desc: "Regional and national homebuilders are actively building across Queen Anne's County and the Eastern Shore. Entitled, finished lots trade readily — multiple credible takeout buyers let us run a competitive process and de-risk the exit.",
-    page: 13,
+    page: 14,
   });
   const cols = [
     { w: 3.1, font: HEAD, bold: true, color: C.navy, size: 10 },
@@ -751,7 +782,7 @@ function phase2() {
     eyebrow: "PHASE 2  ·  HOSPITALITY  ·  ILLUSTRATIVE",
     title: "Phase 2 — add a hotel and restaurants.",
     desc: "VIVÂMEE-led resort; JAL as capital partner. Held for income it yields ~8% / ~12% IRR — to clear a mid-to-high-20s return, build to core: the contributed land + VIVÂMEE's premium NOI create a development spread, captured by recapitalizing at stabilization (~Yr 4).",
-    page: 14,
+    page: 15,
   });
   const costCols = [
     { w: 3.95, color: C.navy, size: 9.5 },
@@ -823,7 +854,7 @@ function capitalAccess() {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 15,
+    page: 16,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -855,7 +886,7 @@ function structure() {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 16,
+    page: 17,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -916,7 +947,7 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 17,
+    page: 18,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -951,7 +982,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 18,
+    page: 19,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -999,7 +1030,7 @@ function path() {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 19,
+    page: 20,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -1076,6 +1107,7 @@ capitalLight();
 proForma();
 basis();
 waterfall();
+sensitivity();
 builders();
 phase2();
 capitalAccess();
