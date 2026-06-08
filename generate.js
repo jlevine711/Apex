@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 22;
+const TOTAL = 24;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -143,6 +143,7 @@ const SRC = {
   qacLots: { label: "Land.com — QAC lots", url: "https://www.land.com/Queen-Annes-County-MD/" },
   newcon:  { label: "Zillow — QAC new homes", url: "https://www.zillow.com/queen-annes-county-md/new-homes/" },
   devcost: { label: "HomeGuide — land dev cost", url: "https://homeguide.com/costs/cost-to-develop-land" },
+  fillat:  { label: "FILLAT+ — resort design", url: "https://www.pfarc.com/queenstown-harbor-resort-spa/" },
   lax:     { label: "Lacrosse Homes (Centreville, QAC)", url: "https://www.laxhomes.com/communities/" },
   caruso:  { label: "Caruso Homes", url: "https://www.carusohomes.com/new-homes/md/maryland/floor-plans/" },
   gem:     { label: "Gemcraft Homes", url: "https://www.gemcrafthomes.com/" },
@@ -545,7 +546,7 @@ function capitalLight() {
     { w: 3.83, color: C.plum, size: 9 },
   ];
   const rows = [
-    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "JAL + H6 (soft costs, light)"],
+    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "Capital H6 (soft costs, light)"],
     ["Phase 2 — Develop", "Roads, sewer & utilities", "~$16.8M", "Development loan + equity (we fund)"],
     ["Phase 3 — Deliver", "Sell finished lots", "Self-funding", "Builders build homes; proceeds recycle"],
   ];
@@ -588,8 +589,8 @@ function proForma() {
   ];
   const sources = [
     ["Development loan (60% LTC)", "$16.5M"],
-    ["Land equity (H6)", "$4.0M"],
-    ["Cash equity (JAL + LP)", "$7.0M"],
+    ["Land equity", "$4.0M"],
+    ["Cash equity", "$7.0M"],
     [{ text: "TOTAL", bold: true, font: HEAD, color: C.navy },
       { text: "$27.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
@@ -781,7 +782,7 @@ function phase2() {
   chrome(s, {
     eyebrow: "PHASE 2  ·  HOSPITALITY  ·  ILLUSTRATIVE",
     title: "Phase 2 — add a hotel and restaurants.",
-    desc: "VIVÂMEE-led resort; JAL as capital partner. Held for income it yields ~8% / ~12% IRR — to clear a mid-to-high-20s return, build to core: the contributed land + VIVÂMEE's premium NOI create a development spread, captured by recapitalizing at stabilization (~Yr 4).",
+    desc: "VIVÂMEE-led resort; a 120-key resort & spa is already designed (FILLAT+ Architecture). JAL leads capital formation. Held for income it yields ~8% / ~12% IRR; to clear a mid-to-high-20s return we build to core, recapitalizing at stabilization (~Yr 4).",
     page: 15,
   });
   const costCols = [
@@ -838,9 +839,10 @@ function phase2() {
   rect(s, ML, 5.95, CW, 0.45, C.aubergine);
   txt(s, "Built to core (recap at stabilization), the hotel clears ~28% IRR / ~2.3×. Held for income it's ~12% — the spread is the contributed land + VIVÂMEE's premium NOI.",
     ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
-  footnote(s, 6.55, [SRC.hvs, SRC.hcap, SRC.rcost]);
+  footnote(s, 6.55, [SRC.fillat, SRC.hvs, SRC.hcap, SRC.rcost]);
   s.addNotes(
-    "Phase 2 = hospitality upside, VIVÂMEE-led, JAL as capital partner. Two cases in the model: hold for income (~8% YoC, " +
+    "Phase 2 = hospitality upside, VIVÂMEE-led; JAL leads capital formation. A 120-key resort & spa is already designed " +
+    "(FILLAT+ Architecture), validating the program. Two cases in the model: hold for income (~8% YoC, " +
     "~12% IRR — the floor) or BUILD-TO-CORE — recap/sell at stabilization (~Yr 4) at a 7.5% cap, capturing the development " +
     "spread from the contributed land + premium NOI → ~28% IRR / ~2.3x. Build-to-core lets JAL earn the development return " +
     "while VIVÂMEE keeps and operates the resort. Model is source of truth."
@@ -870,7 +872,7 @@ function phase2sens() {
   ];
   table(s, ML, 2.3, cols, ["BUILD-TO-CORE IRR  (NOI / cap)", "7.0% cap", "7.5% cap", "8.0% cap", "8.5% cap"], rows, { rowH: 0.85, headSize: 9 });
   callout(s, "Base ~28%. Strong NOI + a sub-8% cap → low-to-high 30s; soft NOI or an 8.5% cap pulls it toward the high-teens / low-20s.", 5.55);
-  txt(s, "Build-to-core project IRR (65% LTC, recap ~Yr 4). VIVÂMEE-led; JAL is the capital partner. Each cell re-runs the model. Illustrative.",
+  txt(s, "Build-to-core project IRR (65% LTC, recap ~Yr 4). VIVÂMEE-led; JAL leads capital formation. Each cell re-runs the model. Illustrative.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
     "Phase 2 build-to-core IRR sensitized to stabilized NOI × exit cap (the development spread). Base $4.65M NOI / 7.5% cap " +
@@ -879,14 +881,82 @@ function phase2sens() {
   );
 }
 
-// ===================================== SLIDE 17 — CAPITAL ACCESS
+// ===================================== SLIDE 17 — PHASE 1 CASH FLOW
+function phase1cf() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "PHASE 1  ·  PRO FORMA CASH FLOW",
+    title: "Phase 1 — pro forma cash flow.",
+    desc: "Finished-lot development, project cash flow ($M). Land and entitlement up front; the horizontal funds in Yr 1–2; lots sell Yr 2–4. Net profit ~$14.5M. Illustrative.",
+    page: 17,
+  });
+  const cf = (label, vals, opts = {}) => [
+    opts.bold ? { text: label, bold: true, font: HEAD, color: C.navy } : label,
+    ...vals.slice(0, 5).map((v) => (opts.bold ? { text: v, bold: true, font: HEAD, color: C.navy, align: "center" } : v)),
+    { text: vals[5] || "", bold: true, font: HEAD, color: C.aubergine, align: "right" },
+  ];
+  const cols = [
+    { w: 3.0, font: HEAD, bold: true, color: C.navy, size: 9.5 },
+    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.5, color: C.navy, size: 10, align: "center" },
+    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.5, color: C.navy, size: 10, align: "center" },
+    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.8, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
+  ];
+  const rows = [
+    cf("Lot revenue", ["—", "—", "8.0", "17.0", "17.0", "42.0"]),
+    cf("Less: land contribution", ["(4.0)", "—", "—", "—", "—", "(4.0)"]),
+    cf("Less: horizontal + soft costs", ["(2.0)", "(10.4)", "(9.9)", "(1.0)", "(0.2)", "(23.5)"]),
+    cf("Net project cash flow", ["(6.0)", "(10.4)", "(1.9)", "16.0", "16.8", "14.5"], { bold: true }),
+    cf("Cumulative cash flow", ["(6.0)", "(16.4)", "(18.3)", "(2.3)", "14.5", ""]),
+  ];
+  table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
+  callout(s, "Net profit ~$14.5M  ·  ~24% unlevered / ~31% levered project IRR  ·  LP ~27% after the promote (60% LTC).", 5.8);
+  txt(s, "Project-level cash flow; illustrative phasing. Equity, leverage and the promote waterfall are on slides 10–13. Figures subject to confirmation.",
+    ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
+  s.addNotes("Phase 1 annual project cash flow — ties to slide 6 ($42M revenue) and slide 10 ($27.5M cost, $14.5M profit). Lots sell Yr 2–4; levered / LP returns per the waterfall (slide 12).");
+}
+
+// ===================================== SLIDE 18 — PHASE 2 CASH FLOW
+function phase2cf() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "PHASE 2  ·  PRO FORMA CASH FLOW",
+    title: "Phase 2 — pro forma cash flow.",
+    desc: "Hospitality build-to-core, project cash flow ($M). Develop Yr 0–2; stabilize, then recap / sell at ~Yr 4 (~$62M @ a 7.5% cap). VIVÂMEE operates. Illustrative.",
+    page: 18,
+  });
+  const cf = (label, vals, opts = {}) => [
+    opts.bold ? { text: label, bold: true, font: HEAD, color: C.navy } : label,
+    ...vals.slice(0, 5).map((v) => (opts.bold ? { text: v, bold: true, font: HEAD, color: C.navy, align: "center" } : v)),
+    { text: vals[5] || "", bold: true, font: HEAD, color: C.aubergine, align: "right" },
+  ];
+  const cols = [
+    { w: 3.0, font: HEAD, bold: true, color: C.navy, size: 9.5 },
+    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.5, color: C.navy, size: 10, align: "center" },
+    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.5, color: C.navy, size: 10, align: "center" },
+    { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.8, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
+  ];
+  const rows = [
+    cf("Net operating income", ["—", "—", "1.9", "4.7", "4.7", "11.3"]),
+    cf("Recap / sale proceeds", ["—", "—", "—", "—", "62.0", "62.0"]),
+    cf("Less: development cost", ["(15.0)", "(20.0)", "(12.0)", "—", "—", "(47.0)"]),
+    cf("Net project cash flow", ["(15.0)", "(20.0)", "(10.1)", "4.7", "66.7", "26.3"], { bold: true }),
+    cf("Cumulative cash flow", ["(15.0)", "(35.0)", "(45.1)", "(40.4)", "26.3", ""]),
+  ];
+  table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
+  callout(s, "Develops to ~cost; value is created at the recap / sale. Build-to-core (65% LTC) levered IRR ~28% / ~2.3× — see the Phase 2 sensitivity.", 5.8);
+  txt(s, "Project-level cash flow; illustrative phasing. A 120-key resort & spa is already designed (FILLAT+). Figures subject to confirmation.",
+    ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
+  s.addNotes("Phase 2 build-to-core annual cash flow. Develop $47M Yr 0–2; NOI ramps Yr 2–4; recap / sell ~$62M @ a 7.5% cap at Yr 4. Levered build-to-core IRR ~28% (65% LTC).");
+}
+
+// ===================================== SLIDE 19 — CAPITAL ACCESS
 function capitalAccess() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 17,
+    page: 19,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -901,7 +971,7 @@ function capitalAccess() {
     "Where I place capital — equity and debt.",
     [
       "Family offices (Texas) — my core equity base; they'll travel for the right risk-adjusted return.",
-      "Institutional equity — Angelo Gordon and peer private-equity relationships.",
+      "Institutional equity — private-equity fund relationships.",
       "National debt — Goldman Sachs (met two weeks ago; national platform, Dallas team) + specialty lenders.",
       "The bar for out-of-state development is mid-to-high-20s IRR — the fresh land basis helps clear it.",
     ]);
@@ -917,8 +987,8 @@ function structure() {
   chrome(s, {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
-    desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 18,
+    desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL runs entitlement, capital formation and lot sales alongside your team.",
+    page: 20,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -938,9 +1008,9 @@ function structure() {
   txt(s, "CAPITAL STACK", px[1] + 0.25, 3.18, pw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
   txt(s, "Illustrative", px[1] + 0.25, 3.46, pw - 0.5, 0.25, { font: BODY, size: 9, color: C.plum });
   const stack = [
-    ["Land equity (H6)", "Contributed"],
+    ["Land equity", "Contributed"],
     ["Builder-funded infra", "Horizontal"],
-    ["Cash equity (JAL + LP)", "Soft costs"],
+    ["Cash equity", "Soft costs"],
   ];
   let sy = 3.78;
   stack.forEach(([a, b]) => {
@@ -956,7 +1026,7 @@ function structure() {
   const roles = [
     ["Josh McCallen / VIVÂMEE", "Resort owner-operator"],
     ["Bob Connell / Capital H6", "Development lead (H6 GP)"],
-    ["JAL Strategies", "GP member — capital, entitlement & sales; co-invests"],
+    ["JAL Strategies", "GP member — capital formation, entitlement & sales"],
   ];
   let ry = 3.62;
   roles.forEach(([a, b]) => {
@@ -965,10 +1035,10 @@ function structure() {
     ry += 0.72;
   });
 
-  callout(s, "JAL is a GP member — co-investing and sharing the promote alongside Capital H6 and Bob, not just advising.", 6.5);
+  callout(s, "JAL is a GP member — sharing the promote alongside Capital H6 and Bob, not just advising.", 6.5);
   s.addNotes(
-    "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL co-invests " +
-    "and runs entitlement + capital + lot sales. VIVÂMEE keeps operating the resort."
+    "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL " +
+    "runs entitlement + capital formation + lot sales. VIVÂMEE keeps operating the resort."
   );
 }
 
@@ -979,14 +1049,14 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 19,
+    page: 21,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
   txt(s, "$15K/mo + expenses, then success fees + carry", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13.5, bold: true, color: C.white });
   txt(s, "Aligned to lot-sale value created — not a flat consulting check.", 3.6, 2.46, 5.85, 0.35, { font: BODY, size: 10, color: C.cream });
-  txt(s, "Skin in\nthe game", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
+  txt(s, "Aligned\nupside", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
   const cols = [
     { w: 3.4, font: HEAD, bold: true, color: C.navy, size: 11 },
@@ -994,10 +1064,10 @@ function engagement() {
     { w: 5.93, color: C.plum, size: 9.5, lh: 12 },
   ];
   const rows = [
-    ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term; creditable against success fees"],
+    ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term"],
     ["Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately, not netted from fees"],
-    ["Capital placement fee", "1% debt · 2–3% equity", "Success fee if and when we place debt or equity for a parcel"],
-    ["Carried interest", "Share of GP promote", "JAL's share of the GP promote (alongside H6, Bob & partners); JAL co-invests its own capital"],
+    ["Capital placement fee", "1% debt · 3% equity", "Success fee if and when we place debt or equity for a parcel"],
+    ["Carried interest", "Share of GP promote", "JAL's share of the GP promote (alongside H6, Bob & partners)"],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
   callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);
@@ -1014,7 +1084,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 20,
+    page: 22,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -1061,8 +1131,8 @@ function path() {
   chrome(s, {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
-    desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 21,
+    desc: "Light and fast to start — diligence now, an in-person in July or August (I'm in the NYC area all of July and the first half of August), then a defined engagement on the first parcels.",
+    page: 23,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -1070,8 +1140,8 @@ function path() {
        "Pull entitlement & zoning status (Queen Anne's County)",
        "Model lot yield & absorption for the developable parcels",
        "Confirm the H6 ownership & contribution mechanics"]],
-    ["STAGE 2", "IN PERSON", "July 2026", "Walk the site",
-      ["Meet while I'm in the NY / Philly area — train down or drive to the Shore",
+    ["STAGE 2", "IN PERSON", "July / Aug 2026", "Walk the site",
+      ["Meet Bob in July or August — I'm in the NYC area all of July & the first half of August",
        "Walk Queenstown (River House & the course edges)",
        "Meet Josh / VIVÂMEE",
        "Align on first parcels, capital plan & comp"]],
@@ -1143,6 +1213,8 @@ sensitivity();
 builders();
 phase2();
 phase2sens();
+phase1cf();
+phase2cf();
 capitalAccess();
 structure();
 engagement();

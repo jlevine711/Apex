@@ -64,12 +64,14 @@ development) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 14. Buyer Universe / Liquidity — named regional + national lot buyers
 15. Phase 2 — Hospitality (hotel + suite of restaurants) *(illustrative)*
 16. Phase 2 Sensitivity — build-to-core IRR across stabilized NOI × exit cap
-17. Capital Access — JAL's debt & equity network
-18. The Structure — a land vehicle under Capital H6
-19. Engagement & Compensation — hybrid, skin in the game
-20. Why JAL — Justin A. Levine
-21. The Path — diligence → July site visit → mandate
-22. Thank You
+17. Phase 1 Cash Flow — finished-lot project cash flow, year by year *(illustrative)*
+18. Phase 2 Cash Flow — build-to-core cash flow; recap / sale at stabilization *(illustrative)*
+19. Capital Access — JAL's debt & equity network
+20. The Structure — a land vehicle under Capital H6
+21. Engagement & Compensation — hybrid; retainer + reimbursed expenses, 1% debt / 3% equity placement, share of the GP promote
+22. Why JAL — Justin A. Levine
+23. The Path — diligence → July/Aug in-person → mandate
+24. Thank You
 
 ## Verified facts (public sources)
 
@@ -114,13 +116,20 @@ consistent:
   GP member with a share**, not the sole GP.
   Sensitivity (slide 13): LP IRR ~25–33% across $150K lots at 55–70% LTC,
   up to ~41% at $170K / 70% LTC
+- **Year-by-year cash flow** (slides 17–18) lays out the project cash flow for
+  each phase: Phase 1 land + horizontal up front, lots sell Yr 2–4 (net
+  ~$14.5M); Phase 2 develops to ~cost Yr 0–2, then a **recap / sale ~$62M @ a
+  7.5% cap** at ~Yr 4 (net ~$26.3M). Both tie back to the pro-forma totals.
 
 `JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
 numbers — Phase 1 (finished-lot: ~31% levered project / **~27% LP** after a
 market promote waterfall, with an **LP-IRR sensitivity** over lot price × LTC)
 **and** Phase 2 hospitality (~$47M resort — hold-for-income ~12% IRR, or
 **build-to-core** recap at stabilization **~28% IRR / ~2.3×**; hotel cost/key
-per HVS 2025, ~8% cap). Only the 198-ac easement and the 9-ac
+per HVS 2025, ~8% cap). A **120-key Queenstown Harbor Resort & Spa is already
+designed** (FILLAT+ Architecture) — the closest thing to a site plan today;
+the deck references it but embeds no copyrighted imagery. Only the 198-ac
+easement and the 9-ac
 range are sourced; the 700 ac is
 the owner's verbal figure and the haircuts, density, price and cost loads are
 estimates — recalibrate against survey, easement and entitlement (Queen Anne's
