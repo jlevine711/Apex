@@ -104,12 +104,14 @@ consistent:
   acres** → **~280 finished lots**
 - 280 × **$150K** finished lot = **$42.0M** revenue
 - less **$27.5M** cost (incl. **$16.8M** JV-funded horizontal at $60K/lot) =
-  **~$14.5M** profit → **~2.3× equity**, **~24% project IRR**
+  **~$14.5M** profit → **~2.3× equity**, **~32% levered equity IRR**
+  (~24% unlevered)
 
 `JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
-numbers — Phase 1 (finished-lot) **and** the Phase 2 hospitality scenario
-(~$47M resort, ~8.1% yield on cost, ~1.9× / ~12% IRR over a 7-yr hold; hotel
-cost/key per HVS 2025, ~8% hotel cap). Only the 198-ac easement and the 9-ac
+numbers — Phase 1 (finished-lot: ~24% unlevered / **~32% levered** equity IRR)
+**and** Phase 2 hospitality (~$47M resort — hold-for-income ~12% IRR, or
+**build-to-core** recap at stabilization **~28% IRR / ~2.3×**; hotel cost/key
+per HVS 2025, ~8% cap). Only the 198-ac easement and the 9-ac
 range are sourced; the 700 ac is
 the owner's verbal figure and the haircuts, density, price and cost loads are
 estimates — recalibrate against survey, easement and entitlement (Queen Anne's

@@ -174,6 +174,17 @@ irrCell.alignment = { horizontal: "right" };
 const cfnote = irrRow.getCell(3); ws.mergeCells(irrRow.number, 3, irrRow.number, 6);
 cfnote.value = "entitlement/land Yr 0–1, horizontal Yr 1–2, finished-lot sales Yr 2–4"; cfnote.font = { italic: true, size: 9, color: { argb: "FF6B5A6B" } };
 
+// ---- LEVERED EQUITY RETURN ----
+header("LEVERED EQUITY RETURN  (~60% LTC development loan)");
+const lyr = row(); lyr.getCell(1).value = "Year"; ["Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4"].forEach((y, i) => { const c = lyr.getCell(2 + i); c.value = y; c.font = { bold: true, size: 9, color: { argb: "FF6B5A6B" } }; c.alignment = { horizontal: "right" }; });
+const lcfs = [-7000000, -4000000, 3000000, 9000000, 13500000];
+const lcfRow = row(); lcfRow.getCell(1).value = "Equity cash flow (levered)"; lcfRow.getCell(1).font = { size: 10, color: { argb: "FF333333" } }; lcfRow.getCell(1).alignment = { indent: 1 };
+lcfs.forEach((v, i) => { const c = lcfRow.getCell(2 + i); c.value = v; c.numFmt = money; c.font = { size: 10, color: { argb: "FF0B163C" } }; c.alignment = { horizontal: "right" }; });
+const lirr = irr(lcfs);
+const lirrRow = row(); lirrRow.getCell(1).value = "Equity IRR (levered, phased)"; lirrRow.getCell(1).font = { bold: true, size: 10, color: { argb: "FF0B163C" } }; lirrRow.getCell(1).alignment = { indent: 1 };
+const lc = lirrRow.getCell(2); lc.value = { formula: `IRR(B${lcfRow.number}:F${lcfRow.number})`, result: lirr }; lc.numFmt = pct; lc.font = { bold: true, size: 10, color: { argb: AUB } }; lc.alignment = { horizontal: "right" };
+const lnn = lirrRow.getCell(3); ws.mergeCells(lirrRow.number, 3, lirrRow.number, 6); lnn.value = "equity deployed Yr 0–1; lot sales Yr 2–4 (60% LTC). Unlevered project IRR ~24%."; lnn.font = { italic: true, size: 9, color: { argb: "FF6B5A6B" } };
+
 // ---- footer note ----
 r++;
 const note = row();
@@ -267,6 +278,29 @@ const em2 = cf2.slice(2).reduce((a, b) => a + b, 0) / -(cf2[0] + cf2[1]);
 qline("Equity multiple (7-yr)", { formula: `SUM(B${cf2Start + 2}:B${cf2End})/-(B${cf2Start}+B${cf2Start + 1})`, result: em2 }, "distributions / equity", mult, { bold: true, accent: true });
 qline("Project IRR (levered, 7-yr)", { formula: `IRR(B${cf2Start}:B${cf2End})`, result: irr2 }, "equity cash flows Yr 0–7", pct, { bold: true, accent: true });
 
+qheader("BUILD-TO-CORE CASE  (path to mid–high 20s IRR — recap / sell at stabilization)");
+const bcUp = qline("NOI uplift — premium execution", 0.22, "VIVAMEE experiential: ADR ~$275, occ ~63%, strong F&B / events", pct);
+const bcNOI = qline("Premium stabilized NOI", { formula: `${Q(pNOI)}*(1+${Q(bcUp)})`, result: 4653226 }, "base NOI x (1 + uplift)", money, { bold: true, accent: true });
+const bcCap = qline("Exit cap (build-to-core)", 0.075, "trophy / experiential resort", pct);
+const bcLTC = qline("Leverage (% of cost)", 0.65, "construction loan", pct);
+const bcYoC = qline("Yield on cost (premium)", { formula: `${Q(bcNOI)}/${Q(pCost)}`, result: 0.099 }, "premium NOI / cost — vs 7.5% exit = the spread", pct, { bold: true });
+const bcVal = qline("Recap / sale value (~Yr 4)", { formula: `${Q(bcNOI)}/${Q(bcCap)}`, result: 62043015 }, "premium NOI / exit cap", money, { bold: true });
+const bcLoan = qline("Loan", { formula: `${Q(pCost)}*${Q(bcLTC)}`, result: 30550000 }, "% of cost", money);
+const bcEq = qline("Equity", { formula: `${Q(pCost)}-${Q(bcLoan)}`, result: 16450000 }, "cost - loan", money);
+const bcXEq = qline("Exit equity (value - loan)", { formula: `${Q(bcVal)}-${Q(bcLoan)}`, result: 31493015 }, "at recap / sale", money);
+qheader("BUILD-TO-CORE EQUITY CASH FLOW (Yr 0–4, $) & RETURNS");
+const bcf = [-8225000, -8225000, 1000000, 2514726, 34007741];
+const bcfStart = q + 1;
+bcf.forEach((v, i) => {
+  const a = qrow(); a.getCell(1).value = "Year " + i; a.getCell(1).alignment = { indent: 1 }; a.getCell(1).font = { name: "Calibri", size: 10, color: { argb: "FF333333" } };
+  const c = a.getCell(2); c.value = v; c.numFmt = money; c.font = { name: "Calibri", size: 10, color: { argb: "FF0B163C" } }; c.alignment = { horizontal: "right" };
+});
+const bcfEnd = q;
+const bcIRR = irr(bcf);
+const bcEM = bcf.slice(2).reduce((a, b) => a + b, 0) / -(bcf[0] + bcf[1]);
+qline("Equity multiple (build-to-core)", { formula: `SUM(B${bcfStart + 2}:B${bcfEnd})/-(B${bcfStart}+B${bcfStart + 1})`, result: bcEM }, "distributions / equity, ~4-yr", mult, { bold: true, accent: true });
+qline("Project IRR (build-to-core, ~4-yr)", { formula: `IRR(B${bcfStart}:B${bcfEnd})`, result: bcIRR }, "recap / sell at stabilization", pct, { bold: true, accent: true });
+
 q++;
 const n2 = qrow(); p2.mergeCells(q, 1, q, 6);
 n2.getCell(1).value = "Illustrative. Hospitality is an income / hold play: it develops to roughly cost, so the return is durable cash flow + appreciation (lower IRR than the Phase 1 land, longer hold). VIVAMEE operates; JAL is the capital partner (debt + equity placement fees, co-invest, promote). The resort also lifts Phase 1 lot values. Subject to confirmation.";
@@ -274,5 +308,5 @@ n2.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: 
 n2.getCell(1).alignment = { wrapText: true, vertical: "top" }; n2.height = 50;
 
 wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
-  .then(() => console.log("Wrote JAL_Queenstown_Harbor_Model.xlsx  (P1 IRR ~" + (irrVal * 100).toFixed(1) + "%, P2 IRR ~" + (irr2 * 100).toFixed(1) + "%, P2 EM ~" + em2.toFixed(2) + "x)"))
+  .then(() => console.log("Wrote model  (P1 unlev ~" + (irrVal * 100).toFixed(1) + "% / levered ~" + (lirr * 100).toFixed(1) + "%; P2 hold ~" + (irr2 * 100).toFixed(1) + "% / build-to-core ~" + (bcIRR * 100).toFixed(1) + "% EM ~" + bcEM.toFixed(2) + "x)"))
   .catch((e) => { console.error(e); process.exit(1); });

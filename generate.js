@@ -608,8 +608,8 @@ function proForma() {
     ["$42.0M", "Gross lot revenue"],
     ["$14.5M", "Net development profit"],
     ["~2.3×", "Equity multiple"],
-    ["~24%", "Project IRR (phased)"],
-    ["~20%", "LP IRR (after promote)"],
+    ["~32%", "Equity IRR (levered)"],
+    ["~24%", "LP IRR (after promote)"],
   ];
   let my = 2.5;
   mets.forEach(([v, l]) => {
@@ -619,14 +619,14 @@ function proForma() {
   });
 
   rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, "Illustrative: ~$14.5M profit on ~$27.5M cost — ~2.3× equity, ~24% project IRR. We deliver finished lots; builders just build.",
+  txt(s, "Illustrative: ~$14.5M profit on ~$27.5M cost — ~2.3× equity, ~32% levered IRR (24% unlevered). We deliver finished lots; builders just build.",
     ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
   txt(s, "Illustrative pro forma for discussion only — basis and sources on the following slide; figures subject to confirmation.",
     ML, 6.58, CW, 0.26, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
     "Finished-lot development pro forma, consistent with slide 6. $42.0M revenue − $27.5M cost ≈ $14.5M profit. " +
-    "Funded ~60% by a development loan; equity ~$11M (land $4M + cash $7M) → ~2.3x / ~24% project IRR (phased); " +
-    "LP ~20% after an 8% pref + JAL co-GP promote. We capture the builder's margin but take horizontal risk. All illustrative."
+    "Funded ~60% by a development loan; equity ~$11M (land $4M + cash $7M) → ~2.3x equity, ~32% levered equity IRR " +
+    "(~24% unlevered); LP ~24% after an 8% pref + JAL co-GP promote. Leverage + phased lot sales drive the equity IRR past 30%. All illustrative."
   );
 }
 
@@ -702,7 +702,7 @@ function phase2() {
   chrome(s, {
     eyebrow: "PHASE 2  ·  HOSPITALITY  ·  ILLUSTRATIVE",
     title: "Phase 2 — add a hotel and restaurants.",
-    desc: "VIVÂMEE-led resort; JAL as capital partner. An income / hold play — durable cash flow and a stabilized-value exit (lower IRR than the land, longer hold). The Phase 1 lots help fund and de-risk it; the resort lifts lot values.",
+    desc: "VIVÂMEE-led resort; JAL as capital partner. Held for income it yields ~8% / ~12% IRR — to clear a mid-to-high-20s return, build to core: the contributed land + VIVÂMEE's premium NOI create a development spread, captured by recapitalizing at stabilization (~Yr 4).",
     page: 13,
   });
   const costCols = [
@@ -725,18 +725,18 @@ function phase2() {
     { w: 0.5, color: C.plum, size: 8, align: "right" },
   ];
   const noi = [
-    ["Hotel NOI", "$2.8M", "8.6%"],
-    ["Restaurant NOI", "$1.0M", "11%"],
+    ["Hotel NOI", "$3.4M", "10%"],
+    ["Restaurant NOI", "$1.2M", "14%"],
     [{ text: "STABILIZED NOI", bold: true, font: HEAD, color: C.navy },
-      { text: "$3.8M", bold: true, font: HEAD, color: C.aubergine, align: "right" },
-      { text: "8.1%", color: C.plum, align: "right" }],
+      { text: "$4.7M", bold: true, font: HEAD, color: C.aubergine, align: "right" },
+      { text: "9.9%", color: C.plum, align: "right" }],
   ];
   table(s, 6.1, 2.0, noiCols, ["STABILIZED NOI", "", "YoC"], noi, { rowH: 0.48 });
 
   rect(s, 6.1, 3.92, 3.1, 1.84, C.navy);
   rect(s, 6.1, 3.92, 0.1, 1.84, C.aubergine);
   txt(s, "KEY METRICS", 6.32, 4.02, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "Yield on cost 8.1%  ·  cash-on-cash ~9.8%  ·  exit ~$54M @ 8% cap  ·  ~60% LTC  ·  VIVÂMEE operates, JAL = capital",
+  txt(s, "Build-to-core: recap / sell ~Yr 4  ·  7.5% exit cap → ~$62M  ·  65% LTC  ·  premium NOI (VIVÂMEE)  ·  ~2.4-pt development spread  ·  land contributed",
     6.32, 4.3, 2.78, 1.4, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
 
   rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
@@ -744,10 +744,10 @@ function phase2() {
   txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
   const mets = [
     ["$47.0M", "Total project cost"],
-    ["$3.8M", "Stabilized NOI"],
-    ["8.1%", "Yield on cost"],
-    ["~1.9×", "Equity multiple (7-yr)"],
-    ["~12%", "Project IRR (7-yr)"],
+    ["$4.7M", "Stabilized NOI (premium)"],
+    ["9.9%", "Yield on cost"],
+    ["~2.3×", "Equity multiple (~4-yr)"],
+    ["~28%", "Build-to-core IRR"],
   ];
   let my = 2.5;
   mets.forEach(([v, l]) => {
@@ -757,13 +757,14 @@ function phase2() {
   });
 
   rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, "Illustrative: ~$47M resort at ~8.1% yield on cost — ~1.9× / ~12% IRR over a 7-yr hold. VIVÂMEE operates; JAL brings the capital.",
+  txt(s, "Built to core (recap at stabilization), the hotel clears ~28% IRR / ~2.3×. Held for income it's ~12% — the spread is the contributed land + VIVÂMEE's premium NOI.",
     ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
   footnote(s, 6.55, [SRC.hvs, SRC.hcap, SRC.rcost]);
   s.addNotes(
-    "Phase 2 is the hospitality upside — VIVÂMEE-led (their wheelhouse), JAL as capital partner. Income / hold play: " +
-    "develops to ~cost, so the return is durable cash flow + appreciation (~8% yield on cost, ~1.9x / ~12% IRR over 7 yr) — " +
-    "lower IRR than the Phase 1 land but bigger, recurring, and it lifts lot values. Numbers are the model's source of truth."
+    "Phase 2 = hospitality upside, VIVÂMEE-led, JAL as capital partner. Two cases in the model: hold for income (~8% YoC, " +
+    "~12% IRR — the floor) or BUILD-TO-CORE — recap/sell at stabilization (~Yr 4) at a 7.5% cap, capturing the development " +
+    "spread from the contributed land + premium NOI → ~28% IRR / ~2.3x. Build-to-core lets JAL earn the development return " +
+    "while VIVÂMEE keeps and operates the resort. Model is source of truth."
   );
 }
 
