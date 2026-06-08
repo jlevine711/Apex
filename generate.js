@@ -42,7 +42,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 18;
+const TOTAL = 19;
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -147,6 +147,9 @@ const SRC = {
   caruso:  { label: "Caruso Homes", url: "https://www.carusohomes.com/new-homes/md/maryland/floor-plans/" },
   gem:     { label: "Gemcraft Homes", url: "https://www.gemcrafthomes.com/" },
   zcom:    { label: "Zillow — MD new communities", url: "https://www.zillow.com/browse/communities/md/" },
+  hvs:     { label: "HVS — hotel dev cost 2025", url: "https://www.hvs.com/article/10219-hvs-us-hotel-development-cost-survey-2025" },
+  hcap:    { label: "hotel cap rates 2025", url: "https://www.mmcginvest.com/post/u-s-hotel-cap-rates-in-2025-trends-drivers-and-segment-analysis" },
+  rcost:   { label: "restaurant build cost", url: "https://blog.eb3construction.com/construction/food-beverage/restaurant-build-out-estimate/" },
 };
 
 // Small hyperlinked source footnote, just above the footer rule.
@@ -693,14 +696,85 @@ function builders() {
   );
 }
 
-// =============================================== SLIDE 13 — CAPITAL ACCESS
+// ===================================== SLIDE 13 — PHASE 2: HOSPITALITY
+function phase2() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "PHASE 2  ·  HOSPITALITY  ·  ILLUSTRATIVE",
+    title: "Phase 2 — add a hotel and restaurants.",
+    desc: "VIVÂMEE-led resort; JAL as capital partner. An income / hold play — durable cash flow and a stabilized-value exit (lower IRR than the land, longer hold). The Phase 1 lots help fund and de-risk it; the resort lifts lot values.",
+    page: 13,
+  });
+  const costCols = [
+    { w: 3.95, color: C.navy, size: 9.5 },
+    { w: 1.55, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
+  ];
+  const cost = [
+    ["Hotel (100 keys × $325K)", "$32.5M"],
+    ["Restaurants (16K SF × $550)", "$8.8M"],
+    ["Land — hospitality parcel", "$2.0M"],
+    ["Soft / FF&E / pre-opening", "$3.7M"],
+    [{ text: "TOTAL DEVELOPMENT COST", bold: true, font: HEAD, color: C.navy },
+      { text: "$47.0M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+  ];
+  table(s, ML, 2.0, costCols, ["DEVELOPMENT COST", ""], cost, { rowH: 0.48 });
+
+  const noiCols = [
+    { w: 1.95, color: C.navy, size: 9.5 },
+    { w: 0.65, color: C.aubergine, bold: true, font: HEAD, size: 9, align: "right" },
+    { w: 0.5, color: C.plum, size: 8, align: "right" },
+  ];
+  const noi = [
+    ["Hotel NOI", "$2.8M", "8.6%"],
+    ["Restaurant NOI", "$1.0M", "11%"],
+    [{ text: "STABILIZED NOI", bold: true, font: HEAD, color: C.navy },
+      { text: "$3.8M", bold: true, font: HEAD, color: C.aubergine, align: "right" },
+      { text: "8.1%", color: C.plum, align: "right" }],
+  ];
+  table(s, 6.1, 2.0, noiCols, ["STABILIZED NOI", "", "YoC"], noi, { rowH: 0.48 });
+
+  rect(s, 6.1, 3.92, 3.1, 1.84, C.navy);
+  rect(s, 6.1, 3.92, 0.1, 1.84, C.aubergine);
+  txt(s, "KEY METRICS", 6.32, 4.02, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
+  txt(s, "Yield on cost 8.1%  ·  cash-on-cash ~9.8%  ·  exit ~$54M @ 8% cap  ·  ~60% LTC  ·  VIVÂMEE operates, JAL = capital",
+    6.32, 4.3, 2.78, 1.4, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
+
+  rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
+  rect(s, 9.3, 2.0, 0.12, 3.76, C.aubergine);
+  txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
+  const mets = [
+    ["$47.0M", "Total project cost"],
+    ["$3.8M", "Stabilized NOI"],
+    ["8.1%", "Yield on cost"],
+    ["~1.9×", "Equity multiple (7-yr)"],
+    ["~12%", "Project IRR (7-yr)"],
+  ];
+  let my = 2.5;
+  mets.forEach(([v, l]) => {
+    txt(s, v, 9.55, my, 3.1, 0.32, { font: HEAD, size: 17, bold: true, color: C.white });
+    txt(s, l, 9.55, my + 0.31, 3.1, 0.22, { font: BODY, size: 8.5, color: C.mauve });
+    my += 0.63;
+  });
+
+  rect(s, ML, 5.95, CW, 0.45, C.aubergine);
+  txt(s, "Illustrative: ~$47M resort at ~8.1% yield on cost — ~1.9× / ~12% IRR over a 7-yr hold. VIVÂMEE operates; JAL brings the capital.",
+    ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
+  footnote(s, 6.55, [SRC.hvs, SRC.hcap, SRC.rcost]);
+  s.addNotes(
+    "Phase 2 is the hospitality upside — VIVÂMEE-led (their wheelhouse), JAL as capital partner. Income / hold play: " +
+    "develops to ~cost, so the return is durable cash flow + appreciation (~8% yield on cost, ~1.9x / ~12% IRR over 7 yr) — " +
+    "lower IRR than the Phase 1 land but bigger, recurring, and it lifts lot values. Numbers are the model's source of truth."
+  );
+}
+
+// =============================================== SLIDE 14 — CAPITAL ACCESS
 function capitalAccess() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "CAPITAL ACCESS",
     title: "I bring the capital relationships.",
     desc: "When a parcel does call for equity or debt — or to move faster — here's the access. Active mandates, not a paper Rolodex.",
-    page: 13,
+    page: 14,
   });
   const cards = [
     ["$15M", "Equity being raised now", "Houston retail — family-office capital, closing summer 2026"],
@@ -732,7 +806,7 @@ function structure() {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
     desc: "Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL co-invests and runs entitlement, capital and lot sales alongside your team.",
-    page: 14,
+    page: 15,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
@@ -793,7 +867,7 @@ function engagement() {
     eyebrow: "ENGAGEMENT  ·  FOR DISCUSSION",
     title: "How I'd want to be engaged.",
     desc: "You asked how I'd like to be comped. My preference matches yours — a small base to fund the work, then real alignment on the value we create. For discussion only.",
-    page: 15,
+    page: 16,
   });
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
@@ -828,7 +902,7 @@ function whyJAL() {
     eyebrow: "WHY JAL AS YOUR PARTNER",
     title: "Pedigree. Relationships. Operator.",
     desc: "Institutional capital-markets pedigree, an active investor network, and hands-on development & asset-management experience.",
-    page: 16,
+    page: 17,
   });
   rect(s, ML, 1.85, 5.0, 4.75, C.navy);
   rect(s, ML, 1.85, 0.12, 4.75, C.aubergine);
@@ -876,7 +950,7 @@ function path() {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
     desc: "Light and fast to start — diligence now, an in-person while I'm in the Northeast in July, then a defined engagement on the first parcels.",
-    page: 17,
+    page: 18,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
@@ -953,6 +1027,7 @@ capitalLight();
 proForma();
 basis();
 builders();
+phase2();
 capitalAccess();
 structure();
 engagement();

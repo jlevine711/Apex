@@ -40,7 +40,8 @@ embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
 
 `model.js` writes a backup financial model — `JAL_Queenstown_Harbor_Model.xlsx`
 — with **live formulas** (every output references the INPUTS block) so it shows
-exactly how each number is derived. Outputs:
+exactly how each number is derived — two sheets, **Phase 1** (finished-lot
+development) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 
 - `JAL_Queenstown_Harbor_Proposal.pptx` · `JAL_Queenstown_Harbor_Proposal.pdf`
 - `JAL_Queenstown_Harbor_Model.xlsx`
@@ -59,12 +60,13 @@ exactly how each number is derived. Outputs:
 10. Pro Forma & Returns — finished-lot budget, profit, IRR / equity multiple *(illustrative)*
 11. Basis & Sources — every pro-forma assumption, its reasoning and source
 12. Buyer Universe / Liquidity — named regional + national lot buyers
-13. Capital Access — JAL's debt & equity network
-14. The Structure — a land vehicle under Capital H6
-15. Engagement & Compensation — hybrid, skin in the game
-16. Why JAL — Justin A. Levine
-17. The Path — diligence → July site visit → mandate
-18. Thank You
+13. Phase 2 — Hospitality (hotel + suite of restaurants) *(illustrative)*
+14. Capital Access — JAL's debt & equity network
+15. The Structure — a land vehicle under Capital H6
+16. Engagement & Compensation — hybrid, skin in the game
+17. Why JAL — Justin A. Levine
+18. The Path — diligence → July site visit → mandate
+19. Thank You
 
 ## Verified facts (public sources)
 
@@ -105,7 +107,10 @@ consistent:
   **~$14.5M** profit → **~2.3× equity**, **~24% project IRR**
 
 `JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
-numbers. Only the 198-ac easement and the 9-ac range are sourced; the 700 ac is
+numbers — Phase 1 (finished-lot) **and** the Phase 2 hospitality scenario
+(~$47M resort, ~8.1% yield on cost, ~1.9× / ~12% IRR over a 7-yr hold; hotel
+cost/key per HVS 2025, ~8% hotel cap). Only the 198-ac easement and the 9-ac
+range are sourced; the 700 ac is
 the owner's verbal figure and the haircuts, density, price and cost loads are
 estimates — recalibrate against survey, easement and entitlement (Queen Anne's
 County) data before sharing externally.

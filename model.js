@@ -183,6 +183,96 @@ note.getCell(1).font = { italic: true, size: 8.5, color: { argb: "FF6B5A6B" } };
 note.getCell(1).alignment = { wrapText: true, vertical: "top" };
 note.height = 42;
 
+// =================== PHASE 2 — HOSPITALITY (HOTEL + RESTAURANTS) ===================
+// Income / hold play, VIVAMEE-led, JAL as capital partner. Source of truth for
+// the deck's Phase 2 slide — live formulas off the INPUTS block.
+const p2 = wb.addWorksheet("Phase 2 — Hospitality", { views: [{ showGridLines: false }] });
+p2.columns = [{ width: 42 }, { width: 16 }, { width: 14 }, { width: 12 }, { width: 12 }, { width: 12 }];
+let q = 0;
+const qrow = () => p2.getRow(++q);
+const Q = (i) => `B${i}`;
+function qband(t, sub) {
+  const a = qrow(); a.getCell(1).value = t; a.getCell(1).font = { name: "Calibri", bold: true, size: 16, color: { argb: WHITE } };
+  for (let c = 1; c <= 6; c++) a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; a.height = 24;
+  if (sub) { const b = qrow(); b.getCell(1).value = sub; b.getCell(1).font = { name: "Calibri", italic: true, size: 9, color: { argb: AUB } }; p2.mergeCells(q, 1, q, 6); }
+}
+function qheader(t) {
+  q++; const a = qrow(); a.getCell(1).value = t;
+  for (let c = 1; c <= 6; c++) { a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: AUB } }; a.getCell(c).font = { name: "Calibri", bold: true, size: 10, color: { argb: WHITE } }; }
+  a.getCell(1).alignment = { indent: 1 }; return q;
+}
+function qline(label, value, note, fmt, opts = {}) {
+  const a = qrow(); a.getCell(1).value = label; a.getCell(1).font = { name: "Calibri", size: 10, bold: !!opts.bold, color: { argb: opts.bold ? "FF0B163C" : "FF333333" } }; a.getCell(1).alignment = { indent: 1 };
+  const vc = a.getCell(2); vc.value = value; if (fmt) vc.numFmt = fmt; vc.font = { name: "Calibri", size: 10, bold: opts.bold !== false, color: { argb: opts.accent ? AUB : "FF0B163C" } }; vc.alignment = { horizontal: "right" };
+  if (note) { const nc = a.getCell(3); p2.mergeCells(q, 3, q, 6); nc.value = note; nc.font = { name: "Calibri", italic: true, size: 9, color: { argb: "FF6B5A6B" } }; }
+  if (opts.fill) for (let c = 1; c <= 2; c++) a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } };
+  return q;
+}
+
+qband("Queenstown Harbor — Phase 2: Hospitality (Hotel + Restaurants)",
+  "VIVAMEE-led resort; JAL as capital partner. Income / hold play — develops to ~cost; returns come from cash flow + appreciation.  ·  ILLUSTRATIVE.");
+
+qheader("INPUTS  (edit these — everything below recalculates)");
+const hKeys = qline("Hotel — keys", 100, "boutique resort lodge", "#,##0");
+const hCostKey = qline("Hotel — cost / key ($)", 325000, "HVS 2025: select ~$223K, full-service ~$409K", money);
+const hADR = qline("Hotel — ADR ($)", 250, "upscale Eastern Shore resort (weddings / golf)", money);
+const hOcc = qline("Hotel — stabilized occupancy", 0.62, "leisure / resort", pct);
+const hMult = qline("Hotel — total-revenue multiple (x rooms)", 1.6, "+ F&B, banquets, spa", "0.00");
+const hMgn = qline("Hotel — NOI margin", 0.31, "stabilized", pct);
+const rSF = qline("Restaurants — GLA (SF)", 16000, "a suite of destination restaurants", "#,##0");
+const rCostSF = qline("Restaurants — build cost / SF ($)", 550, "full-service ~$555/SF", money);
+const rSalesSF = qline("Restaurants — sales / SF ($)", 700, "upscale destination dining", money);
+const rMgn = qline("Restaurants — NOI (% of sales)", 0.09, "rent / operating contribution", pct);
+const pLand = qline("Land — hospitality parcel ($)", 2000000, "contributed by Capital H6", money);
+const pSoft = qline("Soft / FF&E / pre-opening ($)", 3700000, "", money);
+const pCap = qline("Exit cap rate", 0.08, "hotel cap ~8% (2025)", pct);
+const pLTC = qline("Construction loan (% of cost)", 0.60, "", pct);
+const pRate = qline("Loan interest rate", 0.07, "", pct);
+const pGrow = qline("NOI growth / yr", 0.03, "", pct);
+
+qheader("HOTEL");
+const hCost = qline("Hotel development cost", { formula: `${Q(hKeys)}*${Q(hCostKey)}`, result: 32500000 }, "keys x cost/key", money);
+const hRoom = qline("Room revenue", { formula: `${Q(hKeys)}*365*${Q(hADR)}*${Q(hOcc)}`, result: 5657500 }, "keys x 365 x ADR x occ", money);
+const hRev = qline("Total hotel revenue", { formula: `${Q(hRoom)}*${Q(hMult)}`, result: 9052000 }, "x revenue multiple", money);
+const hNOI = qline("Hotel NOI (stabilized)", { formula: `${Q(hRev)}*${Q(hMgn)}`, result: 2806120 }, "x NOI margin", money, { bold: true, accent: true });
+
+qheader("RESTAURANTS  (a suite of nice restaurants)");
+const rCost = qline("Restaurant development cost", { formula: `${Q(rSF)}*${Q(rCostSF)}`, result: 8800000 }, "SF x cost/SF", money);
+const rSales = qline("Restaurant sales", { formula: `${Q(rSF)}*${Q(rSalesSF)}`, result: 11200000 }, "SF x sales/SF", money);
+const rNOI = qline("Restaurant NOI (to owner)", { formula: `${Q(rSales)}*${Q(rMgn)}`, result: 1008000 }, "rent / operating contribution", money, { bold: true, accent: true });
+
+qheader("TOTAL PROJECT  ->  STABILIZED");
+const pCost = qline("Total project cost", { formula: `${Q(hCost)}+${Q(rCost)}+${Q(pLand)}+${Q(pSoft)}`, result: 47000000 }, "hotel + restaurants + land + soft", money, { bold: true, accent: true, fill: true });
+const pNOI = qline("Stabilized NOI", { formula: `${Q(hNOI)}+${Q(rNOI)}`, result: 3814120 }, "hotel + restaurant NOI", money, { bold: true, accent: true, fill: true });
+const pYoC = qline("Yield on cost", { formula: `${Q(pNOI)}/${Q(pCost)}`, result: 0.0811 }, "NOI / cost", pct, { bold: true });
+const pLoan = qline("Construction loan", { formula: `${Q(pCost)}*${Q(pLTC)}`, result: 28200000 }, "% LTC", money);
+const pEq = qline("Equity (land + cash)", { formula: `${Q(pCost)}-${Q(pLoan)}`, result: 18800000 }, "cost - loan", money);
+const pCoC = qline("Cash-on-cash (stabilized, levered)", { formula: `(${Q(pNOI)}-${Q(pLoan)}*${Q(pRate)})/${Q(pEq)}`, result: 0.098 }, "(NOI - interest) / equity", pct);
+
+qheader("EXIT  &  RETURNS  (7-year hold)");
+const pXNOI = qline("Year-7 NOI (3%/yr growth)", { formula: `${Q(pNOI)}*(1+${Q(pGrow)})^4`, result: 4292800 }, "stabilized x growth", money);
+const pXVal = qline("Exit value (@ exit cap)", { formula: `${Q(pXNOI)}/${Q(pCap)}`, result: 53660000 }, "Year-7 NOI / cap", money, { bold: true });
+const pXEq = qline("Exit equity (value - loan)", { formula: `${Q(pXVal)}-${Q(pLoan)}`, result: 25460000 }, "net of loan", money);
+
+qheader("EQUITY CASH FLOW (levered, $) & RETURNS");
+const cf2 = [-9400000, -9400000, 900000, 1840000, 1900000, 1950000, 2010000, 27530000];
+const cf2Start = q + 1;
+cf2.forEach((v, i) => {
+  const a = qrow(); a.getCell(1).value = "Year " + i; a.getCell(1).alignment = { indent: 1 }; a.getCell(1).font = { name: "Calibri", size: 10, color: { argb: "FF333333" } };
+  const c = a.getCell(2); c.value = v; c.numFmt = money; c.font = { name: "Calibri", size: 10, color: { argb: "FF0B163C" } }; c.alignment = { horizontal: "right" };
+});
+const cf2End = q;
+const irr2 = irr(cf2);
+const em2 = cf2.slice(2).reduce((a, b) => a + b, 0) / -(cf2[0] + cf2[1]);
+qline("Equity multiple (7-yr)", { formula: `SUM(B${cf2Start + 2}:B${cf2End})/-(B${cf2Start}+B${cf2Start + 1})`, result: em2 }, "distributions / equity", mult, { bold: true, accent: true });
+qline("Project IRR (levered, 7-yr)", { formula: `IRR(B${cf2Start}:B${cf2End})`, result: irr2 }, "equity cash flows Yr 0–7", pct, { bold: true, accent: true });
+
+q++;
+const n2 = qrow(); p2.mergeCells(q, 1, q, 6);
+n2.getCell(1).value = "Illustrative. Hospitality is an income / hold play: it develops to roughly cost, so the return is durable cash flow + appreciation (lower IRR than the Phase 1 land, longer hold). VIVAMEE operates; JAL is the capital partner (debt + equity placement fees, co-invest, promote). The resort also lifts Phase 1 lot values. Subject to confirmation.";
+n2.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: "FF6B5A6B" } };
+n2.getCell(1).alignment = { wrapText: true, vertical: "top" }; n2.height = 50;
+
 wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
-  .then(() => console.log("Wrote JAL_Queenstown_Harbor_Model.xlsx  (project IRR ~", (irrVal * 100).toFixed(1) + "%)"))
+  .then(() => console.log("Wrote JAL_Queenstown_Harbor_Model.xlsx  (P1 IRR ~" + (irrVal * 100).toFixed(1) + "%, P2 IRR ~" + (irr2 * 100).toFixed(1) + "%, P2 EM ~" + em2.toFixed(2) + "x)"))
   .catch((e) => { console.error(e); process.exit(1); });
