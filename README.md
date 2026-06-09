@@ -80,7 +80,7 @@ comparison) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 20. Phase 2 Cash Flow — build-to-core equity cash flow *(illustrative)*
 21. Capital Access — JAL's debt & equity network
 22. The Structure — a development company under Capital H6 (50/50)
-23. Engagement & Compensation — $15K/mo retainer + reimbursed expenses, 1% debt / 2% equity placement, a share of the dev-co 50%
+23. Engagement & Compensation — $15K/mo retainer + reimbursed expenses, 1% debt / 2% equity placement, 30% of the dev-co 50% (~$2.1M carry; ~$2.7M all-in)
 24. Why JAL — Justin A. Levine
 25. The Path — diligence → Renault site visit (late Jul / early Aug) → mandate
 26. Thank You
@@ -126,8 +126,10 @@ derived and internally consistent:
   Costs repaid, then a straight **50/50**: **~$7.2M** to the property (Josh
   ~$3.6M → returns capital to his investors against their 8% pref) and
   **~$7.2M** to the development company (**Accountable Equity** / Capital H6 ·
-  Bob · JAL + partners). **No pref, no promote, no waterfall.** JAL earns a share
-  of the dev-co 50% plus a **$15K/mo** retainer, and intends to invest (TBD).
+  Bob · JAL + partners). **No pref, no promote, no waterfall.** JAL earns **30%
+  of the dev-co 50%** (≈ **~$2.1M**, ~15% of profit) plus a **$15K/mo** retainer
+  (non-creditable floor) → **~$2.7M all-in** (~19% of profit, mostly contingent
+  carry); placement fees only on outside capital raised; co-invest optional (TBD).
   Sensitivity (slide 15): net profit ~$8–22M across $55–85K entitled lots ×
   240–320 lots.
 - **Why capital-light:** finishing the lots ourselves would gross more (~$42M)
