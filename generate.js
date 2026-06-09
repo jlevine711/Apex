@@ -670,18 +670,19 @@ function proForma() {
   const mets = [
     ["$19.6M", "Entitled-lot revenue"],
     ["$14.3M", "Net profit (73% margin)"],
+    ["~86%", "Project IRR (unlevered)"],
     ["2.7×", "Return on cost (~$5.3M)"],
     ["$7.2M", "Development co (50%)"],
     ["$7.2M", "Property / investors (50%)"],
   ];
-  let my = 2.55;
+  let my = 2.5;
   mets.forEach(([v, l]) => {
     txt(s, v, 9.55, my, 3.1, 0.32, { font: HEAD, size: 17, bold: true, color: C.white });
     txt(s, l, 9.55, my + 0.31, 3.1, 0.22, { font: BODY, size: 8.5, color: C.mauve });
-    my += 0.74;
+    my += 0.62;
   });
 
-  callout(s, "Illustrative: ~$14.3M profit on ~$5.3M of soft cost (~2.7× on cost). Builder funds the horizontal. Costs repaid, then a straight 50/50 — half returns capital to your investors.", 6.55);
+  callout(s, "Illustrative: ~$14.3M profit on ~$5.3M of soft cost — ~2.7× on cost and a ~86% unlevered IRR on a near-zero land basis. Builder funds the horizontal; costs repaid, then a straight 50/50.", 6.55);
   s.addNotes(
     "Capital-light entitled-lot pro forma, consistent with slide 6. $19.6M revenue − $5.3M soft cost ≈ $14.3M profit " +
     "(~2.7× on cost, 73% margin) on a near-zero land basis; the builder funds the horizontal. Costs repaid first, then a " +
@@ -965,7 +966,7 @@ function phase1cf() {
     cf("Cumulative cash flow", ["(1.6)", "(4.0)", "(0.1)", "7.4", "14.3", ""]),
   ];
   table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
-  callout(s, "Net profit ~$14.3M on ~$5.3M of soft cost (~2.7× on cost); the builder funds the horizontal. Costs repaid, then a straight 50/50.", 5.8);
+  callout(s, "Net profit ~$14.3M on ~$5.3M of soft cost — ~2.7× on cost, ~86% unlevered project IRR; the builder funds the horizontal. Costs repaid, then a straight 50/50.", 5.8);
   txt(s, "Project cash flow; illustrative phasing. The builder funds the horizontal. Ties to the model's entitled-lot sheet. Figures subject to confirmation.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes("Phase 1 entitled-lot project cash flow — ties to the model: $19.6M revenue, $5.3M soft cost, $14.3M profit (~2.7× on cost). We fund only soft costs Yr 0–2; entitled lots sell Yr 2–4; the builder funds the horizontal. Costs repaid, then a straight 50/50.");
