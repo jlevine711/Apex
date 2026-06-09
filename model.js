@@ -1,17 +1,17 @@
 /**
- * Queenstown Harbor — Finished-Lot Development Model (backup to the deck).
+ * Queenstown Harbor — Entitled-Lot (Capital-Light) Development Model.
  *
- * Finished-lot basis: the JV funds the horizontal (roads, sewer, utilities)
- * and sells FINISHED lots to homebuilders; builders just build the homes.
+ * CAPITAL-LIGHT basis (per Bob, 6/9): we fund only the SOFT costs to entitle the
+ * land, then sell ENTITLED lots to builders — the builder funds all the
+ * horizontal (roads, sewer, utilities). Costs are repaid first, then profit is
+ * split a simple 50/50: half to the property owner (the "H" entities; Josh owns
+ * 50%, so ~25% of profit) and half to the development company (Bob · JAL ·
+ * partners). No pref, no promote waterfall — a straight deal.
  *
- * DYNAMIC & CALCULATED. There are no hardcoded results: a single INPUTS object
- * (`IN`) feeds two pure calc engines (`calcP1`, `calcP2`) that derive every
- * figure — totals, cash flows, IRRs, the promote split and the sensitivity
- * grids. In the workbook, the INPUTS block plus the cash-flow timing vectors
- * are the only typed numbers; every other cell is a live Excel formula that
- * references them (the cached `result` shown before recalc is the engine's own
- * computed value, so spreadsheet and engine always agree). Edit any input —
- * in JS or in the sheet — and everything recalculates. All figures illustrative.
+ * DYNAMIC & CALCULATED. A single INPUTS object (`IN`) feeds pure calc engines
+ * (`calcP1`, `calcP2`) that derive every figure; in the workbook the INPUTS plus
+ * the cash-flow timing vectors are the only typed numbers and every other cell
+ * is a live Excel formula (recalcs on open). All figures illustrative.
  *
  *   npm run model   ->   JAL_Queenstown_Harbor_Model.xlsx
  */
@@ -20,7 +20,7 @@ const ExcelJS = require("exceljs");
 // ---- IRR (bisection) — caches the value Excel shows before it recalculates --
 function irr(cfs) {
   const npv = (r) => cfs.reduce((a, c, i) => a + c / Math.pow(1 + r, i), 0);
-  let lo = -0.9, hi = 5;
+  let lo = -0.9, hi = 9;
   for (let i = 0; i < 200; i++) {
     const mid = (lo + hi) / 2;
     if (npv(mid) > 0) lo = mid; else hi = mid;
@@ -28,51 +28,34 @@ function irr(cfs) {
   return (lo + hi) / 2;
 }
 
-// ---- promote waterfall: split a project equity cash flow into LP / GP -------
-// Pari-passu return of capital + pref, then IRR-hurdle promote tiers.
-function waterfall(eqCF, lpFrac, pref, tiers) {
-  const n = eqCF.length;
-  const lp = Array(n).fill(0), gp = Array(n).fill(0);
-  for (let t = 0; t < n; t++) if (eqCF[t] < 0) { lp[t] = eqCF[t] * lpFrac; gp[t] = eqCF[t] * (1 - lpFrac); }
-  for (let t = 0; t < n; t++) {
-    let dist = eqCF[t] > 0 ? eqCF[t] : 0;
-    if (dist <= 0) continue;
-    const N = 2000, step = dist / N;
-    for (let k = 0; k < N; k++) {
-      const cur = irr(lp.slice(0, t + 1));                 // LP IRR achieved so far
-      let s = tiers[tiers.length - 1].lp;                  // top tier by default
-      if (cur < pref - 1e-6) s = lpFrac;                   // still earning pref → pari-passu
-      else for (const tr of tiers) if (cur < tr.irr - 1e-6) { s = tr.lp; break; }
-      lp[t] += step * s; gp[t] += step * (1 - s);
-    }
-  }
-  return { lp, gp };
-}
-
 // ============================================================================
 // INPUTS — the single source of truth.  Edit here (or in the sheet) and
 // everything below recalculates.  Phasing vectors run Yr 0..4 and sum to 1.
 // ============================================================================
 const IN = {
-  // ---- Phase 1 — finished-lot development ----
-  grossAc: 700, consAc: 198, golfAc: 302, critAc: 60,
-  density: 2.0, lotPx: 150000, horizPerLot: 60000, soft: 2800000,
-  mktPct: 0.03, contPct: 0.07, fin: 1400000, landBas: 4000000,
-  ltc: 0.60, pref: 0.08, lpFrac: 0.90,
-  tiers: [{ irr: 0.15, lp: 0.80 }, { irr: 0.20, lp: 0.70 }, { irr: Infinity, lp: 0.60 }],
+  // ---- Phase 1 — entitled-lot (capital-light) ----
+  grossAc: 700, consAc: 198, golfAc: 302, critAc: 60, density: 2.0,
+  entitledPx: 70000,            // price of an ENTITLED (paper) lot to a builder
+  // soft costs to entitle (we fund these; builder funds the horizontal)
+  entitlement: 1200000,         // planning, zoning, PUD approvals
+  civilEng: 1000000,            // civil engineering / construction plans
+  environmental: 600000,        // wetlands, Critical Area, studies
+  legalSurvey: 500000,          // legal, survey, title
+  projMgmt: 700000,             // project management / consultants
+  mktPct: 0.03, contPct: 0.10, fin: 300000,
+  split: 0.50,                  // profit split — development company share = 1 − split
+  joshOfProperty: 0.50,         // Josh's ownership of each property entity
+  // finished-lot comparison (what building it out ourselves would look like)
+  finishedPx: 150000, horizPerLot: 60000, finFin: 1400000,
   // cash-flow timing (% by year, Yr 0..4)
-  revPhase:  [0, 0, 8 / 42, 17 / 42, 17 / 42],   // finished-lot sales, Yr 2–4
-  costPhase: [0.22, 0.38, 0.36, 0.03, 0.01],     // land/soft/horizontal front-loaded
-  drawPhase: [0.607, 0.393, 0, 0, 0],            // equity drawn Yr 0–1
-  distPhase: [0, 0, 0.088, 0.307, 0.605],        // equity distributions Yr 2–4
+  revPhase:  [0, 0, 0.25, 0.40, 0.35],   // entitled-lot sales as approvals land, Yr 2–4
+  costPhase: [0.30, 0.45, 0.18, 0.07, 0],// soft costs front-loaded Yr 0–2
 
-  // ---- Phase 2 — hospitality (hotel + restaurants) ----
+  // ---- Phase 2 — hospitality (hotel + restaurants); hotel is REQUIRED ----
   hKeys: 100, hCostKey: 325000, hADR: 250, hOcc: 0.62, hMult: 1.6, hMgn: 0.31,
   rSF: 16000, rCostSF: 550, rSalesSF: 700, rMgn: 0.09,
   pLand: 2000000, pSoft: 3700000, pCap: 0.08, pLTC: 0.60, pRate: 0.07, pGrow: 0.03,
-  eqSplit: 0.5,        // equity drawn Yr 0 (balance Yr 1)
-  rampYr2: 0.5,        // first operating year (hold case) runs at half
-  // build-to-core
+  eqSplit: 0.5, rampYr2: 0.5,
   bcUp: 0.22, bcCap: 0.075, bcLTC: 0.65, bcRampYr2: 0.4,
 };
 
@@ -80,38 +63,36 @@ const IN = {
 function calcP1(over = {}) {
   const i = { ...IN, ...over };
   const netAc = i.grossAc - i.consAc - i.golfAc - i.critAc;
-  const lots = netAc * i.density;
-  const rev = lots * i.lotPx;
-  const uLand = i.landBas;
-  const uHoriz = lots * i.horizPerLot;
-  const uSoft = i.soft;
-  const uMkt = rev * i.mktPct;
-  const uCont = uHoriz * i.contPct;
-  const uFin = i.fin;
-  const totCost = uLand + uHoriz + uSoft + uMkt + uCont + uFin;
-  const loan = totCost * i.ltc;
-  const landEq = i.landBas;
-  const cashEq = totCost - loan - landEq;
-  const totEquity = landEq + cashEq;          // = totCost − loan
+  const lots = over.lots != null ? over.lots : netAc * i.density;
+  const rev = lots * i.entitledPx;
+  const softBase = i.entitlement + i.civilEng + i.environmental + i.legalSurvey + i.projMgmt;
+  const mkt = rev * i.mktPct;
+  const cont = softBase * i.contPct;
+  const fin = i.fin;
+  const totCost = softBase + mkt + cont + fin;           // we only fund soft costs
   const profit = rev - totCost;
-  const dist = totEquity + profit;            // distributable to equity
-  const em = dist / totEquity;
-  // annual cash flows, derived from totals × phasing
+  const propShare = profit * i.split;                    // property / H entities
+  const devShare = profit * (1 - i.split);               // development company
+  const joshShare = propShare * i.joshOfProperty;        // ~25% of profit
+  const roiCost = profit / totCost;
+  const margin = profit / rev;
+  // annual project cash flow, derived from totals × phasing
   const revArr = i.revPhase.map((p) => rev * p);
   const costArr = i.costPhase.map((p) => -totCost * p);
-  const unlevCF = revArr.map((v, t) => v + costArr[t]);
-  const drawArr = i.drawPhase.map((p) => -totEquity * p);
-  const distArr = i.distPhase.map((p) => dist * p);
-  const levCF = drawArr.map((v, t) => v + distArr[t]);
-  const unlevIRR = irr(unlevCF), levIRR = irr(levCF);
-  const wf = waterfall(levCF, i.lpFrac, i.pref, i.tiers);
-  const lpIRR = irr(wf.lp), gpIRR = irr(wf.gp), gpProfit = wf.gp.reduce((a, b) => a + b, 0);
-  return { netAc, lots, rev, uLand, uHoriz, uSoft, uMkt, uCont, uFin, totCost, loan,
-    landEq, cashEq, totEquity, profit, dist, em, revArr, costArr, unlevCF,
-    drawArr, distArr, levCF, unlevIRR, levIRR, wf, lpIRR, gpIRR, gpProfit };
+  const netCF = revArr.map((v, t) => v + costArr[t]);
+  const projIRR = irr(netCF);
+  // finished-lot comparison (build the horizontal ourselves; land contributed)
+  const finRev = lots * i.finishedPx;
+  const finHoriz = lots * i.horizPerLot;
+  const finCost = finHoriz + softBase + finRev * i.mktPct + finHoriz * 0.07 + i.finFin;
+  const finProfit = finRev - finCost;
+  const finRoiCost = finProfit / finCost;
+  return { netAc, lots, rev, softBase, mkt, cont, fin, totCost, profit, propShare,
+    devShare, joshShare, roiCost, margin, revArr, costArr, netCF, projIRR,
+    finRev, finHoriz, finCost, finProfit, finRoiCost };
 }
 
-// ---- Phase 2 engine ---------------------------------------------------------
+// ---- Phase 2 engine (hospitality; hotel is a required component) ------------
 function calcP2(over = {}) {
   const i = { ...IN, ...over };
   const hCost = i.hKeys * i.hCostKey;
@@ -126,23 +107,18 @@ function calcP2(over = {}) {
   const pYoC = pNOI / pCost;
   const pLoan = pCost * i.pLTC;
   const pEq = pCost - pLoan;
-  const stabLevCF = pNOI - pLoan * i.pRate;       // stabilized levered cash flow
+  const stabLevCF = pNOI - pLoan * i.pRate;
   const pCoC = stabLevCF / pEq;
   const pXNOI = pNOI * Math.pow(1 + i.pGrow, 4);
   const pXVal = pXNOI / i.pCap;
   const pXEq = pXVal - pLoan;
-  // 7-year hold equity cash flow (Yr 0..7)
   const cf2 = [
     -pEq * i.eqSplit, -pEq * (1 - i.eqSplit),
-    stabLevCF * i.rampYr2,
-    stabLevCF,
-    stabLevCF * Math.pow(1 + i.pGrow, 1),
-    stabLevCF * Math.pow(1 + i.pGrow, 2),
-    stabLevCF * Math.pow(1 + i.pGrow, 3),
-    stabLevCF * Math.pow(1 + i.pGrow, 4) + pXEq,
+    stabLevCF * i.rampYr2, stabLevCF,
+    stabLevCF * Math.pow(1 + i.pGrow, 1), stabLevCF * Math.pow(1 + i.pGrow, 2),
+    stabLevCF * Math.pow(1 + i.pGrow, 3), stabLevCF * Math.pow(1 + i.pGrow, 4) + pXEq,
   ];
   const irr2 = irr(cf2), em2 = cf2.slice(2).reduce((a, b) => a + b, 0) / -(cf2[0] + cf2[1]);
-  // build-to-core (recap / sell at stabilization, ~Yr 4)
   const bcNOI = pNOI * (1 + i.bcUp);
   const bcVal = bcNOI / i.bcCap;
   const bcLoan = pCost * i.bcLTC;
@@ -152,9 +128,7 @@ function calcP2(over = {}) {
   const bcXEq = bcVal - bcLoan;
   const bcf = [
     -bcEq * i.eqSplit, -bcEq * (1 - i.eqSplit),
-    bcStabLevCF * i.bcRampYr2,
-    bcStabLevCF,
-    bcStabLevCF + bcXEq,
+    bcStabLevCF * i.bcRampYr2, bcStabLevCF, bcStabLevCF + bcXEq,
   ];
   const bcIRR = irr(bcf), bcEM = bcf.slice(2).reduce((a, b) => a + b, 0) / -(bcf[0] + bcf[1]);
   return { hCost, hRoom, hRev, hNOI, rCost, rSales, rNOI, pCost, pNOI, pYoC, pLoan,
@@ -163,7 +137,7 @@ function calcP2(over = {}) {
 }
 
 // sensitivity helpers reuse the engines (no duplicated constants)
-const p1LPIRR = (lotPx, ltc) => calcP1({ lotPx, ltc }).lpIRR;
+const p1Profit = (entitledPx, lots) => calcP1({ entitledPx, lots }).profit;
 const p2IRR = (bcUp, bcCap, bcLTC = IN.bcLTC) => calcP2({ bcUp, bcCap, bcLTC }).bcIRR;
 
 const P1 = calcP1();
@@ -175,13 +149,13 @@ const P2 = calcP2();
 const NAVY = "FF0B163C", AUB = "FF3A243A", CREAM = "FFF4F2ED", WHITE = "FFFFFFFF";
 const wb = new ExcelJS.Workbook();
 wb.creator = "JAL Strategies";
-wb.title = "Queenstown Harbor — Finished-Lot Development Model";
-wb.calcProperties.fullCalcOnLoad = true; // recalc every formula when opened
-const ws = wb.addWorksheet("Finished-Lot Model", {
+wb.title = "Queenstown Harbor — Entitled-Lot (Capital-Light) Model";
+wb.calcProperties.fullCalcOnLoad = true;
+const ws = wb.addWorksheet("Entitled-Lot Model", {
   views: [{ showGridLines: false }],
   properties: { defaultRowHeight: 16 },
 });
-ws.columns = [{ width: 40 }, { width: 16 }, { width: 14 }, { width: 12 }, { width: 12 }, { width: 12 }];
+ws.columns = [{ width: 42 }, { width: 16 }, { width: 14 }, { width: 12 }, { width: 12 }, { width: 12 }];
 
 const COLS = ["B", "C", "D", "E", "F"];
 let r = 0;
@@ -204,7 +178,7 @@ function band(text, sub) {
   }
 }
 function header(text) {
-  r++; // spacer
+  r++;
   const a = row();
   a.getCell(1).value = text;
   for (let c = 1; c <= 6; c++) {
@@ -214,7 +188,6 @@ function header(text) {
   a.getCell(1).alignment = { indent: 1 };
   return r;
 }
-// label / value(or formula) / note ; returns the row index for referencing
 function line(label, value, note, fmt, opts = {}) {
   const a = row();
   a.getCell(1).value = label;
@@ -234,7 +207,6 @@ function line(label, value, note, fmt, opts = {}) {
   if (opts.fill) for (let c = 1; c <= 2; c++) a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } };
   return r;
 }
-// year-labelled header (Yr 0..4 across B:F)
 function yrHead() {
   const a = row();
   a.getCell(1).value = "$ by year";
@@ -247,7 +219,6 @@ function yrHead() {
   });
   return r;
 }
-// horizontal row of 5 cells (numbers or {formula,result}) across B:F
 function hrow(label, cells, fmt, opts = {}) {
   const a = row();
   a.getCell(1).value = label;
@@ -263,20 +234,15 @@ function hrow(label, cells, fmt, opts = {}) {
   });
   return r;
 }
-// build 5 formulas: scalarRef × phaseRow (optionally negated), with engine results
 function phased(scalarRef, phaseRow, results, sign = 1) {
-  return COLS.map((col, t) => ({
-    formula: `${sign < 0 ? "-" : ""}${scalarRef}*${col}${phaseRow}`,
-    result: results[t],
-  }));
+  return COLS.map((col, t) => ({ formula: `${sign < 0 ? "-" : ""}${scalarRef}*${col}${phaseRow}`, result: results[t] }));
 }
-// build 5 formulas summing two rows column-by-column
 function sumRows(rowA, rowB, results) {
   return COLS.map((col, t) => ({ formula: `${col}${rowA}+${col}${rowB}`, result: results[t] }));
 }
 
-band("Queenstown Harbor — Finished-Lot Development Model",
-  "JV funds the horizontal (roads, sewer, utilities); homebuilders just build the homes.  ·  Dynamic — every cell below is a live formula off INPUTS.  ·  ILLUSTRATIVE.");
+band("Queenstown Harbor — Entitled-Lot (Capital-Light) Development Model",
+  "Entitle the land and sell ENTITLED lots; the builder funds the horizontal. Costs repaid, then a simple 50/50.  ·  Dynamic — live formulas off INPUTS.  ·  ILLUSTRATIVE.");
 
 // ---- INPUTS ----
 header("INPUTS  (edit these — everything below recalculates)");
@@ -285,119 +251,103 @@ const consAc  = line("Less: permanent conservation (acres)", IN.consAc, "recorde
 const golfAc  = line("Less: golf, range, water & lodging (acres)", IN.golfAc, "two 18s + 9-ac range + clubhouse/cottages (est.)", "#,##0");
 const critAc  = line("Less: Critical Area & wetlands (acres)", IN.critAc, "Chesapeake Bay 1,000-ft zone (est.)", "#,##0");
 const density = line("Lot density (lots / acre)", IN.density, "blended; Queen Anne's Co. zoning to confirm", "0.0");
-const lotPx   = line("Finished lot price ($ / lot)", IN.lotPx, "conservative — QAC lots avg ~$237K; new homes $600–705K", money);
-const horiz   = line("Horizontal site dev cost ($ / lot)", IN.horizPerLot, "JV-funded; national benchmark $50–150K/acre", money);
-const soft    = line("Soft costs ($)", IN.soft, "entitlement, civil, environmental, legal, mgmt", money);
+const entPx   = line("Entitled lot price ($ / lot)", IN.entitledPx, "to a builder — ~finished $150K less the builder's ~$80K to finish", money);
+const cEnt    = line("Entitlement / approvals ($)", IN.entitlement, "planning, zoning, PUD", money);
+const cCiv    = line("Civil engineering ($)", IN.civilEng, "construction plans", money);
+const cEnv    = line("Environmental studies ($)", IN.environmental, "wetlands, Critical Area", money);
+const cLeg    = line("Legal / survey / title ($)", IN.legalSurvey, "", money);
+const cPM     = line("Project management ($)", IN.projMgmt, "consultants over the entitlement", money);
 const mktPct  = line("Marketing & brokerage (% of revenue)", IN.mktPct, "lot sales", pct);
-const contPct = line("Contingency (% of hard cost)", IN.contPct, "on horizontal", pct);
-const fin     = line("Financing / interest carry ($)", IN.fin, "development loan interest", money);
-const landBas = line("Land basis — contributed ($)", IN.landBas, "allocated from $25M H6 purchase (~$29K/ac); appraisal to set", money);
-const ltc     = line("Development loan (% of total cost)", IN.ltc, "land-development / A&D financing (60% LTC)", pct);
-const pref    = line("Preferred return", IN.pref, "to equity, before promote", pct);
+const contPct = line("Contingency (% of soft cost)", IN.contPct, "on the soft costs", pct);
+const fin     = line("Financing / carry ($)", IN.fin, "small bank line", money);
+const splitIn = line("Profit split — each side", IN.split, "50/50 after costs (no pref, no promote)", pct);
+const joshIn  = line("Josh ownership of property entity", IN.joshOfProperty, "→ Josh nets ~25% of profit", pct);
 
 const B = (i) => `B${i}`;
 
 // ---- LAND -> LOTS ----
-header("DEVELOPABLE LAND  →  LOTS");
+header("DEVELOPABLE LAND  →  ENTITLED LOTS");
 const netAc = line("Net developable land (acres)",
   { formula: `${B(grossAc)}-${B(consAc)}-${B(golfAc)}-${B(critAc)}`, result: P1.netAc },
   "gross − conservation − golf − Critical Area", "#,##0", { bold: true });
-const lots = line("Finished lots",
+const lots = line("Entitled lots",
   { formula: `${B(netAc)}*${B(density)}`, result: P1.lots },
   "net developable acres × density", "#,##0", { bold: true, accent: true });
 
 // ---- REVENUE ----
 header("REVENUE");
-const rev = line("Gross lot revenue",
-  { formula: `${B(lots)}*${B(lotPx)}`, result: P1.rev },
-  "finished lots × finished lot price", money, { bold: true, accent: true });
+const rev = line("Gross entitled-lot revenue",
+  { formula: `${B(lots)}*${B(entPx)}`, result: P1.rev },
+  "entitled lots × entitled-lot price", money, { bold: true, accent: true });
 
-// ---- USES ----
-header("USES OF CAPITAL  (development budget)");
-const uLand = line("Land contribution", { formula: `${B(landBas)}`, result: P1.uLand }, "contributed by Capital H6", money);
-const uHoriz = line("Horizontal site development", { formula: `${B(lots)}*${B(horiz)}`, result: P1.uHoriz }, "lots × $/lot (roads, sewer, utilities)", money);
-const uSoft = line("Soft costs", { formula: `${B(soft)}`, result: P1.uSoft }, "entitlement, civil, env, legal", money);
-const uMkt = line("Marketing & brokerage", { formula: `${B(rev)}*${B(mktPct)}`, result: P1.uMkt }, "% of revenue", money);
-const uCont = line("Contingency", { formula: `${B(uHoriz)}*${B(contPct)}`, result: P1.uCont }, "% of hard cost", money);
-const uFin = line("Financing / interest carry", { formula: `${B(fin)}`, result: P1.uFin }, "loan interest", money);
-const totCost = line("TOTAL PROJECT COST", { formula: `SUM(${B(uLand)}:${B(uFin)})`, result: P1.totCost }, "sum of uses", money, { bold: true, accent: true, fill: true });
+// ---- DEVELOPMENT COST (SOFT ONLY) ----
+header("DEVELOPMENT COST  (SOFT ONLY — builder funds the horizontal)");
+const uMkt = line("Marketing & brokerage", { formula: `${B(rev)}*${B(mktPct)}`, result: P1.mkt }, "% of revenue", money);
+const softBase = line("Soft costs (entitle the land)", { formula: `${B(cEnt)}+${B(cCiv)}+${B(cEnv)}+${B(cLeg)}+${B(cPM)}`, result: P1.softBase }, "entitlement + civil + env + legal + PM", money);
+const uCont = line("Contingency", { formula: `${B(softBase)}*${B(contPct)}`, result: P1.cont }, "% of soft cost", money);
+const uFin = line("Financing / carry", { formula: `${B(fin)}`, result: P1.fin }, "small bank line", money);
+const totCost = line("TOTAL DEVELOPMENT COST", { formula: `${B(softBase)}+${B(uMkt)}+${B(uCont)}+${B(uFin)}`, result: P1.totCost }, "what we fund (land contributed at ~zero basis)", money, { bold: true, accent: true, fill: true });
 
-// ---- SOURCES ----
-header("SOURCES OF CAPITAL  (capital stack)");
-const sLoan = line("Development loan (~60% LTC)", { formula: `${B(totCost)}*${B(ltc)}`, result: P1.loan }, "land-development financing", money);
-const sLand = line("Land equity (contributed)", { formula: `${B(landBas)}`, result: P1.landEq }, "contributed land", money);
-const sCash = line("Cash equity", { formula: `${B(totCost)}-${B(sLoan)}-${B(sLand)}`, result: P1.cashEq }, "balance — co-invest + LP raise", money);
-const totCap = line("TOTAL CAPITAL", { formula: `SUM(${B(sLoan)}:${B(sCash)})`, result: P1.totCost }, "= total project cost", money, { bold: true, accent: true, fill: true });
+// ---- PROFIT & 50/50 SPLIT ----
+header("PROFIT  &  THE 50/50 SPLIT  (costs repaid first, then a straight deal)");
+const profit = line("Net profit", { formula: `${B(rev)}-${B(totCost)}`, result: P1.profit }, "revenue − development cost", money, { bold: true, accent: true });
+line("Profit margin (on revenue)", { formula: `${B(profit)}/${B(rev)}`, result: P1.margin }, "near-zero land basis", pct);
+line("Return on cost", { formula: `${B(profit)}/${B(totCost)}`, result: P1.roiCost }, "profit / development cost", mult, { bold: true, accent: true });
+const propShare = line("→ Property / H entities (50%)", { formula: `${B(profit)}*${B(splitIn)}`, result: P1.propShare }, "returns capital to Josh's investors", money, { bold: true });
+line("    of which Josh (~25% of profit)", { formula: `${B(propShare)}*${B(joshIn)}`, result: P1.joshShare }, "Josh owns 50% of the property entity", money);
+line("→ Development company (50%)", { formula: `${B(profit)}*(1-${B(splitIn)})`, result: P1.devShare }, "Bob · JAL · partners — JAL earns a share + $15K/mo retainer", money, { bold: true, accent: true });
 
-// ---- RETURNS ----
-header("RETURNS");
-const profit = line("Net development profit", { formula: `${B(rev)}-${B(totCost)}`, result: P1.profit }, "revenue − total cost", money, { bold: true, accent: true });
-line("Profit margin (on revenue)", { formula: `${B(profit)}/${B(rev)}`, result: P1.profit / P1.rev }, "", pct);
-line("Profit on cost", { formula: `${B(profit)}/${B(totCost)}`, result: P1.profit / P1.totCost }, "", pct);
-const equity = line("Total equity (land + cash)", { formula: `${B(sLand)}+${B(sCash)}`, result: P1.totEquity }, "land contribution + cash equity", money);
-const distRow = line("Distributable to equity (capital + profit)", { formula: `${B(equity)}+${B(profit)}`, result: P1.dist }, "returned to equity over the hold", money);
-line("Equity multiple", { formula: `${B(distRow)}/${B(equity)}`, result: P1.em }, "distributable / equity, levered", mult, { bold: true, accent: true });
-
-// ---- CASH-FLOW TIMING (phasing inputs) ----
-header("CASH-FLOW TIMING  (% by year — edit to re-phase; each row sums to 100%)");
+// ---- CASH FLOW ----
+header("PROJECT CASH FLOW  (revenue × phasing − cost × phasing)");
 yrHead();
-const revPhaseRow  = hrow("Revenue phasing (lot sales)", IN.revPhase, pct);
-const costPhaseRow = hrow("Cost phasing (land/horizontal/soft)", IN.costPhase, pct);
-const drawPhaseRow = hrow("Equity-draw phasing", IN.drawPhase, pct);
-const distPhaseRow = hrow("Equity-distribution phasing", IN.distPhase, pct);
+const revPhaseRow  = hrow("Revenue phasing (entitled-lot sales)", IN.revPhase, pct);
+const costPhaseRow = hrow("Cost phasing (entitlement soft costs)", IN.costPhase, pct);
+const p1RevRow  = hrow("Entitled-lot revenue", phased(`$B$${rev}`, revPhaseRow, P1.revArr), money);
+const p1CostRow = hrow("Development cost", phased(`$B$${totCost}`, costPhaseRow, P1.costArr, -1), money);
+const p1NetRow  = hrow("Net project cash flow", sumRows(p1RevRow, p1CostRow, P1.netCF), money, { bold: true, accent: true });
+line("Project IRR (unlevered)", { formula: `IRR(B${p1NetRow}:F${p1NetRow})`, result: P1.projIRR },
+  "high — minimal capital on a near-zero-basis land", pct, { bold: true, accent: true });
 
-// ---- UNLEVERED PROJECT CASH FLOW ----
-header("UNLEVERED PROJECT CASH FLOW  (revenue × phasing − cost × phasing)");
-yrHead();
-const p1RevRow  = hrow("Lot revenue", phased(`$B$${rev}`, revPhaseRow, P1.revArr), money);
-const p1CostRow = hrow("Total cost", phased(`$B$${totCost}`, costPhaseRow, P1.costArr, -1), money);
-const p1NetRow  = hrow("Net project cash flow", sumRows(p1RevRow, p1CostRow, P1.unlevCF), money, { bold: true, accent: true });
-line("Project IRR (unlevered)", { formula: `IRR(B${p1NetRow}:F${p1NetRow})`, result: P1.unlevIRR },
-  "lots sell Yr 2–4; land & horizontal up front", pct, { bold: true, accent: true });
-
-// ---- LEVERED EQUITY CASH FLOW + PROMOTE WATERFALL ----
-header(`LEVERED EQUITY CASH FLOW  (${(IN.ltc * 100).toFixed(0)}% LTC development loan)`);
-yrHead();
-const p1DrawRow = hrow("Equity drawn", phased(`$B$${equity}`, drawPhaseRow, P1.drawArr, -1), money);
-const p1DistRow = hrow("Equity distributions", phased(`$B$${distRow}`, distPhaseRow, P1.distArr), money);
-const p1LevRow  = hrow("Project equity cash flow", sumRows(p1DrawRow, p1DistRow, P1.levCF), money, { bold: true });
-line("Project equity IRR (levered)", { formula: `IRR(B${p1LevRow}:F${p1LevRow})`, result: P1.levIRR },
-  `equity ~$${(P1.totEquity / 1e6).toFixed(1)}M; unlevered project IRR ~${(P1.unlevIRR * 100).toFixed(0)}%`, pct, { bold: true, accent: true });
-
-header("PROMOTE WATERFALL  (LP 90% / GP 10% · 8% pref · 80/20 to 15% · 70/30 to 20% · 60/40 above)");
-yrHead();
-const lpRow = hrow("LP cash flow (after promote)", P1.wf.lp.map(Math.round), money);
-const gpRow = hrow("GP cash flow (co-invest + promote)", P1.wf.gp.map(Math.round), money);
-line("LP IRR (after promote)", { formula: `IRR(B${lpRow}:F${lpRow})`, result: P1.lpIRR }, "what the equity investors earn", pct, { bold: true, accent: true });
-line("GP IRR (co-invest + carried interest)", { formula: `IRR(B${gpRow}:F${gpRow})`, result: P1.gpIRR }, "sponsor group — Accountable Equity / Capital H6 / Bob / JAL + partners", pct, { bold: true });
-line("GP net profit (co-invest + promote)", { formula: `SUM(B${gpRow}:F${gpRow})`, result: Math.round(P1.gpProfit) }, "GP group total — JAL earns a share", money, { bold: true });
+// ---- CAPITAL-LIGHT vs FINISHED-LOT ----
+header("WHY CAPITAL-LIGHT  (entitled vs. finishing the lots ourselves)");
+const ch = row();
+["", "Entitled lots", "Finished lots"].forEach((t, i) => { const c = ch.getCell(1 + i); c.value = t; c.font = { name: "Calibri", bold: true, size: 9, color: { argb: i ? NAVY : "FF6B5A6B" } }; c.alignment = { horizontal: i ? "right" : "left", indent: i ? 0 : 1 }; });
+const cmp = (label, ent, finv, fmt) => {
+  const a = row();
+  a.getCell(1).value = label; a.getCell(1).font = { name: "Calibri", size: 10, color: { argb: "FF333333" } }; a.getCell(1).alignment = { indent: 1 };
+  const e = a.getCell(2); e.value = ent; e.numFmt = fmt; e.font = { name: "Calibri", size: 10, bold: true, color: { argb: AUB } }; e.alignment = { horizontal: "right" };
+  const f = a.getCell(3); f.value = finv; f.numFmt = fmt; f.font = { name: "Calibri", size: 10, color: { argb: NAVY } }; f.alignment = { horizontal: "right" };
+};
+cmp("Revenue", P1.rev, P1.finRev, money);
+cmp("Development cost (capital deployed)", P1.totCost, P1.finCost, money);
+cmp("Net profit", P1.profit, P1.finProfit, money);
+cmp("Return on cost", P1.roiCost, P1.finRoiCost, mult);
 {
   const a = row(); ws.mergeCells(r, 1, r, 6);
-  a.getCell(1).value = "LP / GP split is solved by the model's promote engine (an IRR-hurdle waterfall isn't a closed-form cell formula); the IRR / profit cells above are live over those rows.";
+  a.getCell(1).value = "Finishing the lots adds ~$" + ((P1.finProfit - P1.profit) / 1e6).toFixed(1) + "M of profit but needs ~" + (P1.finCost / P1.totCost).toFixed(1) + "× the capital and all the horizontal execution + absorption risk. Capital-light wins on return-on-cost and risk — and it's what the sponsor wants.";
   a.getCell(1).font = { name: "Calibri", italic: true, size: 9, color: { argb: "FF6B5A6B" } };
 }
 
-// ---- LP IRR SENSITIVITY ----
-header("LP IRR SENSITIVITY  (finished lot price  ×  LTC)");
-const sPrices = [130000, 150000, 170000];
-const sLTC = [0.55, 0.60, 0.65, 0.70];
-const shr = row(); shr.getCell(1).value = "Lot price  /  LTC"; shr.getCell(1).font = { bold: true, size: 9, color: { argb: WHITE } }; shr.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } };
-sLTC.forEach((l, i) => { const c = shr.getCell(2 + i); c.value = l; c.numFmt = "0%"; c.font = { bold: true, size: 10, color: { argb: WHITE } }; c.alignment = { horizontal: "center" }; c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; });
+// ---- SENSITIVITY ----
+header("PROFIT SENSITIVITY  ($M — entitled lot price  ×  lot yield)");
+const sPrices = [55000, 70000, 85000];
+const sLots = [240, 280, 320];
+const shr = row(); shr.getCell(1).value = "Entitled $/lot  /  lots"; shr.getCell(1).font = { bold: true, size: 9, color: { argb: WHITE } }; shr.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } };
+sLots.forEach((l, i) => { const c = shr.getCell(2 + i); c.value = l + " lots"; c.font = { bold: true, size: 10, color: { argb: WHITE } }; c.alignment = { horizontal: "center" }; c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; });
 sPrices.forEach((p) => {
   const rr = row(); rr.getCell(1).value = "$" + (p / 1000) + "K / lot"; rr.getCell(1).font = { bold: true, size: 10, color: { argb: NAVY } }; rr.getCell(1).alignment = { indent: 1 };
-  sLTC.forEach((l, i) => { const v = p1LPIRR(p, l); const c = rr.getCell(2 + i); c.value = v; c.numFmt = "0.0%"; const base = (p === IN.lotPx && l === IN.ltc); c.font = { size: 10, bold: base, color: { argb: base ? AUB : NAVY } }; c.alignment = { horizontal: "center" }; if (base) c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } }; });
+  sLots.forEach((l, i) => { const v = p1Profit(p, l) / 1e6; const c = rr.getCell(2 + i); c.value = v; c.numFmt = '$#,##0.0,"M"'.replace(",,", ""); c.numFmt = '#,##0.0'; const base = (p === IN.entitledPx && l === 280); c.font = { size: 10, bold: base, color: { argb: base ? AUB : NAVY } }; c.alignment = { horizontal: "center" }; if (base) c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } }; });
 });
 {
   const a = row(); ws.mergeCells(r, 1, r, 6);
-  a.getCell(1).value = "LP IRR after the 8% pref + tiered promote. Base = $150K lot / 60% LTC (highlighted). Each cell re-runs the full waterfall engine.";
+  a.getCell(1).value = "Net project profit ($M) across entitled-lot price × lot yield. Base = $70K × 280 lots (highlighted). 50% flows to the property (Josh's investor liquidity), 50% to the development company.";
   a.getCell(1).font = { name: "Calibri", italic: true, size: 9, color: { argb: "FF6B5A6B" } };
 }
 
-// ---- footer note ----
 r++;
 {
   const a = row(); ws.mergeCells(r, 1, r, 6);
-  a.getCell(1).value = "Illustrative and for discussion only. Figures compiled from public sources and independent research; subject to change and confirmation. Finished-lot model: the JV captures the homebuilder's development margin but takes horizontal execution risk and more capital than selling entitled (paper) lots.";
+  a.getCell(1).value = "Illustrative and for discussion only. Capital-light entitled-lot basis: we fund only the soft costs to entitle the land and sell entitled lots; the builder funds the horizontal. Costs repaid first, then a straight 50/50 (no pref, no promote). The entitled-lot price is the key assumption — confirm against builder bids in diligence.";
   a.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: "FF6B5A6B" } };
   a.getCell(1).alignment = { wrapText: true, vertical: "top" };
   a.height = 42;
@@ -426,7 +376,6 @@ function qline(label, value, note, fmt, opts = {}) {
   if (opts.fill) for (let c = 1; c <= 2; c++) a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } };
   return q;
 }
-// vertical cash-flow block: one row per year, value (or {formula,result}) in col B
 function qcf(label, items) {
   const start = q + 1;
   items.forEach((it, i) => {
@@ -437,7 +386,7 @@ function qcf(label, items) {
 }
 
 qband("Queenstown Harbor — Phase 2: Hospitality (Hotel + Restaurants)",
-  "VIVÂMEE-led resort; JAL leads capital formation.  ·  Dynamic — every cell below is a live formula off INPUTS.  ·  ILLUSTRATIVE.");
+  "Hotel is a REQUIRED component (per Bob). VIVÂMEE-led resort; JAL leads capital formation.  ·  Dynamic.  ·  ILLUSTRATIVE.");
 
 qheader("INPUTS  (edit these — everything below recalculates)");
 const hKeys = qline("Hotel — keys", IN.hKeys, "boutique resort lodge", "#,##0");
@@ -459,7 +408,7 @@ const pGrow = qline("NOI growth / yr", IN.pGrow, "", pct);
 const eqSplit = qline("Equity drawn — Year 0 (balance Yr 1)", IN.eqSplit, "construction equity timing", pct);
 const rampYr2 = qline("First operating year ramp (hold)", IN.rampYr2, "Yr 2 opens partway through", pct);
 
-qheader("HOTEL");
+qheader("HOTEL  (required component)");
 const hCost = qline("Hotel development cost", { formula: `${Q(hKeys)}*${Q(hCostKey)}`, result: P2.hCost }, "keys × cost/key", money);
 const hRoom = qline("Room revenue", { formula: `${Q(hKeys)}*365*${Q(hADR)}*${Q(hOcc)}`, result: P2.hRoom }, "keys × 365 × ADR × occ", money);
 const hRev = qline("Total hotel revenue", { formula: `${Q(hRoom)}*${Q(hMult)}`, result: P2.hRev }, "× revenue multiple", money);
@@ -542,18 +491,17 @@ p2Up.forEach(([u, lbl]) => {
 q++;
 {
   const a = qrow(); p2.mergeCells(q, 1, q, 6);
-  a.getCell(1).value = "Illustrative. Hospitality is an income / hold play: it develops to roughly cost, so the return is durable cash flow + appreciation (lower IRR than the Phase 1 land, longer hold) — unless you build to core and recap at stabilization. VIVÂMEE operates; JAL leads capital formation. The resort also lifts Phase 1 lot values. Subject to confirmation.";
+  a.getCell(1).value = "Illustrative. The hotel is a required component (per Bob); at Renault the plan is +100–200 rooms. Hospitality develops to ~cost (income/hold ~12% IRR) unless you build to core and recap at stabilization (~28%). VIVÂMEE operates; JAL leads capital formation. The resort also lifts the lot values. Subject to confirmation.";
   a.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: "FF6B5A6B" } };
   a.getCell(1).alignment = { wrapText: true, vertical: "top" }; a.height = 50;
 }
 
 wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
   .then(() => console.log(
-    "Wrote model  P1: unlev ~" + (P1.unlevIRR * 100).toFixed(1) + "% / lev ~" + (P1.levIRR * 100).toFixed(1) +
-    "% / LP ~" + (P1.lpIRR * 100).toFixed(1) + "% / GP ~" + (P1.gpIRR * 100).toFixed(1) + "% / EM " + P1.em.toFixed(2) + "x" +
-    "\n             P1 unlevCF($M): [" + P1.unlevCF.map((v) => (v / 1e6).toFixed(1)).join(", ") + "]" +
-    "  levCF($M): [" + P1.levCF.map((v) => (v / 1e6).toFixed(1)).join(", ") + "]" +
-    "\n             P2: hold ~" + (P2.irr2 * 100).toFixed(1) + "% (" + P2.em2.toFixed(2) + "x) / b-t-c ~" + (P2.bcIRR * 100).toFixed(1) + "% (" + P2.bcEM.toFixed(2) + "x)" +
-    "\n             P2 b-t-c CF($M): [" + P2.bcf.map((v) => (v / 1e6).toFixed(1)).join(", ") + "]  recap $" + (P2.bcVal / 1e6).toFixed(1) + "M" +
-    "\n             P2 sens NOI$4.65M: 7%=" + (p2IRR(.22, .07) * 100).toFixed(0) + " 7.5%=" + (p2IRR(.22, .075) * 100).toFixed(0) + " 8.5%=" + (p2IRR(.22, .085) * 100).toFixed(0)))
+    "Wrote model  P1 (entitled): rev $" + (P1.rev / 1e6).toFixed(1) + "M  cost $" + (P1.totCost / 1e6).toFixed(1) +
+    "M  profit $" + (P1.profit / 1e6).toFixed(1) + "M  (" + P1.roiCost.toFixed(1) + "x on cost, " + (P1.margin * 100).toFixed(0) + "% margin)  IRR ~" + (P1.projIRR * 100).toFixed(0) + "%" +
+    "\n             50/50: $" + (P1.propShare / 1e6).toFixed(1) + "M property (Josh ~$" + (P1.joshShare / 1e6).toFixed(1) + "M) / $" + (P1.devShare / 1e6).toFixed(1) + "M dev co" +
+    "\n             P1 netCF($M): [" + P1.netCF.map((v) => (v / 1e6).toFixed(1)).join(", ") + "]" +
+    "\n             vs finished: profit $" + (P1.finProfit / 1e6).toFixed(1) + "M on $" + (P1.finCost / 1e6).toFixed(1) + "M cost (" + P1.finRoiCost.toFixed(1) + "x)" +
+    "\n             P2: hold ~" + (P2.irr2 * 100).toFixed(1) + "% / b-t-c ~" + (P2.bcIRR * 100).toFixed(1) + "% (" + P2.bcEM.toFixed(2) + "x)"))
   .catch((e) => { console.error(e); process.exit(1); });

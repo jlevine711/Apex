@@ -5,8 +5,9 @@
  * Scope: monetize the developable LAND around Queenstown Harbor — the 36-hole
  * Eastern Shore resort that Accountable Equity / VIVÂMEE acquired via Capital H6
  * (May 2026, with The Golf Club at South River, $25M, from The Brick Companies).
- * Entitle the developable, non-conservation acreage and sell finished lots to
- * homebuilders — the JV funds the horizontal (builders just build the homes); recycle proceeds.
+ * Capital-light entitled-lot basis: entitle the non-conservation acreage and sell
+ * ENTITLED lots to builders (the builder funds the horizontal). Costs repaid, then a
+ * straight 50/50 — half returns capital to the investors, half to the development company.
  *
  * Design system reverse-engineered from the JAL "Republic Square" pitch deck:
  *   - 16:9 (13.33" x 7.5"); Montserrat (headings) / DM Sans (body)
@@ -42,7 +43,8 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 24;
+const TOTAL = 26;
+let PAGENO = 2; // auto page counter — cover is 1, chrome slides number themselves 2..N-1, Thank You is N
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
 const FOOTER_LEFT =
@@ -98,7 +100,8 @@ const txt = (s, text, x, y, w, h, o = {}) =>
     wrap: o.wrap !== false,
   });
 
-function chrome(s, { eyebrow, title, desc, page }) {
+function chrome(s, { eyebrow, title, desc }) {
+  const page = PAGENO++;
   s.background = { color: C.cream };
   rect(s, 0, 0, PAGE_W, 0.04, C.navy);
   txt(s, "JAL STRATEGIES", ML, 0.12, 3.0, 0.3, {
@@ -280,31 +283,31 @@ function opportunity() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE OPPORTUNITY",
-    title: "You just bought it. Now monetize the land.",
-    desc: "Bob — Capital H6 just closed Queenstown Harbor. The resort runs itself; the upside is the developable land around the 36 holes — entitle it, sell lots to builders, recycle the proceeds.",
+    title: "Monetize the land. Return capital to your investors.",
+    desc: "Bob — Capital H6 bought these courses with ~1,000 acres at a near-zero land basis. The resort runs itself; the upside is the land — entitle it and sell entitled lots to builders (they fund the horizontal), returning capital to the investors who are owed their pref.",
     page: 2,
   });
   const cards = [
     ["$25M", "Just acquired (May 2026)", "Queenstown + South River, via Capital H6"],
-    ["36 holes", "River & Lakes courses", "Waterfront resort on the Eastern Shore"],
-    ["870+ ac", "Across the two properties", "Waterfront + conservation land (to verify)"],
-    ["Soft costs", "To entitle", "Phase 1 is light; we fund the horizontal next"],
+    ["~1,000 ac", "Near-zero land basis", "Land across the portfolio — that's the upside"],
+    ["Capital-light", "Entitle & sell lots", "Builder funds the horizontal; we fund soft costs"],
+    ["Liquidity", "For your investors", "Lot sales return capital against the 8% pref"],
   ];
   let cy = 2.05;
   cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
 
   sidePanel(s, 7.0, 2.05, 5.83, 4.5, "WHY NOW",
-    "You own it free and clear — Capital H6 just closed the purchase.",
+    "Monetize the land to get your investors their capital back.",
     [
-      "Fresh, low basis: $25M for two courses across 870+ acres — the land value is the upside.",
-      "We develop the lots — roads, sewer and utilities — and sell them finished, capturing the full lot value.",
-      "Minutes over the Bay Bridge to Annapolis; ~1 hour to D.C. & Baltimore.",
-      "Golf and water frontage on the Chesapeake commands a premium — and sells quickly.",
+      "Near-zero basis: ~1,000 acres came with the golf-course buys — the land value is pure upside.",
+      "Capital-light: entitle the parcels and sell entitled lots; the builder funds the roads, sewer & utilities.",
+      "Your investors are owed an 8% pref and have seen no cash yet — lot sales return their capital.",
+      "And it repeats — a steady pipeline of family-owned courses keeps coming to Josh.",
     ]);
   footnote(s, 6.66, [SRC.cr, SRC.eoa]);
   s.addNotes(
-    "Anchor on the fresh acquisition (H6 — Bob's fund). The land bank is additive to the hospitality: " +
-    "monetize the developable acreage the golf doesn't need — develop and sell finished lots."
+    "Reframed to Bob's own words: ~1,000 acres at no cost basis; the goal is liquidity for Josh's syndication " +
+    "investors (owed an 8% pref, no cash yet). Capital-light: we entitle and sell entitled lots; the builder funds the horizontal."
   );
 }
 
@@ -347,7 +350,7 @@ function theLandBank() {
   chrome(s, {
     eyebrow: "THE LAND BANK",
     title: "The upside is the land around the golf.",
-    desc: "The resort operates; the value-creation is entitling and developing the non-conservation acreage and selling finished lots to homebuilders — capturing the full lot value, additive to the hospitality.",
+    desc: "The resort operates; the value-creation is entitling the non-conservation acreage and selling entitled lots to builders — capital-light, the builder funds the horizontal — additive to the hospitality.",
     page: 4,
   });
   const cards = [
@@ -363,7 +366,7 @@ function theLandBank() {
     "Monetize the land the golf doesn't need.",
     [
       "Identify developable parcels at the course edges — away from conservation, wetlands and play.",
-      "Entitle, then develop finished lots — we fund the roads, sewer and utilities; builders just build.",
+      "Entitle and sell entitled lots — the builder funds the horizontal (roads, sewer, utilities) and builds.",
       "Golf-frontage and water-view lots command premium pricing and faster absorption.",
       "Recycle proceeds into the broader Capital H6 program — including South River.",
     ]);
@@ -380,18 +383,18 @@ function playbook() {
   chrome(s, {
     eyebrow: "THE PLAYBOOK",
     title: "Four moves that turn land into cash.",
-    desc: "Phased — entitle first (soft costs), then we fund the horizontal and deliver finished lots, recycling proceeds into the next parcel.",
+    desc: "Capital-light: entitle the land (soft costs only), sell entitled lots to builders who fund the horizontal, then recycle into the next parcel — and the next property.",
     page: 5,
   });
   const items = [
     ["01", "Entitle", "Approvals for lots",
-      "Secure zoning and subdivision approvals for the developable acreage around the fairways."],
-    ["02", "Sell to Builders", "Finished lots → homebuilders",
-      "Develop finished lots — we fund the roads, sewer and utilities; the builder just builds the homes."],
+      "Secure zoning and subdivision approvals for the developable acreage around the fairways — soft costs only."],
+    ["02", "Sell Entitled Lots", "Entitled lots → builders",
+      "Sell entitled (approved) lots to builders — they fund the horizontal (roads, sewer, utilities) and build the homes."],
     ["03", "Golf & Water Premium", "Frontage sells higher",
       "Lots on a course or with Chesapeake water views command a premium and absorb faster."],
-    ["04", "Recycle & Repeat", "Parcel by parcel",
-      "Roll proceeds into the next parcel — and seed the broader Capital H6 program."],
+    ["04", "Recycle & Repeat", "Parcel — then property",
+      "Roll proceeds into the next parcel, and run the same playbook across the Capital H6 pipeline."],
   ];
   const cardW = 2.94, gap = 0.18;
   let x = ML;
@@ -417,8 +420,8 @@ function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
-    title: "From 700 acres to $42M of finished-lot revenue.",
-    desc: "Finished-lot basis: we develop the lots — funding roads, sewer and utilities — and sell them finished; the builder just builds the homes. Costs and returns are on the pro forma. Illustrative — survey-dependent.",
+    title: "From 700 acres to ~$19.6M of entitled-lot revenue.",
+    desc: "Capital-light entitled-lot basis: we entitle the land and sell entitled lots; the builder funds the horizontal. ~280 lots at ~$70K = ~$19.6M revenue. Net profit & the 50/50 split are on the pro forma. Illustrative — survey-dependent.",
     page: 6,
   });
   const cols = [
@@ -432,22 +435,22 @@ function mathLand() {
     ["Less permanent conservation", "recorded easement", "700 − 198", "502 ac"],
     ["Less golf, range, water & lodging", "two 18s + 9-ac range + cottages", "502 − ~300", "~200 ac"],
     ["Less Critical Area & wetlands", "Chesapeake 1,000-ft zone", "200 − ~60", "~140 ac"],
-    ["Finished lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
-    ["Finished lot price", "we deliver finished lots", "to homebuilders", "$150K"],
-    [{ text: "GROSS LOT REVENUE", bold: true, font: HEAD, color: C.navy },
-      { text: "net profit & returns on the pro forma", color: C.plum }, "280 × $150K", "$42.0M"],
+    ["Entitled lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
+    ["Entitled lot price", "to a builder (they finish)", "≈ $150K − ~$80K", "$70K"],
+    [{ text: "GROSS ENTITLED-LOT REVENUE", bold: true, font: HEAD, color: C.navy },
+      { text: "net profit & 50/50 split on the pro forma", color: C.plum }, "280 × $70K", "$19.6M"],
   ];
   table(s, ML, 2.1, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.48 });
   rect(s, ML, 6.0, CW, 0.45, C.navy);
   txt(s,
-    "$42.0M gross finished-lot revenue — we develop and deliver finished lots; builders just build. Net profit & returns on the pro forma.",
+    "~$19.6M entitled-lot revenue on ~$5.3M of soft cost → ~$14.3M profit — the builder funds the horizontal. Split & returns on the pro forma.",
     ML + 0.2, 6.0, CW - 0.4, 0.45,
     { font: HEAD, size: 11, bold: true, color: C.white, align: "center" });
   footnote(s, 6.62, [SRC.qhwho, SRC.qac, SRC.dnr]);
   s.addNotes(
-    "Finished-lot basis: the JV funds the horizontal and sells finished lots. 280 lots × $150K = $42.0M gross " +
-    "revenue. Costs and returns are on the pro forma (slide 10). This captures the builder's development margin " +
-    "but takes horizontal execution risk and more capital than selling paper lots. Illustrative until survey / entitlement."
+    "Capital-light entitled-lot basis: we entitle and sell entitled lots; the builder funds the horizontal. 280 lots × $70K " +
+    "= $19.6M revenue, ~$5.3M soft cost → ~$14.3M profit (~2.7× on cost). The entitled-lot price (~finished $150K less the " +
+    "builder's ~$80K to finish) is the key assumption. Split & returns on the pro forma. Illustrative until survey / entitlement."
   );
 }
 
@@ -518,25 +521,88 @@ function southRiver() {
   );
 }
 
-// ============================================== SLIDE 9 — CAPITAL: LIGHT
+// ===================================== SLIDE 9 — RENAULT (THE FIRST DEAL)
+function renault() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "THE FIRST DEAL  ·  RENAULT WINERY",
+    title: "Renault — the first deal, and the site visit.",
+    desc: "Renault Winery (Egg Harbor City, NJ — ~25 min from Atlantic City) is the lead property and where we'll meet. The township has offered land for ~34 lots overlooking the course, a +100–200-room hotel expansion is planned, and the architect is already mapping lots.",
+    page: 9,
+  });
+  const cards = [
+    ["~34 lots", "Township-offered land", "Overlooking the golf course"],
+    ["+100–200", "Hotel rooms planned", "Expansion off the back of the resort"],
+    ["~25 min", "From Atlantic City", "Where I'll meet Bob & Josh"],
+    ["In motion", "Architect mapping lots", "Underway since the last meeting"],
+  ];
+  let cy = 2.05;
+  cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
+
+  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "WHY RENAULT FIRST",
+    "Josh's original property — the proof case for the playbook.",
+    [
+      "The township has offered additional land for ~34 lots; the architect is already boxing them out.",
+      "A required hotel expansion (+100–200 rooms) layers hospitality on top of the lot sales.",
+      "The winery already runs a lake & campground profitably — operating upside beyond golf.",
+      "Closest asset to walk — ~25 minutes from Atlantic City airport; the natural place to start.",
+    ]);
+  s.addNotes(
+    "Renault (NJ) is the lead / first deal and the site-visit location (Bob: 'an expansion down at Reno, which is where I'd meet you'). " +
+    "Township offered ~34 lots; +100–200 hotel rooms planned; architect already mapping. The capital-light entitled-lot playbook applies here too."
+  );
+}
+
+// ===================================== SLIDE 10 — THE PIPELINE
+function pipeline() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "THE PIPELINE  ·  NOT A ONE-OFF",
+    title: "One playbook, a portfolio of properties.",
+    desc: "This isn't a single deal. Family-owned golf courses keep coming to Josh — bought at or below appraisal, each with monetizable land. The same capital-light playbook runs across the portfolio; Bob is negotiating the development rights.",
+    page: 10,
+  });
+  const cols = [
+    { w: 3.4, font: HEAD, bold: true, color: C.navy, size: 10 },
+    { w: 2.6, color: C.aubergine, bold: true, font: HEAD, size: 9, align: "center" },
+    { w: 6.33, color: C.plum, size: 9, lh: 11 },
+  ];
+  const rows = [
+    ["Renault Winery", "NJ · first deal", "~34 township-offered lots + a +100–200-room hotel expansion"],
+    ["Queenstown Harbor", "MD · this proposal", "~280 entitled lots around the 36 holes (~1,000 ac, ~zero basis)"],
+    ["The Golf Club at South River", "MD · operating", "Profitable club — appraised ~2× the purchase price"],
+    ["Kent Island", "MD · venue", "Clubhouse / event venue — Palantir rented it for a week"],
+    ["Colorado course", "Off-market", "Not yet on the website; equity needed to acquire"],
+    ["Virginia (1–2 courses)", "Offered to Josh", "Family-owned courses seeking a well-regarded operator"],
+  ];
+  table(s, ML, 2.1, cols, ["Property", "Status", "The land opportunity"], rows, { rowH: 0.55 });
+  callout(s, "A steady train of undervalued courses → monetizable land. Same capital-light playbook each time — and the buys are extraordinary (South River at half appraisal; tax-structured for ~50% bonus depreciation).", 6.35);
+  s.addNotes(
+    "Bob: 'this isn't a one-off.' Pipeline — Renault (first), Queenstown, South River, Kent Island (Palantir), a Colorado " +
+    "course (off-website), 1–2 in Virginia, plus family-owned courses regularly offered to Josh. He's negotiating development " +
+    "rights across the properties. Buys are exceptional (South River at half appraisal; 90% to depreciable assets → ~50% bonus depreciation)."
+  );
+}
+
+// ============================================== SLIDE 11 — CAPITAL: LIGHT
 function capitalLight() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "DEVELOPMENT PLAN",
-    title: "Entitle, develop, deliver finished lots.",
-    desc: "Start light with entitlement (soft costs), then fund the horizontal — roads, sewer and utilities — and deliver finished lots. The builder just builds the homes, so we capture the full lot value.",
+    title: "Entitle the land. Sell entitled lots.",
+    desc: "Capital-light: we fund only the soft costs to entitle the land, then sell entitled lots to builders who fund the horizontal. ~$5M of cost, not ~$25M — and the builder carries the construction risk.",
     page: 9,
   });
-  statCard(s, ML, 2.05, "$1–3M", "To entitle (Phase 1)",
-    "Light to start — before the horizontal", { w: 6.05 });
-  statCard(s, ML, 3.12, "$60K / lot", "Horizontal we fund",
-    "Roads, sewer & utilities — lots delivered finished", { w: 6.05 });
+  statCard(s, ML, 2.05, "~$5M", "Total cost (soft only)",
+    "Entitlement, civil, environmental, legal, PM", { w: 6.05 });
+  statCard(s, ML, 3.12, "$0", "Horizontal we fund",
+    "The builder funds roads, sewer & utilities", { w: 6.05 });
 
   rect(s, 7.0, 2.05, 5.83, 2.02, C.navy);
   rect(s, 7.0, 2.05, 0.12, 2.02, C.aubergine);
   txt(s, "THE PRINCIPLE", 7.4, 2.2, 5.4, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 4 });
-  txt(s, "We control and capture the full lot.", 7.4, 2.5, 5.4, 0.35, { font: HEAD, size: 13, bold: true, color: C.white });
-  txt(s, "We fund the roads, sewer and utilities and sell finished lots — capturing the builder's development margin and controlling quality, timing and absorption.",
+  txt(s, "Stay light; let the builder build.", 7.4, 2.5, 5.4, 0.35, { font: HEAD, size: 13, bold: true, color: C.white });
+  txt(s, "We fund only the entitlement and sell entitled lots — the builder funds the horizontal and the homes. Far less capital and no construction risk, on land carried at ~zero basis.",
     7.4, 2.96, 5.4, 1.0, { font: BODY, size: 10.5, color: C.cream, lh: 14, valign: "top" });
 
   const cols = [
@@ -546,15 +612,15 @@ function capitalLight() {
     { w: 3.83, color: C.plum, size: 9 },
   ];
   const rows = [
-    ["Phase 1 — Entitle", "Approvals for lots", "$1–3M", "Capital H6 (soft costs, light)"],
-    ["Phase 2 — Develop", "Roads, sewer & utilities", "~$16.8M", "Development loan + equity (we fund)"],
-    ["Phase 3 — Deliver", "Sell finished lots", "Self-funding", "Builders build homes; proceeds recycle"],
+    ["Phase 1 — Entitle", "Approvals for lots", "~$4M soft", "We fund (soft costs only)"],
+    ["Phase 2 — Sell lots", "Entitled lots → builders", "Builder", "Builder funds the horizontal"],
+    ["Phase 3 — Recycle", "Costs repaid, then 50/50", "Self-funding", "Proceeds → investors + next parcel"],
   ];
   table(s, ML, 4.3, cols, ["Phase", "Approach", "Capital", "Who funds"], rows, { rowH: 0.5 });
-  callout(s, "We carry the development to finished lots — capturing the builder's margin and controlling quality, timing & absorption.", 6.5);
+  callout(s, "We stay capital-light — fund the entitlement, sell entitled lots, let the builder build. Costs repaid, then a simple 50/50.", 6.5);
   s.addNotes(
-    "Finished-lot development: start light (entitlement), then fund the horizontal (roads/sewer/utilities) and " +
-    "deliver finished lots. Captures the builder's development margin and controls quality/timing — more capital, more value."
+    "Capital-light entitled-lot plan (per Bob): fund only the soft costs to entitle, then sell entitled lots; the builder " +
+    "funds the horizontal. ~$5M of cost vs ~$25M to build it out — far less capital, no construction risk, much higher return on cost."
   );
 }
 
@@ -563,8 +629,8 @@ function proForma() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "PRO FORMA  ·  ILLUSTRATIVE",
-    title: "The budget, and the returns.",
-    desc: "A finished-lot development: Capital H6 contributes the land, a development loan plus equity funds the horizontal, and we sell ~280 finished lots to homebuilders. Illustrative — for discussion.",
+    title: "The budget, and the 50/50.",
+    desc: "Capital-light entitled-lot pro forma: we fund ~$5.3M of soft costs to entitle the land and sell ~280 entitled lots at ~$70K (~$19.6M). The builder funds the horizontal. Costs repaid, then a straight 50/50. Illustrative.",
     page: 10,
   });
   const usesCols = [
@@ -572,62 +638,55 @@ function proForma() {
     { w: 1.55, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
   ];
   const uses = [
-    ["Land contribution (~140 dev. ac)", "$4.0M"],
-    ["Horizontal site development ($60K/lot)", "$16.8M"],
-    ["Soft costs (entitle, civil, env, legal)", "$2.8M"],
-    ["Marketing & brokerage (~3%)", "$1.3M"],
-    ["Contingency (7% of hard)", "$1.2M"],
-    ["Financing / interest carry", "$1.4M"],
-    [{ text: "TOTAL PROJECT COST", bold: true, font: HEAD, color: C.navy },
-      { text: "$27.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+    ["Soft costs — entitle the land", "$4.0M"],
+    ["Marketing & brokerage (~3%)", "$0.6M"],
+    ["Contingency (10% of soft)", "$0.4M"],
+    ["Financing / carry", "$0.3M"],
+    [{ text: "TOTAL DEVELOPMENT COST", bold: true, font: HEAD, color: C.navy },
+      { text: "$5.3M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
-  table(s, ML, 2.0, usesCols, ["USES OF CAPITAL", ""], uses, { rowH: 0.48 });
+  table(s, ML, 2.0, usesCols, ["USES OF CAPITAL  ·  SOFT ONLY", ""], uses, { rowH: 0.48 });
 
-  const srcCols = [
-    { w: 2.05, color: C.navy, size: 9.5 },
-    { w: 1.05, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
-  ];
-  const sources = [
-    ["Development loan (60% LTC)", "$16.5M"],
-    ["Land equity", "$4.0M"],
-    ["Cash equity", "$7.0M"],
-    [{ text: "TOTAL", bold: true, font: HEAD, color: C.navy },
-      { text: "$27.5M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
-  ];
-  table(s, 6.1, 2.0, srcCols, ["SOURCES OF CAPITAL", ""], sources, { rowH: 0.48 });
+  rect(s, ML, 4.95, 5.5, 1.45, C.navy);
+  rect(s, ML, 4.95, 0.1, 1.45, C.aubergine);
+  txt(s, "KEY ASSUMPTIONS", ML + 0.25, 5.05, 5.1, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
+  txt(s, "$70K entitled lot  ·  280 lots  ·  builder funds the horizontal  ·  land at ~zero basis  ·  costs repaid, then a straight 50/50 (no pref, no promote)",
+    ML + 0.25, 5.32, 5.05, 1.0, { font: BODY, size: 9, color: C.cream, lh: 12, valign: "top" });
 
-  rect(s, 6.1, 4.35, 3.1, 1.41, C.navy);
-  rect(s, 6.1, 4.35, 0.1, 1.41, C.aubergine);
-  txt(s, "KEY ASSUMPTIONS", 6.32, 4.45, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$150K finished lot  ·  280 lots  ·  we fund the horizontal ($60K/lot)  ·  60% LTC loan  ·  8% pref + tiered promote (see waterfall)",
-    6.32, 4.72, 2.78, 1.0, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
+  rect(s, 6.1, 2.0, 3.1, 4.4, C.navy);
+  rect(s, 6.1, 2.0, 0.1, 4.4, C.aubergine);
+  txt(s, "THE 50/50", 6.32, 2.13, 2.8, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 2 });
+  txt(s, "$14.3M", 6.32, 2.5, 2.8, 0.55, { font: HEAD, size: 28, bold: true, color: C.white });
+  txt(s, "net profit", 6.32, 3.06, 2.8, 0.25, { font: BODY, size: 9.5, color: C.mauve });
+  txt(s, "Costs repaid first, then a straight split:", 6.32, 3.5, 2.66, 0.4, { font: BODY, size: 9.5, color: C.cream, lh: 12, valign: "top" });
+  txt(s, "Property / H — 50%", 6.32, 4.0, 2.66, 0.25, { font: HEAD, size: 10.5, bold: true, color: C.white });
+  txt(s, "$7.2M  ·  Josh ~$3.6M → returns capital to your investors", 6.32, 4.26, 2.66, 0.6, { font: BODY, size: 9, color: C.cream, lh: 11.5, valign: "top" });
+  txt(s, "Development co — 50%", 6.32, 5.1, 2.66, 0.25, { font: HEAD, size: 10.5, bold: true, color: C.white });
+  txt(s, "$7.2M  ·  Bob · JAL · partners (JAL earns a share)", 6.32, 5.36, 2.66, 0.6, { font: BODY, size: 9, color: C.cream, lh: 11.5, valign: "top" });
 
-  rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
-  rect(s, 9.3, 2.0, 0.12, 3.76, C.aubergine);
+  rect(s, 9.3, 2.0, 3.53, 4.4, C.navy);
+  rect(s, 9.3, 2.0, 0.12, 4.4, C.aubergine);
   txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
   const mets = [
-    ["$42.0M", "Gross lot revenue"],
-    ["$14.5M", "Net development profit"],
-    ["~2.3×", "Project equity multiple"],
-    ["~31%", "Project IRR (levered)"],
-    ["~27%", "LP IRR (after promote)"],
+    ["$19.6M", "Entitled-lot revenue"],
+    ["$14.3M", "Net profit (73% margin)"],
+    ["2.7×", "Return on cost (~$5.3M)"],
+    ["$7.2M", "Development co (50%)"],
+    ["$7.2M", "Property / investors (50%)"],
   ];
-  let my = 2.5;
+  let my = 2.55;
   mets.forEach(([v, l]) => {
     txt(s, v, 9.55, my, 3.1, 0.32, { font: HEAD, size: 17, bold: true, color: C.white });
     txt(s, l, 9.55, my + 0.31, 3.1, 0.22, { font: BODY, size: 8.5, color: C.mauve });
-    my += 0.63;
+    my += 0.74;
   });
 
-  rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, "Illustrative: ~$14.5M profit on ~$27.5M cost — 60% LTC → ~2.3× equity, ~31% levered (27% LP after promote). We deliver finished lots; builders just build.",
-    ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
-  txt(s, "Illustrative pro forma for discussion only — basis and sources on the following slide; figures subject to confirmation.",
-    ML, 6.58, CW, 0.26, { font: BODY, size: 7.5, color: C.plum });
+  callout(s, "Illustrative: ~$14.3M profit on ~$5.3M of soft cost (~2.7× on cost). Builder funds the horizontal. Costs repaid, then a straight 50/50 — half returns capital to your investors.", 6.55);
   s.addNotes(
-    "Finished-lot development pro forma, consistent with slide 6. $42.0M revenue − $27.5M cost ≈ $14.5M profit. " +
-    "60% LTC → equity ~$11M (land $4M + cash $7M); ~2.3x / ~31% levered project IRR (~24% unlevered). After an " +
-    "8% pref + tiered promote (80/20 → 70/30 → 60/40), LP IRR ~27% / GP IRR ~59% (see waterfall + sensitivity). All illustrative."
+    "Capital-light entitled-lot pro forma, consistent with slide 6. $19.6M revenue − $5.3M soft cost ≈ $14.3M profit " +
+    "(~2.7× on cost, 73% margin) on a near-zero land basis; the builder funds the horizontal. Costs repaid first, then a " +
+    "straight 50/50 — $7.2M to the property (Josh ~$3.6M, returning capital to his investors) and $7.2M to the development " +
+    "company (Bob · JAL · partners). No pref, no promote. Model = source of truth. All illustrative."
   );
 }
 
@@ -648,98 +707,95 @@ function basis() {
   const rows = [
     ["Net developable acreage", "~140 ac", "700 gross − 198 conservation − ~300 golf − ~60 Critical Area; survey to confirm"],
     ["Lot density", "~2.0 / ac", "Blended for the developable (non-Critical-Area) land; Queen Anne's County zoning to confirm"],
-    ["Finished lot price", "$150K", "Conservative — QAC building lots average ~$237K; new homes $600–705K (lot ≈ 24% of home)"],
-    ["Horizontal site development", "$60K / lot", "JV-funded — roads, sewer, utilities; national benchmark $50–150K / acre"],
-    ["Soft costs", "~$2.8M", "Entitlement, civil & environmental, legal / zoning and management"],
-    ["Development loan", "~60% LTC", "Standard land-development / A&D financing on the horizontal"],
-    ["Land basis (contributed)", "~$4.0M", "Allocated from the $25M H6 purchase (~$29K / ac); joint appraisal to set"],
-    ["Waterfall", "8% pref · co-GP", "Standard JV promote structure — for discussion"],
+    ["Entitled lot price", "$70K", "≈ finished lot $150K less the builder's ~$80K to finish (horizontal + margin); confirm vs builder bids"],
+    ["Soft costs (entitle)", "~$4.0M", "Entitlement / approvals, civil & environmental, legal / survey, project management"],
+    ["Horizontal", "Builder-funded", "Roads, sewer & utilities funded by the builder — not us (capital-light)"],
+    ["Land basis", "~zero", "Contributed at a near-zero basis — the land came with the $25M H6 acquisition"],
+    ["Structure", "Straight 50/50", "Costs repaid, then 50% property / 50% development co — no pref, no promote"],
   ];
-  table(s, ML, 2.1, cols, ["Assumption", "Value", "Basis / reasoning"], rows, { rowH: 0.48 });
+  table(s, ML, 2.1, cols, ["Assumption", "Value", "Basis / reasoning"], rows, { rowH: 0.52 });
   footnote(s, 6.6, [SRC.qacLots, SRC.newcon, SRC.devcost, SRC.cr]);
   s.addNotes(
-    "Backs the pro forma. Market inputs are sourced: QAC home/lot prices (Land.com, Zillow) support a conservative " +
-    "$150K finished lot; the $60K/lot horizontal (now JV-funded) matches national land-dev benchmarks (HomeGuide). Deal-specific " +
-    "inputs — gross acreage, the developable balance, land basis and density — are flagged 'to confirm' pending survey / easement / zoning."
+    "Backs the pro forma. The key assumption is the entitled-lot price (~$70K = finished ~$150K less the builder's ~$80K to " +
+    "finish); QAC home/lot prices (Land.com, Zillow) support the finished anchor. Capital-light: the builder funds the horizontal. " +
+    "Deal-specific inputs — gross acreage, the developable balance, density — are flagged 'to confirm' pending survey / easement / zoning."
   );
 }
 
-// ===================================== SLIDE 12 — RETURNS WATERFALL
+// ===================================== SLIDE 12 — THE 50/50 (was waterfall)
 function waterfall() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "RETURNS WATERFALL  ·  PHASE 1",
-    title: "How the LP IRR is built.",
-    desc: "A market structure: 8% preferred return, then a tiered promote. At 60% LTC the LP (90% of equity) nets ~27% after the promote; reaching the 30%+ range takes higher leverage or pricing (see the sensitivity). The GP — Accountable Equity / Capital H6, Bob & JAL + partners — earns the carry; JAL shares in it.",
+    eyebrow: "THE DEAL  ·  HOW PROFIT SPLITS",
+    title: "A straight deal — 50/50, no waterfall.",
+    desc: "Bob's structure, kept simple: revenue comes in, costs are repaid, then profit splits 50/50 — half to the property owner (the H entities; Josh owns 50%), half to the development company. No pref, no promote tiers.",
     page: 12,
   });
-  const cols = [
-    { w: 4.0, font: HEAD, bold: true, color: C.navy, size: 9.5, lh: 11 },
-    { w: 2.0, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "center" },
+  const flow = [
+    ["$19.6M", "Entitled-lot revenue", "~280 lots × ~$70K"],
+    ["($5.3M)", "Less: costs repaid", "the soft costs we funded"],
+    ["$14.3M", "Net profit to split", "≈ 2.7× on cost"],
   ];
-  const rows = [
-    ["1 · Return of capital + 8% pref", "90 / 10"],
-    ["2 · Promote — to a 15% LP IRR", "80 / 20"],
-    ["3 · Promote — 15% to 20% LP IRR", "70 / 30"],
-    ["4 · Promote — above a 20% LP IRR", "60 / 40"],
-  ];
-  table(s, ML, 2.1, cols, ["PROMOTE WATERFALL", "LP / GP"], rows, { rowH: 0.6 });
+  const fw = 3.97, fgap = 0.21; let fx = ML;
+  flow.forEach(([n, l, sub], i) => {
+    const hot = i === 2;
+    rect(s, fx, 2.0, fw, 1.25, hot ? C.aubergine : C.white, hot ? {} : { line: { color: C.hair, width: 0.75 } });
+    txt(s, n, fx + 0.25, 2.12, fw - 0.5, 0.55, { font: HEAD, size: 26, bold: true, color: hot ? C.white : C.navy });
+    txt(s, l, fx + 0.25, 2.72, fw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: hot ? C.mauve : C.navy });
+    txt(s, sub, fx + 0.25, 2.99, fw - 0.5, 0.25, { font: BODY, size: 9, color: hot ? C.cream : C.plum });
+    fx += fw + fgap;
+  });
 
-  rect(s, ML, 5.0, 6.0, 1.4, C.navy);
-  rect(s, ML, 5.0, 0.1, 1.4, C.aubergine);
-  txt(s, "CAPITAL STACK  ·  60% LTC", ML + 0.25, 5.1, 5.6, 0.3, { font: HEAD, size: 9, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$27.5M cost  =  $16.5M development loan (60%)  +  $11M equity.  Equity: LP 90% ($9.9M)  ·  GP — Accountable Equity · Bob · JAL + partners 10% ($1.1M).",
-    ML + 0.25, 5.38, 5.55, 0.95, { font: BODY, size: 10, color: C.cream, lh: 13.5, valign: "top" });
+  rect(s, ML, 3.55, 6.06, 2.55, C.navy);
+  rect(s, ML, 3.55, 0.12, 2.55, C.aubergine);
+  txt(s, "PROPERTY / H ENTITIES", ML + 0.3, 3.7, 5.6, 0.3, { font: HEAD, size: 11, bold: true, color: C.mauve, spc: 2 });
+  txt(s, "50%", ML + 0.3, 4.0, 5.6, 0.5, { font: HEAD, size: 22, bold: true, color: C.slate });
+  txt(s, "$7.2M", ML + 0.3, 4.5, 5.6, 0.6, { font: HEAD, size: 34, bold: true, color: C.white });
+  txt(s, "Josh owns 50% of each property → ~$3.6M (≈ 25% of profit). This is the liquidity that returns capital to his investors against their 8% pref.",
+    ML + 0.3, 5.22, 5.6, 0.8, { font: BODY, size: 10, color: C.cream, lh: 13, valign: "top" });
 
-  rect(s, 6.83, 2.1, 6.0, 1.98, C.navy);
-  rect(s, 6.83, 2.1, 0.12, 1.98, C.aubergine);
-  txt(s, "LP — EQUITY INVESTORS  (90% of equity)", 7.1, 2.24, 5.6, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 1.5 });
-  txt(s, "~27%", 7.1, 2.55, 2.5, 0.85, { font: HEAD, size: 38, bold: true, color: C.white });
-  txt(s, "LP IRR\nafter promote", 7.1, 3.42, 2.5, 0.5, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
-  txt(s, "$9.9M invested\n→ $20.3M back\n2.05× equity multiple", 9.7, 2.62, 3.0, 1.3, { font: BODY, size: 11, color: C.cream, lh: 15, valign: "middle" });
+  rect(s, 6.77, 3.55, 6.06, 2.55, C.white, { line: { color: C.hair, width: 0.75 } });
+  txt(s, "DEVELOPMENT COMPANY", 7.05, 3.7, 5.6, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
+  txt(s, "50%", 7.05, 4.0, 5.6, 0.5, { font: HEAD, size: 22, bold: true, color: C.slate });
+  txt(s, "$7.2M", 7.05, 4.5, 5.6, 0.6, { font: HEAD, size: 34, bold: true, color: C.navy });
+  txt(s, "Accountable Equity / Capital H6 · Bob · JAL + partners. JAL earns a share of this 50% (plus a $15K/mo retainer) — sweat equity, real skin in the game.",
+    7.05, 5.22, 5.6, 0.8, { font: BODY, size: 10, color: C.plum, lh: 13, valign: "top" });
 
-  rect(s, 6.83, 4.28, 6.0, 1.98, C.white, { line: { color: C.hair, width: 0.75 } });
-  txt(s, "GP — SPONSOR GROUP  (Accountable Equity · Bob · JAL + partners)", 7.1, 4.42, 5.7, 0.3, { font: HEAD, size: 9, bold: true, color: C.aubergine, spc: 0.5 });
-  txt(s, "~$4.1M", 7.1, 4.73, 2.6, 0.8, { font: HEAD, size: 32, bold: true, color: C.navy });
-  txt(s, "GP promote / carry (group)", 7.1, 5.55, 3.0, 0.3, { font: BODY, size: 10, color: C.plum });
-  txt(s, "$1.1M co-invest → $5.2M\n~59% GP IRR\nJAL earns a share", 9.7, 4.78, 3.0, 1.3, { font: BODY, size: 11, color: C.plum, lh: 15, valign: "middle" });
-
-  callout(s, "Market 8% pref + tiered promote → the LP nets ~27% at 60% LTC; the GP (Accountable Equity · Bob · JAL + partners) earns ~$4.1M of carry — JAL takes a share.", 6.5);
+  callout(s, "Costs repaid, then a straight 50/50 — half returns capital to your investors, half to the development company. No pref, no promote, no 50-page waterfall.", 6.5);
   s.addNotes(
-    "Shows how the LP IRR is derived. Project equity IRR (60% LTC) ~31%; through an 8% pref + tiered promote " +
-    "(80/20 to a 15% IRR, 70/30 to 20%, 60/40 above), the LP nets ~27% and the GP group (Accountable Equity / Capital H6, Bob, JAL + partners) earns " +
-    "~59% IRR / ~$4.1M carry on a small co-invest — JAL is one member with a share of the promote. Sensitized next. Model = source of truth."
+    "Bob was emphatic: 'there is no waterfall — it's a straight deal.' Revenue in, costs repaid, then 50/50. " +
+    "Property / H entities 50% (Josh ~25% of profit → investor liquidity); development company 50% (Accountable Equity / " +
+    "Capital H6 · Bob · JAL + partners). JAL takes a share of the dev-co 50% plus a $15K/mo retainer. Simple and aligned."
   );
 }
 
-// ===================================== SLIDE 13 — LP IRR SENSITIVITY
+// ===================================== SLIDE 13 — PHASE 1 PROFIT SENSITIVITY
 function sensitivity() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "SENSITIVITY  ·  PHASE 1 LP IRR",
-    title: "How robust is the LP IRR?",
-    desc: "LP IRR (after the promote) across finished-lot price and leverage. The base case — $150K lots, 60% LTC — pencils to ~27%; the high-20s / low-30s is reachable with stronger pricing or modestly more leverage.",
+    eyebrow: "SENSITIVITY  ·  PHASE 1 PROFIT",
+    title: "How robust is the profit?",
+    desc: "Net project profit ($M) across the entitled-lot price and the lot yield — the two swing factors. The base — $70K lots, ~280 of them — pencils to ~$14.3M; even conservative pricing holds double-digit millions. Split 50/50.",
     page: 13,
   });
   const cols = [
-    { w: 2.4, font: HEAD, bold: true, color: C.navy, size: 10 },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
+    { w: 2.93, font: HEAD, bold: true, color: C.navy, size: 10 },
+    { w: 3.13, color: C.navy, size: 12, align: "center" },
+    { w: 3.13, color: C.navy, size: 12, align: "center" },
+    { w: 3.13, color: C.navy, size: 12, align: "center" },
   ];
   const rows = [
-    ["$130K / lot", "18.1%", "19.7%", "21.6%", "23.9%"],
-    ["$150K / lot  (base)", "24.8%", { text: "26.8%", bold: true, color: C.aubergine, font: HEAD }, "29.4%", "32.8%"],
-    ["$170K / lot", "30.7%", "33.3%", "36.5%", "40.7%"],
+    ["$55K / lot", "$8.1M", "$10.2M", "$12.4M"],
+    ["$70K / lot  (base)", "$11.6M", { text: "$14.3M", bold: true, color: C.aubergine, font: HEAD }, "$17.0M"],
+    ["$85K / lot", "$15.1M", "$18.4M", "$21.7M"],
   ];
-  table(s, ML, 2.3, cols, ["LP IRR   (lot price / LTC)", "55% LTC", "60% LTC", "65% LTC", "70% LTC"], rows, { rowH: 0.85, headSize: 9 });
-  callout(s, "Base ($150K, 60% LTC) → ~27% LP. The 30%+ range is realistic — ~$170K lots, or 65–70% LTC.", 5.55);
-  txt(s, "LP IRR after the 8% pref + tiered promote; each cell re-runs the full waterfall in the model. Illustrative — drivers in order of impact: lot price · LTC · absorption pace.",
+  table(s, ML, 2.3, cols, ["NET PROFIT $M  (price / lots)", "240 lots", "280 lots", "320 lots"], rows, { rowH: 0.85, headSize: 9 });
+  callout(s, "Base $70K × 280 → ~$14.3M profit, split 50/50. The downside still clears ~$8M; stronger pricing or yield pushes past $20M.", 5.55);
+  txt(s, "Net project profit ($M); each cell re-runs the model. Half flows to the property (investor liquidity), half to the development company. Illustrative.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
-    "Sensitivity of the Phase 1 LP IRR to lot price × LTC. Base $150K / 60% LTC → ~27%. To clear 30% LP: ~$170K lots " +
-    "(~33% at 60% LTC) or 65–70% LTC at $150K (~29–33%). Each cell re-runs cost → profit → equity → the promote waterfall in the model."
+    "Sensitivity of Phase 1 net profit to entitled-lot price × lot yield. Base $70K / 280 lots → ~$14.3M, split 50/50 " +
+    "($7.2M each). Even at $55K / 240 lots it clears ~$8M; $85K or 320 lots pushes toward $18–22M. Each cell re-runs the model."
   );
 }
 
@@ -761,13 +817,14 @@ function builders() {
     ["NVR / Ryan Homes", "National · public", "Largest builder in Maryland; routine acquirer of finished / entitled lots"],
     ["D.R. Horton", "National · public", "#1 U.S. homebuilder; active Maryland operations"],
     ["Lennar", "National · public", "Top-3 U.S. builder; Maryland division"],
+    ["Cole Homes", "Regional · local", "Named by Bob — active local to the Renault / Atlantic City market"],
     ["Lacrosse Homes", "Regional", "Centreville, Queen Anne's Co. — Meadow Creek, Kent Island Estates"],
     ["Caruso Homes", "Regional", "Eastern Shore communities + build-on-your-lot across Maryland"],
     ["Gemcraft Homes", "Regional", "Mid-Atlantic production builder (MD · DE · VA · PA)"],
     ["Bay to Beach · Baldwin Homes", "Regional · custom", "Eastern Shore custom / semi-custom builders"],
   ];
-  table(s, ML, 2.1, cols, ["Builder", "Reach", "Footprint / relevance"], rows, { rowH: 0.46 });
-  callout(s, "Multiple well-capitalized buyers = a liquid exit — phased lot takedowns or a bulk sale, marketed competitively.", 5.9);
+  table(s, ML, 2.1, cols, ["Builder", "Reach", "Footprint / relevance"], rows, { rowH: 0.42 });
+  callout(s, "Multiple well-capitalized buyers = a liquid exit — entitled-lot takedowns or a bulk sale, marketed competitively.", 5.9);
   footnote(s, 6.55, [SRC.lax, SRC.caruso, SRC.gem, SRC.zcom]);
   s.addNotes(
     "Answers the exit-liquidity question: the entitled lots have many credible buyers. Nationals (NVR/Ryan, " +
@@ -780,9 +837,9 @@ function builders() {
 function phase2() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "PHASE 2  ·  HOSPITALITY  ·  ILLUSTRATIVE",
-    title: "Phase 2 — add a hotel and restaurants.",
-    desc: "VIVÂMEE-led resort; a 120-key resort & spa is already designed (FILLAT+ Architecture). JAL leads capital formation. Held for income it yields ~8% / ~12% IRR; to clear a mid-to-high-20s return we build to core, recapitalizing at stabilization (~Yr 4).",
+    eyebrow: "PHASE 2  ·  HOTEL REQUIRED  ·  ILLUSTRATIVE",
+    title: "Phase 2 — the hotel (a required component).",
+    desc: "The hotel is required (per Bob) — at Renault the plan is +100–200 rooms; at Queenstown a 120-key resort & spa is already designed (FILLAT+). VIVÂMEE operates; JAL leads capital formation. Build-to-core, recapitalizing at stabilization (~Yr 4), clears a mid-to-high-20s return.",
     page: 15,
   });
   const costCols = [
@@ -885,9 +942,9 @@ function phase2sens() {
 function phase1cf() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "PHASE 1  ·  PRO FORMA CASH FLOW",
-    title: "Phase 1 — pro forma cash flow.",
-    desc: "Finished-lot development, project cash flow ($M). Land and entitlement up front; the horizontal funds in Yr 1–2; lots sell Yr 2–4. Net profit ~$14.5M. Illustrative.",
+    eyebrow: "PHASE 1  ·  CASH FLOW",
+    title: "Phase 1 — entitled-lot cash flow.",
+    desc: "Capital-light entitled-lot project cash flow ($M). We fund the soft costs to entitle (Yr 0–2); entitled lots sell as approvals land (Yr 2–4). Net profit ~$14.3M, then split 50/50. Illustrative.",
     page: 17,
   });
   const cf = (label, vals, opts = {}) => [
@@ -902,17 +959,16 @@ function phase1cf() {
     { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.8, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
   ];
   const rows = [
-    cf("Lot revenue", ["—", "—", "8.0", "17.0", "17.0", "42.0"]),
-    cf("Less: land contribution", ["(4.0)", "—", "—", "—", "—", "(4.0)"]),
-    cf("Less: horizontal + soft costs", ["(2.0)", "(10.4)", "(9.9)", "(1.0)", "(0.2)", "(23.5)"]),
-    cf("Net project cash flow", ["(6.0)", "(10.4)", "(1.9)", "16.0", "16.8", "14.5"], { bold: true }),
-    cf("Cumulative cash flow", ["(6.0)", "(16.4)", "(18.3)", "(2.3)", "14.5", ""]),
+    cf("Entitled-lot revenue", ["—", "—", "4.9", "7.8", "6.9", "19.6"]),
+    cf("Less: soft costs (entitle)", ["(1.6)", "(2.4)", "(1.0)", "(0.3)", "—", "(5.3)"]),
+    cf("Net project cash flow", ["(1.6)", "(2.4)", "3.9", "7.5", "6.9", "14.3"], { bold: true }),
+    cf("Cumulative cash flow", ["(1.6)", "(4.0)", "(0.1)", "7.4", "14.3", ""]),
   ];
   table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
-  callout(s, "Net profit ~$14.5M  ·  ~24% unlevered / ~31% levered project IRR  ·  LP ~27% after the promote (60% LTC).", 5.8);
-  txt(s, "Project-level cash flow; illustrative phasing. Equity, leverage and the promote waterfall are on slides 10–13. Figures subject to confirmation.",
+  callout(s, "Net profit ~$14.3M on ~$5.3M of soft cost (~2.7× on cost); the builder funds the horizontal. Costs repaid, then a straight 50/50.", 5.8);
+  txt(s, "Project cash flow; illustrative phasing. The builder funds the horizontal. Ties to the model's entitled-lot sheet. Figures subject to confirmation.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes("Phase 1 annual project cash flow — ties to slide 6 ($42M revenue) and slide 10 ($27.5M cost, $14.5M profit). Lots sell Yr 2–4; levered / LP returns per the waterfall (slide 12).");
+  s.addNotes("Phase 1 entitled-lot project cash flow — ties to the model: $19.6M revenue, $5.3M soft cost, $14.3M profit (~2.7× on cost). We fund only soft costs Yr 0–2; entitled lots sell Yr 2–4; the builder funds the horizontal. Costs repaid, then a straight 50/50.");
 }
 
 // ===================================== SLIDE 18 — PHASE 2 CASH FLOW
@@ -987,14 +1043,14 @@ function structure() {
   chrome(s, {
     eyebrow: "THE STRUCTURE",
     title: "A vehicle inside the H6 platform.",
-    desc: "Accountable Equity's Capital H6 owns the land. Spin the developable parcels into a land-development entity — H6 contributes the acreage as equity; JAL runs entitlement, capital formation and lot sales alongside your team.",
+    desc: "Accountable Equity's Capital H6 owns the land. Spin the developable parcels into a development company — the property contributes the land, the dev co (Bob · JAL · partners) entitles and sells the lots, and profit splits 50/50.",
     page: 20,
   });
   rect(s, ML, 1.95, CW, 0.86, C.navy);
   rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
   txt(s, "QUEENSTOWN HARBOR LAND PARTNERS, LLC", ML + 0.35, 2.06, 8.7, 0.4, { font: HEAD, size: 16, bold: true, color: C.white });
   txt(s, "Working name", ML + 0.35, 2.46, 8.5, 0.3, { font: BODY, size: 10, color: C.mauve });
-  txt(s, "Land-development vehicle under Capital H6", 9.4, 1.95, 3.4, 0.86,
+  txt(s, "Development company under Capital H6", 9.4, 1.95, 3.4, 0.86,
     { font: BODY, size: 10, color: C.mauve, align: "right", valign: "middle", margin: [2, 10, 2, 6] });
 
   const px = [ML, 4.62, 8.74], pw = 3.93;
@@ -1008,9 +1064,9 @@ function structure() {
   txt(s, "CAPITAL STACK", px[1] + 0.25, 3.18, pw - 0.5, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
   txt(s, "Illustrative", px[1] + 0.25, 3.46, pw - 0.5, 0.25, { font: BODY, size: 9, color: C.plum });
   const stack = [
-    ["Land equity", "Contributed"],
-    ["Builder-funded infra", "Horizontal"],
-    ["Cash equity", "Soft costs"],
+    ["Land", "Contributed"],
+    ["Horizontal", "Builder-funded"],
+    ["Soft costs", "Dev co funds"],
   ];
   let sy = 3.78;
   stack.forEach(([a, b]) => {
@@ -1026,7 +1082,7 @@ function structure() {
   const roles = [
     ["Josh McCallen / VIVÂMEE", "Resort owner-operator"],
     ["Bob Connell / Accountable Equity", "Development lead · Capital H6 GP"],
-    ["JAL Strategies", "GP member — capital formation, entitlement & sales"],
+    ["JAL Strategies", "Dev-co member — entitlement, capital formation & sales"],
   ];
   let ry = 3.62;
   roles.forEach(([a, b]) => {
@@ -1035,11 +1091,11 @@ function structure() {
     ry += 0.72;
   });
 
-  callout(s, "JAL is a GP member — sharing the promote with Accountable Equity, Bob & partners, and intends to invest in the GP, sized in diligence and structure.", 6.5);
+  callout(s, "JAL is a member of the development company — earning a share of its 50% (plus a $15K/mo retainer); intends to invest, sized in diligence.", 6.5);
   s.addNotes(
-    "Nails Bob's exact role: H6 GP / development lead. H6 contributes the developable land; JAL " +
-    "runs entitlement + capital formation + lot sales. VIVÂMEE keeps operating the resort. " +
-    "I also intend to put capital into the GP — amount TBD, to be sized once we've done diligence and set the structure."
+    "The structure (per Bob): the property contributes the land; the development company (Accountable Equity / Capital H6 · " +
+    "Bob · JAL · partners) entitles and sells the lots; costs repaid, then a straight 50/50. JAL runs entitlement + capital " +
+    "formation + lot sales for a share of the dev-co 50% plus a $15K/mo retainer, and intends to invest (amount TBD in diligence). VIVÂMEE operates the resort."
   );
 }
 
@@ -1055,8 +1111,8 @@ function engagement() {
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
-  txt(s, "$15K/mo + expenses, then success fees + carry", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13.5, bold: true, color: C.white });
-  txt(s, "Aligned to value created — and I intend to contribute capital to the GP myself (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
+  txt(s, "$15K/mo + expenses, then a share of the dev-co profit", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13.5, bold: true, color: C.white });
+  txt(s, "Aligned to value created — and I intend to contribute capital to the dev co myself (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
   txt(s, "Aligned\nupside", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
   const cols = [
@@ -1068,13 +1124,14 @@ function engagement() {
     ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term"],
     ["Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately, not netted from fees"],
     ["Capital placement fee", "1% debt · 2% equity", "Success fee — 2% of equity raised (1% of debt placed) for a parcel"],
-    ["Carried interest", "Share of GP promote", "JAL's share of the GP promote (alongside Accountable Equity, Bob & partners)"],
+    ["Profit share", "Share of dev-co 50%", "A share of the development company's 50% of profit (with Accountable Equity, Bob & partners)"],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
   callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);
   s.addNotes(
-    "Directly answers Bob's comp question. Hybrid: $15K/mo creditable retainer (≈ one day/week) + expenses " +
-    "reimbursed, then placement fees and the promote. Lead with alignment — the retainer is a floor, the carry is the prize."
+    "Answers Bob's comp question — he pushed for skin in the game over a big retainer. Hybrid: a modest $15K/mo retainer " +
+    "(≈ one day/week) + expenses, then the real upside is a share of the development company's 50% of profit. Plus I intend " +
+    "to put capital into the dev co (amount TBD). Lead with alignment — the retainer is a floor, the profit share is the prize."
   );
 }
 
@@ -1132,25 +1189,25 @@ function path() {
   chrome(s, {
     eyebrow: "THE PATH",
     title: "From this call to a signed mandate.",
-    desc: "Light and fast to start — diligence now, an in-person in July or August (I'm in the NYC area all of July and the first half of August), then a defined engagement on the first parcels.",
+    desc: "Light and fast — diligence now, a Zoom shortly, then an in-person at Renault (near Atlantic City) in late July or early August, working around my July 15 surgery; then a defined mandate.",
     page: 23,
   });
   const stages = [
     ["STAGE 1", "DILIGENCE & DATA", "Now – July", "Review & analysis",
       ["Confirm developable vs. conservation acreage (survey + easements)",
-       "Pull entitlement & zoning status (Queen Anne's County)",
-       "Model lot yield & absorption for the developable parcels",
-       "Confirm the H6 ownership & contribution mechanics"]],
-    ["STAGE 2", "IN PERSON", "July / Aug 2026", "Walk the site",
-      ["Meet Bob in July or August — I'm in the NYC area all of July & the first half of August",
-       "Walk Queenstown (River House & the course edges)",
-       "Meet Josh / VIVÂMEE",
-       "Align on first parcels, capital plan & comp"]],
+       "Pull entitlement & zoning status (Queen Anne's Co. + Renault township)",
+       "Model entitled-lot yield, pricing & absorption",
+       "Confirm the property / dev-co contribution & 50/50 mechanics"]],
+    ["STAGE 2", "IN PERSON", "Late Jul / early Aug", "Walk Renault",
+      ["Zoom shortly to align on structure & the first parcels",
+       "Meet Bob & Josh; walk Renault (near Atlantic City)",
+       "Around my July 15 surgery — I'm in NY through Aug 14",
+       "See the other assets in the pipeline"]],
     ["STAGE 3", "MANDATE", "H2 2026", "Engage & execute",
-      ["Stand up the land vehicle under Capital H6",
-       "Launch Phase 1 entitlements + soft-cost budget",
-       "Open regional-homebuilder conversations",
-       "First finished-lot sales underwritten"]],
+      ["Stand up the development company",
+       "Launch entitlements + soft-cost budget (capital-light)",
+       "Open builder conversations (incl. Cole)",
+       "First entitled-lot sales underwritten"]],
   ];
   const colW = 3.97, gap = 0.21;
   let x = ML;
@@ -1170,11 +1227,12 @@ function path() {
     x += colW + gap;
   });
   callout(s,
-    "What I need to sharpen the model: survey / plat & conservation easements · entitlement & zoning status · H6 structure · target timeline.",
+    "What I need: surveys / site plans (you have Renault's; Josh has the rest) · entitlement & zoning status · the 50/50 terms · target timeline. Happy to sign an NDA.",
     6.5);
   s.addNotes(
-    "Close on logistics. The July in-person is real (wife's family on Long Island) — Queenstown is a doable " +
-    "drive from Philly. The callout is the data ask — restate it so Bob knows exactly what to send."
+    "Logistics from the call: Zoom soon, in-person at Renault (near Atlantic City) late July / early August around the " +
+    "July 15 foot surgery (non-weight-bearing 4 wks, not the driving foot); I'm in NY through Aug 14; Bob cruises Jun 25–Jul 2 " +
+    "and leaves for Utah Aug 8. Bob to send surveys / site plans (has Renault's; Josh has the rest). Restate the data ask + offer the NDA."
   );
 }
 
@@ -1188,7 +1246,7 @@ function thankYou() {
   txt(s, "YOU", 0.72, 3.38, 12.0, 1.05, { font: HEAD, size: 72, bold: true, color: C.mauve });
   hline(s, 0.78, 4.62, 3.5, C.slate, 0.03);
   txt(s, "Bob — appreciate the call, and the résumé read.", 0.75, 4.78, 12.0, 0.45, { font: HEAD, size: 21, bold: true, color: C.white });
-  txt(s, "Looking forward to monetizing the land around Queenstown Harbor with you, Josh and the H6 team — let's find time in July.",
+  txt(s, "Looking forward to monetizing the land with you, Josh and the H6 team — let's find time at Renault in late July or early August.",
     0.75, 5.3, 12.0, 0.4, { font: BODY, size: 14, color: C.slate });
   txt(s, "Justin A. Levine  |  jlevine@jalstrategies.com  |  JAL Strategies", 0.75, 5.74, 12.0, 0.4, { font: BODY, size: 12, color: C.mauve });
   rect(s, 0, 6.9, PAGE_W, 0.6, C.aubergine);
@@ -1206,6 +1264,8 @@ playbook();
 mathLand();
 whySells();
 southRiver();
+renault();
+pipeline();
 capitalLight();
 proForma();
 basis();
