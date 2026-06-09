@@ -758,9 +758,10 @@ function waterfall() {
   rect(s, 6.77, 3.55, 6.06, 2.55, C.white, { line: { color: C.hair, width: 0.75 } });
   txt(s, "DEVELOPMENT COMPANY", 7.05, 3.7, 5.6, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
   txt(s, "50%", 7.05, 4.0, 5.6, 0.5, { font: HEAD, size: 22, bold: true, color: C.slate });
-  txt(s, "$7.2M", 7.05, 4.5, 5.6, 0.6, { font: HEAD, size: 34, bold: true, color: C.navy });
-  txt(s, "Accountable Equity / Capital H6 · Bob · JAL + partners. JAL earns a share of this 50% (plus a $15K/mo retainer) — sweat equity, real skin in the game.",
-    7.05, 5.22, 5.6, 0.8, { font: BODY, size: 10, color: C.plum, lh: 13, valign: "top" });
+  txt(s, "$7.2M", 7.05, 4.46, 5.6, 0.55, { font: HEAD, size: 32, bold: true, color: C.navy });
+  txt(s, "JAL's share  ~1/3  →  ~$2.4M", 7.05, 5.04, 5.6, 0.3, { font: HEAD, size: 14, bold: true, color: C.aubergine });
+  txt(s, "Accountable Equity / Capital H6 · Bob · partners take the balance. JAL = sweat equity + $15K/mo — no capital required.",
+    7.05, 5.36, 5.6, 0.66, { font: BODY, size: 9, color: C.plum, lh: 11.5, valign: "top" });
 
   callout(s, "Costs repaid, then a straight 50/50 — half returns capital to your investors, half to the development company. No pref, no promote, no 50-page waterfall.", 6.5);
   s.addNotes(
@@ -1112,7 +1113,7 @@ function engagement() {
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
-  txt(s, "$15K/mo + expenses, then a share of the dev-co profit", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13.5, bold: true, color: C.white });
+  txt(s, "$15K/mo + expenses, then ~1/3 of the dev-co 50% (the carry)", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13, bold: true, color: C.white });
   txt(s, "Aligned to value created — and I intend to contribute capital to the dev co myself (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
   txt(s, "Aligned\nupside", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
@@ -1122,17 +1123,19 @@ function engagement() {
     { w: 5.93, color: C.plum, size: 9.5, lh: 12 },
   ];
   const rows = [
-    ["Advisory retainer", "$15K / mo", "Funds entitlement, underwriting & capital sourcing during an initial term"],
-    ["Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately, not netted from fees"],
-    ["Capital placement fee", "1% debt · 2% equity", "Success fee — 2% of equity raised (1% of debt placed) for a parcel"],
-    ["Profit share", "Share of dev-co 50%", "A share of the development company's 50% of profit (with Accountable Equity, Bob & partners)"],
+    ["1 · Advisory retainer", "$15K / mo", "Funds the work during entitlement — a floor; a cost to the deal, not netted from the carry"],
+    ["2 · Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately"],
+    ["3 · Capital placement fee", "1% debt · 2% equity", "On outside capital I place — small on capital-light Queenstown, real on the pipeline's acquisition equity"],
+    ["4 · Profit share (carry)", "~1/3 of dev-co 50%", "≈ ~$2.4M on the Queenstown base case (~17% of profit); Bob & partners take the balance"],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
-  callout(s, "The structure flexes to the deal — the point is alignment: I win when you win.", 6.5);
+  callout(s, "They stack cleanly: retainer funds the work · placement fee only on outside capital I raise · ~1/3 of the dev-co 50% (~$2.4M base) is the carry · any co-invest earns alongside. No double-dip.", 6.5);
   s.addNotes(
-    "Answers Bob's comp question — he pushed for skin in the game over a big retainer. Hybrid: a modest $15K/mo retainer " +
-    "(≈ one day/week) + expenses, then the real upside is a share of the development company's 50% of profit. Plus I intend " +
-    "to put capital into the dev co (amount TBD). Lead with alignment — the retainer is a floor, the profit share is the prize."
+    "Answers Bob's comp question (skin in the game over a big retainer) and shows how the pieces interplay — they stack, " +
+    "but don't double-dip: (1) $15K/mo retainer funds the work (a cost); (2) expenses reimbursed; (3) a placement fee ONLY on " +
+    "outside capital I raise (waived on my own co-invest; small on capital-light Queenstown, meaningful on the pipeline's " +
+    "acquisition equity); (4) the carry — ~1/3 of the dev-co 50% ≈ ~$2.4M on the base case (~17% of profit). If I co-invest, " +
+    "that capital earns alongside everyone else's, separate from the carry. The retainer is a floor; the carry is the prize."
   );
 }
 
