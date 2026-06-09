@@ -46,6 +46,7 @@ const IN = {
   split: 0.50,                  // profit split — development company share = 1 − split
   joshOfProperty: 0.50,         // Josh's ownership of each property entity
   jalShareOfDevCo: 1 / 3,       // JAL's sweat-equity share of the dev co's 50% (~17% of profit)
+  retainerMo: 15000, engMonths: 36, // $15K/mo retainer over the active engagement (illustrative)
   // finished-lot comparison (what building it out ourselves would look like)
   finishedPx: 150000, horizPerLot: 60000, finFin: 1400000,
   // cash-flow timing (% by year, Yr 0..4)
@@ -77,6 +78,8 @@ function calcP1(over = {}) {
   const joshShare = propShare * i.joshOfProperty;        // ~25% of profit
   const jalTake = devShare * i.jalShareOfDevCo;          // JAL's sweat-equity share of the dev co
   const jalOfProfit = jalTake / profit;                  // ≈ 17% of total profit
+  const retainerTotal = i.retainerMo * i.engMonths;      // $15K/mo over the engagement
+  const jalAllIn = jalTake + retainerTotal;              // carry + retainer (illustrative all-in)
   const roiCost = profit / totCost;
   const margin = profit / rev;
   // annual project cash flow, derived from totals × phasing
@@ -91,7 +94,7 @@ function calcP1(over = {}) {
   const finProfit = finRev - finCost;
   const finRoiCost = finProfit / finCost;
   return { netAc, lots, rev, softBase, mkt, cont, fin, totCost, profit, propShare,
-    devShare, joshShare, jalTake, jalOfProfit, roiCost, margin, revArr, costArr, netCF, projIRR,
+    devShare, joshShare, jalTake, jalOfProfit, retainerTotal, jalAllIn, roiCost, margin, revArr, costArr, netCF, projIRR,
     finRev, finHoriz, finCost, finProfit, finRoiCost };
 }
 
@@ -300,7 +303,9 @@ line("Return on cost", { formula: `${B(profit)}/${B(totCost)}`, result: P1.roiCo
 const propShare = line("→ Property / H entities (50%)", { formula: `${B(profit)}*${B(splitIn)}`, result: P1.propShare }, "returns capital to Josh's investors", money, { bold: true });
 line("    of which Josh (~25% of profit)", { formula: `${B(propShare)}*${B(joshIn)}`, result: P1.joshShare }, "Josh owns 50% of the property entity", money);
 const devShareRow = line("→ Development company (50%)", { formula: `${B(profit)}*(1-${B(splitIn)})`, result: P1.devShare }, "Accountable Equity / Capital H6 · Bob · JAL · partners", money, { bold: true, accent: true });
-line("    of which JAL (~1/3 of dev co)", { formula: `${B(devShareRow)}*${B(jalIn)}`, result: P1.jalTake }, "sweat equity — separate from any placement fee or co-invest; + $15K/mo retainer", money, { bold: true });
+const jalTakeRow = line("    of which JAL (~1/3 of dev co)", { formula: `${B(devShareRow)}*${B(jalIn)}`, result: P1.jalTake }, "the carry — sweat equity; separate from any placement fee or co-invest", money, { bold: true });
+line("    + JAL retainer ($15K/mo × ~36 mo)", { formula: `${P1.retainerTotal}`, result: P1.retainerTotal }, "a floor during the engagement (a deal cost)", money);
+line("    = JAL all-in (illustrative)", { formula: `${B(jalTakeRow)}+${B(jalTakeRow + 1)}`, result: P1.jalAllIn }, "carry + retainer on the Queenstown base case", money, { bold: true, accent: true });
 
 // ---- CASH FLOW ----
 header("PROJECT CASH FLOW  (revenue × phasing − cost × phasing)");

@@ -1127,9 +1127,12 @@ function engagement() {
     ["2 · Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately"],
     ["3 · Capital placement fee", "1% debt · 2% equity", "On outside capital I place — small on capital-light Queenstown, real on the pipeline's acquisition equity"],
     ["4 · Profit share (carry)", "~1/3 of dev-co 50%", "≈ ~$2.4M on the Queenstown base case (~17% of profit); Bob & partners take the balance"],
+    [{ text: "= Illustrative all-in (base case)", bold: true, font: HEAD, color: C.navy },
+      { text: "~$2.9M", bold: true, font: HEAD, color: C.aubergine, align: "center" },
+      { text: "~$2.4M carry + ~$0.5M retainer (~3 yrs) — ~20% of profit, mostly the contingent carry", color: C.navy }],
   ];
-  table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.7 });
-  callout(s, "They stack cleanly: retainer funds the work · placement fee only on outside capital I raise · ~1/3 of the dev-co 50% (~$2.4M base) is the carry · any co-invest earns alongside. No double-dip.", 6.5);
+  table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.58 });
+  callout(s, "Aligned, not double-dipping: the retainer is a floor, placement fees only on outside capital I raise, and the carry (~1/3 of the dev-co 50%) is the prize — most of the ~$2.9M is contingent on the upside.", 6.42);
   s.addNotes(
     "Answers Bob's comp question (skin in the game over a big retainer) and shows how the pieces interplay — they stack, " +
     "but don't double-dip: (1) $15K/mo retainer funds the work (a cost); (2) expenses reimbursed; (3) a placement fee ONLY on " +
