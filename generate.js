@@ -25,6 +25,73 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const nodePath = require("path");
 
+// ===== MODEL LINK ==========================================================
+// The deck imports model.js's calc engine and renders every model-derived
+// figure from it, so the presentation and the workbook cannot drift.
+const MODEL = require("./model");
+const { P1, P2 } = MODEL;
+const MIN = MODEL.IN;
+const fM  = (x) => "$" + (x / 1e6).toFixed(1) + "M";    // $X.XM
+const fM0 = (x) => "$" + Math.round(x / 1e6) + "M";     // $XM
+const fMt = (x) => "~$" + (x / 1e6).toFixed(1) + "M";   // ~$X.XM
+const fK  = (x) => "$" + Math.round(x / 1e3) + "K";     // $XXK
+const fP  = (x) => (x * 100).toFixed(0) + "%";          // X%
+const fPt = (x) => "~" + (x * 100).toFixed(0) + "%";    // ~X%
+const fP1 = (x) => (x * 100).toFixed(1) + "%";          // X.X%
+const fX  = (x) => x.toFixed(1) + "×";             // X.X×
+const fXt = (x) => "~" + x.toFixed(1) + "×";       // ~X.X×
+const r1  = (x) => Math.round(x / 1e5) / 10;            // $ -> $M, 1 decimal
+const cfc = (m) => (Math.abs(m) < 0.05 ? "—" : m < 0 ? "(" + Math.abs(m).toFixed(1) + ")" : m.toFixed(1));
+const sumA = (a) => a.reduce((s, v) => s + v, 0);
+// cash-flow display rows from $-arrays: rev, cost (= rev − net), net, cumulative
+function cfRows(revArr, netArr) {
+  const rev = revArr.map(r1), net = netArr.map(r1);
+  const cost = rev.map((v, i) => +(v - net[i]).toFixed(1));
+  let c = 0; const cum = net.map((v) => +(c += v).toFixed(1));
+  return {
+    rev:  [...rev.map(cfc), sumA(rev).toFixed(1)],
+    cost: [...cost.map((v) => cfc(-v)), "(" + sumA(cost).toFixed(1) + ")"],
+    net:  [...net.map(cfc), sumA(net).toFixed(1)],
+    cum:  [...cum.map(cfc), ""],
+  };
+}
+// Phase 2 build-to-core equity cash-flow rows from the engine
+function p2cfRows() {
+  const bcf = P2.bcf.map(r1);
+  const eq = [bcf[0], bcf[1], 0, 0, 0];
+  const op = [0, 0, bcf[2], r1(P2.bcStabLevCF), r1(P2.bcStabLevCF)];
+  const recap = [0, 0, 0, 0, r1(P2.bcXEq)];
+  let c = 0; const cum = bcf.map((v) => +(c += v).toFixed(1));
+  return {
+    eq:    [...eq.map(cfc), "(" + Math.abs(sumA(eq)).toFixed(1) + ")"],
+    op:    [...op.map(cfc), sumA(op).toFixed(1)],
+    recap: [...recap.map(cfc), sumA(recap).toFixed(1)],
+    net:   [...bcf.map(cfc), sumA(bcf).toFixed(1)],
+    cum:   [...cum.map(cfc), ""],
+  };
+}
+const MV = {
+  netAc: Math.round(P1.netAc).toString(),
+  lots: Math.round(P1.lots).toString(),
+  entPx: fK(MIN.entitledPx),
+  rev: fM(P1.rev), cost: fM(P1.totCost), profit: fM(P1.profit),
+  roi: fX(P1.roiCost), margin: fP(P1.margin), irr: fPt(P1.projIRR),
+  half: fM(P1.devShare), josh: fM(P1.joshShare),
+  carryPct: fP(MIN.jalShareOfDevCo), carry: fMt(P1.jalTake),
+  carryPctProfit: fPt(P1.jalOfProfit), allIn: fMt(P1.jalAllIn),
+  allInPctProfit: fPt(P1.jalAllIn / P1.profit), retainerM: fMt(P1.retainerTotal),
+  p1cf: cfRows(P1.revArr, P1.netCF),
+  p1sens: [55000, 70000, 85000].map((px) => [240, 280, 320].map((l) => fM(MODEL.calcP1({ entitledPx: px, lots: l }).profit))),
+  hCost: fM(P2.hCost), rCost: fM(P2.rCost), pCost: fM(P2.pCost),
+  hNOI: fM(P2.hNOI), rNOI: fM(P2.rNOI), pNOI: fM(P2.pNOI),
+  hYoC: fP1(P2.hNOI / P2.hCost), rYoC: fP1(P2.rNOI / P2.rCost), pYoC: fP1(P2.pYoC),
+  bcNOI: fM(P2.bcNOI), bcYoC: fP1(P2.bcYoC), bcVal: fM0(P2.bcVal),
+  bcIRR: fPt(P2.bcIRR), bcEM: fXt(P2.bcEM), holdIRR: fPt(P2.irr2),
+  bcEq: fM(P2.bcEq), bcXEq: fM(P2.bcXEq),
+  p2cf: p2cfRows(),
+  p2sens: [0.10, 0.22, 0.35].map((u) => [0.07, 0.075, 0.08, 0.085].map((c) => fP1(MODEL.p2IRR(u, c)))),
+};
+
 // ----- Design tokens -------------------------------------------------------
 const C = {
   navy: "0B163C",
@@ -356,8 +423,8 @@ function theLandBank() {
   const cards = [
     ["870+ ac", "Portfolio land", "Across Queenstown + South River"],
     ["198 ac", "Under conservation", "Permanent easement at Queenstown — plan around it"],
-    ["~140 ac", "Developable land", "Net of conservation, wetlands & course (to verify)"],
-    ["~280", "Entitled lots", "Sold to regional homebuilders"],
+    [`~${MV.netAc} ac`, "Developable land", "Net of conservation, wetlands & course (to verify)"],
+    [`~${MV.lots}`, "Entitled lots", "Sold to regional homebuilders"],
   ];
   let cy = 2.05;
   cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
@@ -420,8 +487,8 @@ function mathLand() {
   const s = pptx.addSlide();
   chrome(s, {
     eyebrow: "THE MATH  ·  ILLUSTRATIVE",
-    title: "From 700 acres to ~$19.6M of entitled-lot revenue.",
-    desc: "Capital-light entitled-lot basis: we entitle the land and sell entitled lots; the builder funds the horizontal. ~280 lots at ~$70K = ~$19.6M revenue. Net profit & the 50/50 split are on the pro forma. Illustrative — survey-dependent.",
+    title: `From 700 acres to ~${MV.rev} of entitled-lot revenue.`,
+    desc: `Capital-light entitled-lot basis: we entitle the land and sell entitled lots; the builder funds the horizontal. ~${MV.lots} lots at ~${MV.entPx} = ~${MV.rev} revenue. Net profit & the 50/50 split are on the pro forma. Illustrative — survey-dependent.`,
     page: 6,
   });
   const cols = [
@@ -434,22 +501,22 @@ function mathLand() {
     ["Gross Queenstown land", "per ownership (to confirm)", "—", "~700 ac"],
     ["Less permanent conservation", "recorded easement", "700 − 198", "502 ac"],
     ["Less golf, range, water & lodging", "two 18s + 9-ac range + cottages", "502 − ~300", "~200 ac"],
-    ["Less Critical Area & wetlands", "Chesapeake 1,000-ft zone", "200 − ~60", "~140 ac"],
-    ["Entitled lots", "~2.0 lots / acre", "140 × 2.0", "~280 lots"],
-    ["Entitled lot price", "to a builder (they finish)", "≈ $150K − ~$80K", "$70K"],
+    ["Less Critical Area & wetlands", "Chesapeake 1,000-ft zone", "200 − ~60", `~${MV.netAc} ac`],
+    ["Entitled lots", "~2.0 lots / acre", `${MV.netAc} × 2.0`, `~${MV.lots} lots`],
+    ["Entitled lot price", "to a builder (they finish)", "≈ $150K − ~$80K", MV.entPx],
     [{ text: "GROSS ENTITLED-LOT REVENUE", bold: true, font: HEAD, color: C.navy },
-      { text: "net profit & 50/50 split on the pro forma", color: C.plum }, "280 × $70K", "$19.6M"],
+      { text: "net profit & 50/50 split on the pro forma", color: C.plum }, `${MV.lots} × ${MV.entPx}`, MV.rev],
   ];
   table(s, ML, 2.1, cols, ["Step", "Basis", "Calculation", "= Result"], rows, { rowH: 0.48 });
   rect(s, ML, 6.0, CW, 0.45, C.navy);
   txt(s,
-    "~$19.6M entitled-lot revenue on ~$5.3M of soft cost → ~$14.3M profit — the builder funds the horizontal. Split & returns on the pro forma.",
+    `~${MV.rev} entitled-lot revenue on ~${MV.cost} of soft cost → ~${MV.profit} profit — the builder funds the horizontal. Split & returns on the pro forma.`,
     ML + 0.2, 6.0, CW - 0.4, 0.45,
     { font: HEAD, size: 11, bold: true, color: C.white, align: "center" });
   footnote(s, 6.62, [SRC.qhwho, SRC.qac, SRC.dnr]);
   s.addNotes(
-    "Capital-light entitled-lot basis: we entitle and sell entitled lots; the builder funds the horizontal. 280 lots × $70K " +
-    "= $19.6M revenue, ~$5.3M soft cost → ~$14.3M profit (~2.7× on cost). The entitled-lot price (~finished $150K less the " +
+    `Capital-light entitled-lot basis: we entitle and sell entitled lots; the builder funds the horizontal. ${MV.lots} lots × ${MV.entPx} ` +
+    `= ${MV.rev} revenue, ~${MV.cost} soft cost → ~${MV.profit} profit (~${MV.roi} on cost). The entitled-lot price (~finished $150K less the ` +
     "builder's ~$80K to finish) is the key assumption. Split & returns on the pro forma. Illustrative until survey / entitlement."
   );
 }
@@ -590,10 +657,10 @@ function capitalLight() {
   chrome(s, {
     eyebrow: "DEVELOPMENT PLAN",
     title: "Entitle the land. Sell entitled lots.",
-    desc: "Capital-light: we fund only the soft costs to entitle the land, then sell entitled lots to builders who fund the horizontal. ~$5M of cost, not ~$25M — and the builder carries the construction risk.",
+    desc: `Capital-light: we fund only the soft costs to entitle the land, then sell entitled lots to builders who fund the horizontal. ~${fM0(P1.totCost)} of cost, not ~${fM0(P1.finCost)} — and the builder carries the construction risk.`,
     page: 9,
   });
-  statCard(s, ML, 2.05, "~$5M", "Total cost (soft only)",
+  statCard(s, ML, 2.05, `~${fM0(P1.totCost)}`, "Total cost (soft only)",
     "Entitlement, civil, environmental, legal, PM", { w: 6.05 });
   statCard(s, ML, 3.12, "$0", "Horizontal we fund",
     "The builder funds roads, sewer & utilities", { w: 6.05 });
@@ -612,7 +679,7 @@ function capitalLight() {
     { w: 3.83, color: C.plum, size: 9 },
   ];
   const rows = [
-    ["Phase 1 — Entitle", "Approvals for lots", "~$4M soft", "We fund (soft costs only)"],
+    ["Phase 1 — Entitle", "Approvals for lots", `~${fM0(P1.softBase)} soft`, "We fund (soft costs only)"],
     ["Phase 2 — Sell lots", "Entitled lots → builders", "Builder", "Builder funds the horizontal"],
     ["Phase 3 — Recycle", "Costs repaid, then 50/50", "Self-funding", "Proceeds → investors + next parcel"],
   ];
@@ -630,7 +697,7 @@ function proForma() {
   chrome(s, {
     eyebrow: "PRO FORMA  ·  ILLUSTRATIVE",
     title: "The budget, and the 50/50.",
-    desc: "Capital-light entitled-lot pro forma: we fund ~$5.3M of soft costs to entitle the land and sell ~280 entitled lots at ~$70K (~$19.6M). The builder funds the horizontal. Costs repaid, then a straight 50/50. Illustrative.",
+    desc: `Capital-light entitled-lot pro forma: we fund ~${MV.cost} of soft costs to entitle the land and sell ~${MV.lots} entitled lots at ~${MV.entPx} (~${MV.rev}). The builder funds the horizontal. Costs repaid, then a straight 50/50. Illustrative.`,
     page: 10,
   });
   const usesCols = [
@@ -638,42 +705,42 @@ function proForma() {
     { w: 1.55, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
   ];
   const uses = [
-    ["Soft costs — entitle the land", "$4.0M"],
-    ["Marketing & brokerage (~3%)", "$0.6M"],
-    ["Contingency (10% of soft)", "$0.4M"],
-    ["Financing / carry", "$0.3M"],
+    ["Soft costs — entitle the land", fM(P1.softBase)],
+    ["Marketing & brokerage (~3%)", fM(P1.mkt)],
+    ["Contingency (10% of soft)", fM(P1.cont)],
+    ["Financing / carry", fM(P1.fin)],
     [{ text: "TOTAL DEVELOPMENT COST", bold: true, font: HEAD, color: C.navy },
-      { text: "$5.3M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+      { text: MV.cost, bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
   table(s, ML, 2.0, usesCols, ["USES OF CAPITAL  ·  SOFT ONLY", ""], uses, { rowH: 0.48 });
 
   rect(s, ML, 4.95, 5.5, 1.45, C.navy);
   rect(s, ML, 4.95, 0.1, 1.45, C.aubergine);
   txt(s, "KEY ASSUMPTIONS", ML + 0.25, 5.05, 5.1, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$70K entitled lot  ·  280 lots  ·  builder funds the horizontal  ·  land at ~zero basis  ·  costs repaid, then a straight 50/50 (no pref, no promote)",
+  txt(s, `${MV.entPx} entitled lot  ·  ${MV.lots} lots  ·  builder funds the horizontal  ·  land at ~zero basis  ·  costs repaid, then a straight 50/50 (no pref, no promote)`,
     ML + 0.25, 5.32, 5.05, 1.0, { font: BODY, size: 9, color: C.cream, lh: 12, valign: "top" });
 
   rect(s, 6.1, 2.0, 3.1, 4.4, C.navy);
   rect(s, 6.1, 2.0, 0.1, 4.4, C.aubergine);
   txt(s, "THE 50/50", 6.32, 2.13, 2.8, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "$14.3M", 6.32, 2.5, 2.8, 0.55, { font: HEAD, size: 28, bold: true, color: C.white });
+  txt(s, MV.profit, 6.32, 2.5, 2.8, 0.55, { font: HEAD, size: 28, bold: true, color: C.white });
   txt(s, "net profit", 6.32, 3.06, 2.8, 0.25, { font: BODY, size: 9.5, color: C.mauve });
   txt(s, "Costs repaid first, then a straight split:", 6.32, 3.5, 2.66, 0.4, { font: BODY, size: 9.5, color: C.cream, lh: 12, valign: "top" });
   txt(s, "Property / H — 50%", 6.32, 4.0, 2.66, 0.25, { font: HEAD, size: 10.5, bold: true, color: C.white });
-  txt(s, "$7.2M  ·  Josh ~$3.6M → returns capital to your investors", 6.32, 4.26, 2.66, 0.6, { font: BODY, size: 9, color: C.cream, lh: 11.5, valign: "top" });
+  txt(s, `${MV.half}  ·  Josh ~${MV.josh} → returns capital to your investors`, 6.32, 4.26, 2.66, 0.6, { font: BODY, size: 9, color: C.cream, lh: 11.5, valign: "top" });
   txt(s, "Development co — 50%", 6.32, 5.1, 2.66, 0.25, { font: HEAD, size: 10.5, bold: true, color: C.white });
-  txt(s, "$7.2M  ·  Bob · JAL · partners (JAL earns a share)", 6.32, 5.36, 2.66, 0.6, { font: BODY, size: 9, color: C.cream, lh: 11.5, valign: "top" });
+  txt(s, `${MV.half}  ·  Bob · JAL · partners (JAL earns a share)`, 6.32, 5.36, 2.66, 0.6, { font: BODY, size: 9, color: C.cream, lh: 11.5, valign: "top" });
 
   rect(s, 9.3, 2.0, 3.53, 4.4, C.navy);
   rect(s, 9.3, 2.0, 0.12, 4.4, C.aubergine);
   txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
   const mets = [
-    ["$19.6M", "Entitled-lot revenue"],
-    ["$14.3M", "Net profit (73% margin)"],
-    ["~86%", "Project IRR (unlevered)"],
-    ["2.7×", "Return on cost (~$5.3M)"],
-    ["$7.2M", "Development co (50%)"],
-    ["$7.2M", "Property / investors (50%)"],
+    [MV.rev, "Entitled-lot revenue"],
+    [MV.profit, `Net profit (${MV.margin} margin)`],
+    [MV.irr, "Project IRR (unlevered)"],
+    [MV.roi, `Return on cost (~${MV.cost})`],
+    [MV.half, "Development co (50%)"],
+    [MV.half, "Property / investors (50%)"],
   ];
   let my = 2.5;
   mets.forEach(([v, l]) => {
@@ -682,12 +749,11 @@ function proForma() {
     my += 0.62;
   });
 
-  callout(s, "Illustrative: ~$14.3M profit on ~$5.3M of soft cost — ~2.7× on cost and a ~86% unlevered IRR on a near-zero land basis. Builder funds the horizontal; costs repaid, then a straight 50/50.", 6.55);
+  callout(s, `Illustrative: ~${MV.profit} profit on ~${MV.cost} of soft cost — ~${MV.roi} on cost and a ${MV.irr} unlevered IRR on a near-zero land basis. Builder funds the horizontal; costs repaid, then a straight 50/50.`, 6.55);
   s.addNotes(
-    "Capital-light entitled-lot pro forma, consistent with slide 6. $19.6M revenue − $5.3M soft cost ≈ $14.3M profit " +
-    "(~2.7× on cost, 73% margin) on a near-zero land basis; the builder funds the horizontal. Costs repaid first, then a " +
-    "straight 50/50 — $7.2M to the property (Josh ~$3.6M, returning capital to his investors) and $7.2M to the development " +
-    "company (Bob · JAL · partners). No pref, no promote. Model = source of truth. All illustrative."
+    `Capital-light entitled-lot pro forma. Revenue − soft cost ≈ profit (~${MV.roi} on cost, ~${MV.margin} margin) on a near-zero land ` +
+    "basis; the builder funds the horizontal. Costs repaid first, then a straight 50/50 — half to the property (Josh ~25%, " +
+    "returning capital to his investors) and half to the development company. Every figure renders from model.js (the source of truth)."
   );
 }
 
@@ -733,9 +799,9 @@ function waterfall() {
     page: 12,
   });
   const flow = [
-    ["$19.6M", "Entitled-lot revenue", "~280 lots × ~$70K"],
-    ["($5.3M)", "Less: costs repaid", "the soft costs we funded"],
-    ["$14.3M", "Net profit to split", "≈ 2.7× on cost"],
+    [MV.rev, "Entitled-lot revenue", `~${MV.lots} lots × ~${MV.entPx}`],
+    [`(${MV.cost})`, "Less: costs repaid", "the soft costs we funded"],
+    [MV.profit, "Net profit to split", `≈ ${MV.roi} on cost`],
   ];
   const fw = 3.97, fgap = 0.21; let fx = ML;
   flow.forEach(([n, l, sub], i) => {
@@ -751,15 +817,15 @@ function waterfall() {
   rect(s, ML, 3.55, 0.12, 2.55, C.aubergine);
   txt(s, "PROPERTY / H ENTITIES", ML + 0.3, 3.7, 5.6, 0.3, { font: HEAD, size: 11, bold: true, color: C.mauve, spc: 2 });
   txt(s, "50%", ML + 0.3, 4.0, 5.6, 0.5, { font: HEAD, size: 22, bold: true, color: C.slate });
-  txt(s, "$7.2M", ML + 0.3, 4.5, 5.6, 0.6, { font: HEAD, size: 34, bold: true, color: C.white });
-  txt(s, "Josh owns 50% of each property → ~$3.6M (≈ 25% of profit). This is the liquidity that returns capital to his investors against their 8% pref.",
+  txt(s, MV.half, ML + 0.3, 4.5, 5.6, 0.6, { font: HEAD, size: 34, bold: true, color: C.white });
+  txt(s, `Josh owns 50% of each property → ~${MV.josh} (≈ 25% of profit). This is the liquidity that returns capital to his investors against their 8% pref.`,
     ML + 0.3, 5.22, 5.6, 0.8, { font: BODY, size: 10, color: C.cream, lh: 13, valign: "top" });
 
   rect(s, 6.77, 3.55, 6.06, 2.55, C.white, { line: { color: C.hair, width: 0.75 } });
   txt(s, "DEVELOPMENT COMPANY", 7.05, 3.7, 5.6, 0.3, { font: HEAD, size: 11, bold: true, color: C.aubergine, spc: 2 });
   txt(s, "50%", 7.05, 4.0, 5.6, 0.5, { font: HEAD, size: 22, bold: true, color: C.slate });
-  txt(s, "$7.2M", 7.05, 4.46, 5.6, 0.55, { font: HEAD, size: 32, bold: true, color: C.navy });
-  txt(s, "JAL's share  30%  →  ~$2.1M", 7.05, 5.04, 5.6, 0.3, { font: HEAD, size: 14, bold: true, color: C.aubergine });
+  txt(s, MV.half, 7.05, 4.46, 5.6, 0.55, { font: HEAD, size: 32, bold: true, color: C.navy });
+  txt(s, `JAL's share  ${MV.carryPct}  →  ${MV.carry}`, 7.05, 5.04, 5.6, 0.3, { font: HEAD, size: 14, bold: true, color: C.aubergine });
   txt(s, "Accountable Equity / Capital H6 · Bob · partners take the balance. JAL = sweat equity + $15K/mo — no capital required.",
     7.05, 5.36, 5.6, 0.66, { font: BODY, size: 9, color: C.plum, lh: 11.5, valign: "top" });
 
@@ -777,7 +843,7 @@ function sensitivity() {
   chrome(s, {
     eyebrow: "SENSITIVITY  ·  PHASE 1 PROFIT",
     title: "How robust is the profit?",
-    desc: "Net project profit ($M) across the entitled-lot price and the lot yield — the two swing factors. The base — $70K lots, ~280 of them — pencils to ~$14.3M; even conservative pricing holds double-digit millions. Split 50/50.",
+    desc: `Net project profit ($M) across the entitled-lot price and the lot yield — the two swing factors. The base — ${MV.entPx} lots, ~${MV.lots} of them — pencils to ~${MV.profit}; even conservative pricing holds double-digit millions. Split 50/50.`,
     page: 13,
   });
   const cols = [
@@ -787,17 +853,17 @@ function sensitivity() {
     { w: 3.13, color: C.navy, size: 12, align: "center" },
   ];
   const rows = [
-    ["$55K / lot", "$8.1M", "$10.2M", "$12.4M"],
-    ["$70K / lot  (base)", "$11.6M", { text: "$14.3M", bold: true, color: C.aubergine, font: HEAD }, "$17.0M"],
-    ["$85K / lot", "$15.1M", "$18.4M", "$21.7M"],
+    ["$55K / lot", MV.p1sens[0][0], MV.p1sens[0][1], MV.p1sens[0][2]],
+    ["$70K / lot  (base)", MV.p1sens[1][0], { text: MV.p1sens[1][1], bold: true, color: C.aubergine, font: HEAD }, MV.p1sens[1][2]],
+    ["$85K / lot", MV.p1sens[2][0], MV.p1sens[2][1], MV.p1sens[2][2]],
   ];
   table(s, ML, 2.3, cols, ["NET PROFIT $M  (price / lots)", "240 lots", "280 lots", "320 lots"], rows, { rowH: 0.85, headSize: 9 });
-  callout(s, "Base $70K × 280 → ~$14.3M profit, split 50/50. The downside still clears ~$8M; stronger pricing or yield pushes past $20M.", 5.55);
+  callout(s, `Base ${MV.entPx} × ${MV.lots} → ~${MV.profit} profit, split 50/50. The downside still clears ~$8M; stronger pricing or yield pushes past $20M.`, 5.55);
   txt(s, "Net project profit ($M); each cell re-runs the model. Half flows to the property (investor liquidity), half to the development company. Illustrative.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
-    "Sensitivity of Phase 1 net profit to entitled-lot price × lot yield. Base $70K / 280 lots → ~$14.3M, split 50/50 " +
-    "($7.2M each). Even at $55K / 240 lots it clears ~$8M; $85K or 320 lots pushes toward $18–22M. Each cell re-runs the model."
+    `Sensitivity of Phase 1 net profit to entitled-lot price × lot yield. Base ${MV.entPx} / ${MV.lots} lots → ~${MV.profit}, split 50/50 ` +
+    `(${MV.half} each). Even at $55K / 240 lots it clears ~$8M; $85K or 320 lots pushes toward $18–22M. Each cell re-runs the model.`
   );
 }
 
@@ -849,12 +915,12 @@ function phase2() {
     { w: 1.55, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
   ];
   const cost = [
-    ["Hotel (100 keys × $325K)", "$32.5M"],
-    ["Restaurants (16K SF × $550)", "$8.8M"],
-    ["Land — hospitality parcel", "$2.0M"],
-    ["Soft / FF&E / pre-opening", "$3.7M"],
+    [`Hotel (${MIN.hKeys} keys × ${fK(MIN.hCostKey)})`, MV.hCost],
+    [`Restaurants (${MIN.rSF / 1e3}K SF × $${MIN.rCostSF})`, MV.rCost],
+    ["Land — hospitality parcel", fM(MIN.pLand)],
+    ["Soft / FF&E / pre-opening", fM(MIN.pSoft)],
     [{ text: "TOTAL DEVELOPMENT COST", bold: true, font: HEAD, color: C.navy },
-      { text: "$47.0M", bold: true, font: HEAD, color: C.aubergine, align: "right" }],
+      { text: MV.pCost, bold: true, font: HEAD, color: C.aubergine, align: "right" }],
   ];
   table(s, ML, 2.0, costCols, ["DEVELOPMENT COST", ""], cost, { rowH: 0.48 });
 
@@ -864,29 +930,29 @@ function phase2() {
     { w: 0.5, color: C.plum, size: 8, align: "right" },
   ];
   const noi = [
-    ["Hotel NOI", "$2.8M", "8.6%"],
-    ["Restaurant NOI", "$1.0M", "11.5%"],
+    ["Hotel NOI", MV.hNOI, MV.hYoC],
+    ["Restaurant NOI", MV.rNOI, MV.rYoC],
     [{ text: "STABILIZED NOI", bold: true, font: HEAD, color: C.navy },
-      { text: "$3.8M", bold: true, font: HEAD, color: C.aubergine, align: "right" },
-      { text: "8.1%", color: C.plum, align: "right" }],
+      { text: MV.pNOI, bold: true, font: HEAD, color: C.aubergine, align: "right" },
+      { text: MV.pYoC, color: C.plum, align: "right" }],
   ];
   table(s, 6.1, 2.0, noiCols, ["STABILIZED NOI", "", "YoC"], noi, { rowH: 0.48 });
 
   rect(s, 6.1, 3.92, 3.1, 1.84, C.navy);
   rect(s, 6.1, 3.92, 0.1, 1.84, C.aubergine);
   txt(s, "KEY METRICS", 6.32, 4.02, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, "Build-to-core: recap / sell ~Yr 4  ·  7.5% exit cap → ~$62M  ·  65% LTC  ·  premium NOI (VIVÂMEE)  ·  ~2.4-pt development spread  ·  land contributed",
+  txt(s, `Build-to-core: recap / sell ~Yr 4  ·  ${fP1(MIN.bcCap)} exit cap → ~${MV.bcVal}  ·  ${fP(MIN.bcLTC)} LTC  ·  premium NOI (VIVÂMEE)  ·  ~2.4-pt development spread  ·  land contributed`,
     6.32, 4.3, 2.78, 1.4, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
 
   rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
   rect(s, 9.3, 2.0, 0.12, 3.76, C.aubergine);
   txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
   const mets = [
-    ["$47.0M", "Total project cost"],
-    ["$4.7M", "Premium NOI (build-to-core)"],
-    ["9.9%", "Yield on cost (premium)"],
-    ["~2.3×", "Equity multiple (~4-yr)"],
-    ["~28%", "Build-to-core IRR"],
+    [MV.pCost, "Total project cost"],
+    [MV.bcNOI, "Premium NOI (build-to-core)"],
+    [MV.bcYoC, "Yield on cost (premium)"],
+    [MV.bcEM, "Equity multiple (~4-yr)"],
+    [MV.bcIRR, "Build-to-core IRR"],
   ];
   let my = 2.5;
   mets.forEach(([v, l]) => {
@@ -896,14 +962,14 @@ function phase2() {
   });
 
   rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, "Built to core (recap at stabilization), the hotel clears ~28% IRR / ~2.3×. Held for income it's ~12% — the spread is the contributed land + VIVÂMEE's premium NOI.",
+  txt(s, `Built to core (recap at stabilization), the hotel clears ${MV.bcIRR} IRR / ${MV.bcEM}. Held for income it's ${MV.holdIRR} — the spread is the contributed land + VIVÂMEE's premium NOI.`,
     ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
   footnote(s, 6.55, [SRC.fillat, SRC.hvs, SRC.hcap, SRC.rcost]);
   s.addNotes(
     "Phase 2 = hospitality upside, VIVÂMEE-led; JAL leads capital formation. A 120-key resort & spa is already designed " +
-    "(FILLAT+ Architecture), validating the program. Two cases in the model: hold for income (~8% YoC, " +
-    "~12% IRR — the floor) or BUILD-TO-CORE — recap/sell at stabilization (~Yr 4) at a 7.5% cap, capturing the development " +
-    "spread from the contributed land + premium NOI → ~28% IRR / ~2.3x. Build-to-core lets JAL earn the development return " +
+    `(FILLAT+ Architecture), validating the program. Two cases in the model: hold for income (~${fP(P2.pYoC)} YoC, ` +
+    `${MV.holdIRR} IRR — the floor) or BUILD-TO-CORE — recap/sell at stabilization (~Yr 4) at a ${fP1(MIN.bcCap)} cap, capturing the development ` +
+    `spread from the contributed land + premium NOI → ${MV.bcIRR} IRR / ${MV.bcEM}. Build-to-core lets JAL earn the development return ` +
     "while VIVÂMEE keeps and operates the resort. Model is source of truth."
   );
 }
@@ -914,7 +980,7 @@ function phase2sens() {
   chrome(s, {
     eyebrow: "SENSITIVITY  ·  PHASE 2 BUILD-TO-CORE",
     title: "How robust is the hotel return?",
-    desc: "Build-to-core IRR (65% LTC, recap at stabilization) across stabilized NOI and exit cap — the two biggest swing factors. Base ($4.65M NOI, 7.5% cap) → ~28%; it holds in the mid-20s+ as long as NOI lands and caps stay sub-8%.",
+    desc: `Build-to-core IRR (${fP(MIN.bcLTC)} LTC, recap at stabilization) across stabilized NOI and exit cap — the two biggest swing factors. Base (${MV.bcNOI} NOI, ${fP1(MIN.bcCap)} cap) → ${MV.bcIRR}; it holds in the mid-20s+ as long as NOI lands and caps stay sub-8%.`,
     page: 16,
   });
   const cols = [
@@ -925,18 +991,18 @@ function phase2sens() {
     { w: 2.475, color: C.navy, size: 12, align: "center" },
   ];
   const rows = [
-    ["$4.2M NOI", "24.1%", "19.8%", "15.6%", "11.6%"],
-    ["$4.65M NOI  (base)", "31.7%", { text: "27.6%", bold: true, color: C.aubergine, font: HEAD }, "23.7%", "19.9%"],
-    ["$5.15M NOI", "38.8%", "34.8%", "31.1%", "27.5%"],
+    ["$4.2M NOI", MV.p2sens[0][0], MV.p2sens[0][1], MV.p2sens[0][2], MV.p2sens[0][3]],
+    ["$4.65M NOI  (base)", MV.p2sens[1][0], { text: MV.p2sens[1][1], bold: true, color: C.aubergine, font: HEAD }, MV.p2sens[1][2], MV.p2sens[1][3]],
+    ["$5.15M NOI", MV.p2sens[2][0], MV.p2sens[2][1], MV.p2sens[2][2], MV.p2sens[2][3]],
   ];
   table(s, ML, 2.3, cols, ["BUILD-TO-CORE IRR  (NOI / cap)", "7.0% cap", "7.5% cap", "8.0% cap", "8.5% cap"], rows, { rowH: 0.85, headSize: 9 });
-  callout(s, "Base ~28%. Strong NOI + a sub-8% cap → low-to-high 30s; soft NOI or an 8.5% cap pulls it toward the high-teens / low-20s.", 5.55);
+  callout(s, `Base ${MV.bcIRR}. Strong NOI + a sub-8% cap → low-to-high 30s; soft NOI or an 8.5% cap pulls it toward the high-teens / low-20s.`, 5.55);
   txt(s, "Build-to-core project IRR (65% LTC, recap ~Yr 4). VIVÂMEE-led; JAL leads capital formation. Each cell re-runs the model. Illustrative.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
-    "Phase 2 build-to-core IRR sensitized to stabilized NOI × exit cap (the development spread). Base $4.65M NOI / 7.5% cap " +
-    "→ ~28%. Premium NOI ($5.15M) or a 7% cap pushes it to the mid-30s; an 8.5% cap or soft NOI drops it to ~12–20%. " +
-    "65% LTC, recap at stabilization. Model is the source of truth."
+    `Phase 2 build-to-core IRR sensitized to stabilized NOI × exit cap (the development spread). Base ${MV.bcNOI} NOI / ${fP1(MIN.bcCap)} cap ` +
+    `→ ${MV.bcIRR}. Premium NOI or a 7% cap pushes it to the mid-30s; an 8.5% cap or soft NOI drops it to ~12–20%. ` +
+    `${fP(MIN.bcLTC)} LTC, recap at stabilization. Model is the source of truth.`
   );
 }
 
@@ -946,7 +1012,7 @@ function phase1cf() {
   chrome(s, {
     eyebrow: "PHASE 1  ·  CASH FLOW",
     title: "Phase 1 — entitled-lot cash flow.",
-    desc: "Capital-light entitled-lot project cash flow ($M). We fund the soft costs to entitle (Yr 0–2); entitled lots sell as approvals land (Yr 2–4). Net profit ~$14.3M, then split 50/50. Illustrative.",
+    desc: `Capital-light entitled-lot project cash flow ($M). We fund the soft costs to entitle (Yr 0–2); entitled lots sell as approvals land (Yr 2–4). Net profit ~${MV.profit}, then split 50/50. Illustrative.`,
     page: 17,
   });
   const cf = (label, vals, opts = {}) => [
@@ -961,16 +1027,16 @@ function phase1cf() {
     { w: 1.5, color: C.navy, size: 10, align: "center" }, { w: 1.8, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
   ];
   const rows = [
-    cf("Entitled-lot revenue", ["—", "—", "4.9", "7.8", "6.9", "19.6"]),
-    cf("Less: soft costs (entitle)", ["(1.6)", "(2.4)", "(1.0)", "(0.3)", "—", "(5.3)"]),
-    cf("Net project cash flow", ["(1.6)", "(2.4)", "3.9", "7.5", "6.9", "14.3"], { bold: true }),
-    cf("Cumulative cash flow", ["(1.6)", "(4.0)", "(0.1)", "7.4", "14.3", ""]),
+    cf("Entitled-lot revenue", MV.p1cf.rev),
+    cf("Less: soft costs (entitle)", MV.p1cf.cost),
+    cf("Net project cash flow", MV.p1cf.net, { bold: true }),
+    cf("Cumulative cash flow", MV.p1cf.cum),
   ];
   table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
-  callout(s, "Net profit ~$14.3M on ~$5.3M of soft cost — ~2.7× on cost, ~86% unlevered project IRR; the builder funds the horizontal. Costs repaid, then a straight 50/50.", 5.8);
+  callout(s, `Net profit ~${MV.profit} on ~${MV.cost} of soft cost — ~${MV.roi} on cost, ${MV.irr} unlevered project IRR; the builder funds the horizontal. Costs repaid, then a straight 50/50.`, 5.8);
   txt(s, "Project cash flow; illustrative phasing. The builder funds the horizontal. Ties to the model's entitled-lot sheet. Figures subject to confirmation.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes("Phase 1 entitled-lot project cash flow — ties to the model: $19.6M revenue, $5.3M soft cost, $14.3M profit (~2.7× on cost). We fund only soft costs Yr 0–2; entitled lots sell Yr 2–4; the builder funds the horizontal. Costs repaid, then a straight 50/50.");
+  s.addNotes(`Phase 1 entitled-lot project cash flow — ties to the model: ${MV.rev} revenue, ${MV.cost} soft cost, ${MV.profit} profit (~${MV.roi} on cost). We fund only soft costs Yr 0–2; entitled lots sell Yr 2–4; the builder funds the horizontal. Costs repaid, then a straight 50/50.`);
 }
 
 // ===================================== SLIDE 18 — PHASE 2 CASH FLOW
@@ -979,7 +1045,7 @@ function phase2cf() {
   chrome(s, {
     eyebrow: "PHASE 2  ·  BUILD-TO-CORE CASH FLOW",
     title: "Phase 2 — build-to-core equity cash flow.",
-    desc: "Hospitality build-to-core, levered equity cash flow ($M). Build to ~$47M cost at 65% LTC; stabilize at the premium NOI; recap / sell at ~Yr 4 (~$62M @ a 7.5% cap). VIVÂMEE operates. Illustrative.",
+    desc: `Hospitality build-to-core, levered equity cash flow ($M). Build to ~${MV.pCost} cost at ${fP(MIN.bcLTC)} LTC; stabilize at the premium NOI; recap / sell at ~Yr 4 (~${MV.bcVal} @ a ${fP1(MIN.bcCap)} cap). VIVÂMEE operates. Illustrative.`,
     page: 18,
   });
   const cf = (label, vals, opts = {}) => [
@@ -994,17 +1060,17 @@ function phase2cf() {
     { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.78, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
   ];
   const rows = [
-    cf("Equity invested", ["(8.2)", "(8.2)", "—", "—", "—", "(16.4)"]),
-    cf("Operating cash flow (after debt)", ["—", "—", "1.0", "2.5", "2.5", "6.0"]),
-    cf("Recap equity (sale − loan)", ["—", "—", "—", "—", "31.5", "31.5"]),
-    cf("Net equity cash flow", ["(8.2)", "(8.2)", "1.0", "2.5", "34.0", "21.1"], { bold: true }),
-    cf("Cumulative cash flow", ["(8.2)", "(16.4)", "(15.4)", "(12.9)", "21.1", ""]),
+    cf("Equity invested", MV.p2cf.eq),
+    cf("Operating cash flow (after debt)", MV.p2cf.op),
+    cf("Recap equity (sale − loan)", MV.p2cf.recap),
+    cf("Net equity cash flow", MV.p2cf.net, { bold: true }),
+    cf("Cumulative cash flow", MV.p2cf.cum),
   ];
   table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
-  callout(s, "~$16.4M equity → ~$21M net; build-to-core (65% LTC) levered IRR ~28% / ~2.3× at the Yr-4 recap (~$62M on ~$47M cost). Ties to the model's build-to-core sheet.", 5.8);
-  txt(s, "Levered equity cash flow — the line that drives the ~28% IRR; recap / sale at stabilization. A 120-key resort & spa is already designed (FILLAT+). Illustrative.",
+  callout(s, `~${MV.bcEq} equity → ~$${Math.round(sumA(P2.bcf) / 1e6)}M net; build-to-core (${fP(MIN.bcLTC)} LTC) levered IRR ${MV.bcIRR} / ${MV.bcEM} at the Yr-4 recap (~${MV.bcVal} on ~${MV.pCost} cost). Ties to the model's build-to-core sheet.`, 5.8);
+  txt(s, `Levered equity cash flow — the line that drives the ${MV.bcIRR} IRR; recap / sale at stabilization. A 120-key resort & spa is already designed (FILLAT+). Illustrative.`,
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes("Phase 2 build-to-core LEVERED EQUITY cash flow — ties cell-for-cell to the model's Phase 2 sheet: equity $16.4M (bcEq, split Yr 0–1), stabilized levered CF ~$2.5M (NOI − debt; Yr 2 ramps at ~40%), exit equity $31.5M (recap $62M − loan), net equity CF [-8.2, -8.2, 1.0, 2.5, 34.0], IRR ~28% / ~2.3×. Project develops to ~$47M cost, recaps ~$62M @ a 7.5% cap.");
+  s.addNotes(`Phase 2 build-to-core LEVERED EQUITY cash flow — ties cell-for-cell to the model's Phase 2 sheet: equity ${MV.bcEq} (split Yr 0–1), stabilized levered CF ${fM(P2.bcStabLevCF)} (NOI − debt; Yr 2 ramps at ~40%), exit equity ${MV.bcXEq} (recap ${MV.bcVal} − loan), net equity CF [${MV.p2cf.net.slice(0,5).join(", ")}], IRR ${MV.bcIRR} / ${MV.bcEM}. Project develops to ~${MV.pCost} cost, recaps ~${MV.bcVal} @ a ${fP1(MIN.bcCap)} cap.`);
 }
 
 // ===================================== SLIDE 19 — CAPITAL ACCESS
@@ -1113,7 +1179,7 @@ function engagement() {
   rect(s, ML, 1.95, CW, 0.95, C.navy);
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
-  txt(s, "$15K/mo + expenses, then 30% of the dev-co 50% (the carry)", 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13, bold: true, color: C.white });
+  txt(s, `$15K/mo + expenses, then ${MV.carryPct} of the dev-co 50% (the carry)`, 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13, bold: true, color: C.white });
   txt(s, "Aligned to value created — and I intend to contribute capital to the dev co myself (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
   txt(s, "Aligned\nupside", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
@@ -1126,18 +1192,18 @@ function engagement() {
     ["1 · Advisory retainer", "$15K / mo", "Funds the work during entitlement — a floor; a cost to the deal, not netted from the carry"],
     ["2 · Expenses", "Reimbursed at cost", "Travel, survey, market & entitlement studies — billed separately"],
     ["3 · Capital placement fee", "1% debt · 2% equity", "On outside capital I place — small on capital-light Queenstown, real on the pipeline's acquisition equity"],
-    ["4 · Profit share (carry)", "30% of dev-co 50%", "≈ ~$2.1M on the Queenstown base case (~15% of profit); Bob & partners take the balance"],
+    [`4 · Profit share (carry)`, `${MV.carryPct} of dev-co 50%`, `≈ ${MV.carry} on the Queenstown base case (${MV.carryPctProfit} of profit); Bob & partners take the balance`],
     [{ text: "= Illustrative all-in (base case)", bold: true, font: HEAD, color: C.navy },
-      { text: "~$2.7M", bold: true, font: HEAD, color: C.aubergine, align: "center" },
-      { text: "~$2.1M carry + ~$0.5M retainer (~3 yrs) — ~19% of profit, mostly the contingent carry", color: C.navy }],
+      { text: MV.allIn, bold: true, font: HEAD, color: C.aubergine, align: "center" },
+      { text: `${MV.carry} carry + ${MV.retainerM} retainer (~3 yrs) — ${MV.allInPctProfit} of profit, mostly the contingent carry`, color: C.navy }],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.58 });
-  callout(s, "Aligned, not double-dipping: the retainer is a floor, placement fees only on outside capital I raise, and the carry (30% of the dev-co 50%) is the prize — most of the ~$2.7M is contingent on the upside.", 6.42);
+  callout(s, `Aligned, not double-dipping: the retainer is a floor, placement fees only on outside capital I raise, and the carry (${MV.carryPct} of the dev-co 50%) is the prize — most of the ${MV.allIn} is contingent on the upside.`, 6.42);
   s.addNotes(
     "Answers Bob's comp question (skin in the game over a big retainer) and shows how the pieces interplay — they stack, " +
     "but don't double-dip: (1) $15K/mo retainer funds the work (a cost); (2) expenses reimbursed; (3) a placement fee ONLY on " +
     "outside capital I raise (waived on my own co-invest; small on capital-light Queenstown, meaningful on the pipeline's " +
-    "acquisition equity); (4) the carry — 30% of the dev-co 50% ≈ ~$2.1M on the base case (~15% of profit). If I co-invest, " +
+    `acquisition equity); (4) the carry — ${MV.carryPct} of the dev-co 50% ≈ ${MV.carry} on the base case (${MV.carryPctProfit} of profit). If I co-invest, ` +
     "that capital earns alongside everyone else's, separate from the carry. The retainer is a floor; the carry is the prize."
   );
 }

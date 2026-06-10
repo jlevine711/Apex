@@ -41,6 +41,14 @@ it to **both** [PptxGenJS](https://gitbrent.github.io/PptxGenJS/) and
 embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
 [SIL OFL](https://openfontlicense.org/)); if absent it falls back to Helvetica.
 
+**The deck is dynamically linked to the model.** `generate.js` does
+`require("./model")` and renders **every model-derived figure** — totals, the
+50/50 split, JAL's carry/all-in, both cash-flow tables, and both sensitivity
+grids — from the engine (via a small `MV` formatting layer). Nothing financial
+is hardcoded in the deck, so the presentation and the workbook **cannot drift**:
+change an input in `model.js` and the next `npm run all` updates both. (`model.js`
+exports its engine and only writes the `.xlsx` when run directly.)
+
 `model.js` writes a backup financial model — `JAL_Queenstown_Harbor_Model.xlsx`
 — that is **fully dynamic and calculated**: a single `INPUTS` object drives two
 pure calc engines (`calcP1`, `calcP2`) that derive *every* figure — totals, the
