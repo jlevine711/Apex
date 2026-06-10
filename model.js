@@ -149,9 +149,13 @@ const p2IRR = (bcUp, bcCap, bcLTC = IN.bcLTC) => calcP2({ bcUp, bcCap, bcLTC }).
 const P1 = calcP1();
 const P2 = calcP2();
 
+// The deck (generate.js) imports this engine, so deck and workbook can't drift.
+module.exports = { IN, irr, calcP1, calcP2, p1Profit, p2IRR, P1, P2 };
+
 // ============================================================================
-// WORKBOOK
+// WORKBOOK  (rendered only when run directly: `node model.js` / npm run model)
 // ============================================================================
+if (require.main === module) {
 const NAVY = "FF0B163C", AUB = "FF3A243A", CREAM = "FFF4F2ED", WHITE = "FFFFFFFF";
 const wb = new ExcelJS.Workbook();
 wb.creator = "JAL Strategies";
@@ -515,3 +519,4 @@ wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
     "\n             vs finished: profit $" + (P1.finProfit / 1e6).toFixed(1) + "M on $" + (P1.finCost / 1e6).toFixed(1) + "M cost (" + P1.finRoiCost.toFixed(1) + "x)" +
     "\n             P2: hold ~" + (P2.irr2 * 100).toFixed(1) + "% / b-t-c ~" + (P2.bcIRR * 100).toFixed(1) + "% (" + P2.bcEM.toFixed(2) + "x)"))
   .catch((e) => { console.error(e); process.exit(1); });
+} // end require.main gate
