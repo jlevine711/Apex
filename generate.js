@@ -102,7 +102,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 23;
+const TOTAL = 24;
 let PAGENO = 2; // auto page counter — cover is 1, chrome slides number themselves 2..N-1, Thank You is N
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
@@ -1051,13 +1051,50 @@ function engagement() {
       { text: `${MV.carry} carry + ${MV.retainerM} retainer (~3 yrs) — ${MV.allInPctProfit} of profit, mostly the contingent carry`, color: C.navy }],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.58 });
-  callout(s, `Aligned, not double-dipping: the retainer is a floor, placement fees only on outside capital I raise, and the carry (${MV.carryPct} of the dev-co 50%) is the prize — most of the ${MV.allIn} is contingent on the upside.`, 6.42);
+  callout(s, `Aligned, not double-dipping — most of the ${MV.allIn} is the contingent carry. And if it's not working, there's a clean off-ramp (next page).`, 6.42);
   s.addNotes(
     "Answers Bob's comp question (skin in the game over a big retainer) and shows how the pieces interplay — they stack, " +
     "but don't double-dip: (1) $15K/mo retainer funds the work (a cost); (2) expenses reimbursed; (3) a placement fee ONLY on " +
     "outside capital I raise (waived on my own co-invest; small on capital-light Queenstown, meaningful on the pipeline's " +
     `acquisition equity); (4) the carry — ${MV.carryPct} of the dev-co 50% ≈ ${MV.carry} on the base case (${MV.carryPctProfit} of profit). If I co-invest, ` +
-    "that capital earns alongside everyone else's, separate from the carry. The retainer is a floor; the carry is the prize."
+    "that capital earns alongside everyone else's, separate from the carry. The retainer is a floor; the carry is the prize. The off-ramp is the next slide."
+  );
+}
+
+// ==================================== SLIDE — THE OFF-RAMP / EXIT
+function offramp() {
+  const s = pptx.addSlide();
+  chrome(s, {
+    eyebrow: "THE OFF-RAMP  ·  FOR DISCUSSION",
+    title: "If it's not working — how you exit me.",
+    desc: "You asked the right question. Worst case, in plain terms: an easy, fast off-ramp where you only ever owe me for value already created — because my pay is mostly contingent carry.",
+    page: 21,
+  });
+  rect(s, ML, 1.95, CW, 0.86, C.navy);
+  rect(s, ML, 1.95, 0.12, 0.86, C.aubergine);
+  txt(s, "30-day notice", ML + 0.35, 2.02, 3.6, 0.72, { font: HEAD, size: 24, bold: true, color: C.mauve, valign: "middle" });
+  txt(s, "Terminate for convenience — either side, no reason needed.", 4.5, 1.95, 5.0, 0.86, { font: HEAD, size: 13, bold: true, color: C.white, valign: "middle", lh: 16 });
+  txt(s, "Worst\ncase", 9.6, 1.95, 3.23, 0.86, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
+
+  const cols = [
+    { w: 2.55, font: HEAD, bold: true, color: C.navy, size: 11 },
+    { w: 2.85, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "center" },
+    { w: 6.93, color: C.plum, size: 9.5, lh: 12 },
+  ];
+  const rows = [
+    ["Advisory role", "30-day notice, either side", "Terminate for convenience — no reason needed. Retainer + approved expenses paid through the notice date; no severance."],
+    ["Placement fees", "Earned + 6-mo tail", "Due only on capital actually placed before you let me go, plus a 6-month tail on capital I'd already sourced."],
+    ["The carry", "Keep only what's earned", "Without cause: I keep carry on parcels already closed or under contract — speculative forfeits. For cause: forfeit all unrealized (clawback for fraud)."],
+    ["My co-invest", "Returned at NAV", "It's an investment, not comp — returned like any investor's. I don't lose it; it doesn't keep me in the deal."],
+    ["Clean break", "Optional buyout", "I hand over all work product and step out of the dev co. You can buy out my vested carry at a set formula for a fully clean break."],
+  ];
+  table(s, ML, 2.95, cols, ["If we part ways", "Terms", "What happens"], rows, { rowH: 0.62 });
+  callout(s, "You can let me go any time — and only ever owe me for value already created. That's the point of comp that's mostly contingent carry.", 6.5);
+  s.addNotes(
+    "Directly answers Bob's email ('how do I get rid of you if you are not working out — I always look at worst case'). A clean, fast off-ramp: " +
+    "30-day terminate-for-convenience on the advisory; placement fees only on capital actually placed (+6-mo tail); carry only on parcels already " +
+    "closed / under contract (for cause → forfeit all unrealized + clawback for fraud); co-invest returned at NAV (it's an investment, not comp); " +
+    "optional buyout of vested carry for a clean break. The whole point: comp is mostly contingent, so 'getting rid of me' costs only value already created."
   );
 }
 
@@ -1202,6 +1239,7 @@ phase1cf();
 capitalAccess();
 structure();
 engagement();
+offramp();
 whyJAL();
 path();
 thankYou();

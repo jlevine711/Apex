@@ -87,9 +87,10 @@ finished-lot comparison. Outputs:
 18. Capital Access — JAL's debt & equity network
 19. The Structure — a development company under Capital H6 (50/50)
 20. Engagement & Compensation — $15K/mo retainer + reimbursed expenses, 1% debt / 2% equity placement, 30% of the dev-co 50% (~$2.1M carry; ~$2.7M all-in)
-21. Why JAL — Justin A. Levine
-22. The Path — diligence → Renault site visit (late Jul / early Aug) → mandate
-23. Thank You
+21. The Off-Ramp / Exit — how Bob exits if it's not working (30-day notice; keep only earned carry; for-cause forfeit; buyout)
+22. Why JAL — Justin A. Levine
+23. The Path — diligence → Renault site visit (late Jul / early Aug) → mandate
+24. Thank You
 
 ## Verified facts (public sources)
 
