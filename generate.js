@@ -92,6 +92,21 @@ const MV = {
   p2sens: [0.10, 0.22, 0.35].map((u) => [0.07, 0.075, 0.08, 0.085].map((c) => fP1(MODEL.p2IRR(u, c)))),
 };
 
+// ----- Build-time guard: fail loudly if the deck↔model link is broken -------
+(function assertModelLink() {
+  for (const fn of ["calcP1", "calcP2", "p2IRR"])
+    if (typeof MODEL[fn] !== "function") throw new Error(`MODEL LINK BROKEN: MODEL.${fn} is not a function (deck and model are out of sync).`);
+  for (const o of ["P1", "P2", "IN"])
+    if (!MODEL[o] || typeof MODEL[o] !== "object") throw new Error(`MODEL LINK BROKEN: MODEL.${o} missing.`);
+  const bad = [];
+  (function scan(v, path) {
+    if (typeof v === "string") { if (/NaN|undefined|Infinity/.test(v)) bad.push(`${path} = ${JSON.stringify(v)}`); }
+    else if (Array.isArray(v)) v.forEach((x, i) => scan(x, `${path}[${i}]`));
+    else if (v && typeof v === "object") for (const k in v) scan(v[k], `${path}.${k}`);
+  })(MV, "MV");
+  if (bad.length) throw new Error("MODEL LINK BROKEN: non-finite figure(s) — a model field was renamed/removed:\n  " + bad.join("\n  "));
+})();
+
 // ----- Design tokens -------------------------------------------------------
 const C = {
   navy: "0B163C",
