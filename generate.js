@@ -29,7 +29,7 @@ const nodePath = require("path");
 // The deck imports model.js's calc engine and renders every model-derived
 // figure from it, so the presentation and the workbook cannot drift.
 const MODEL = require("./model");
-const { P1, P2 } = MODEL;
+const { P1 } = MODEL;
 const MIN = MODEL.IN;
 const fM  = (x) => "$" + (x / 1e6).toFixed(1) + "M";    // $X.XM
 const fM0 = (x) => "$" + Math.round(x / 1e6) + "M";     // $XM
@@ -55,21 +55,6 @@ function cfRows(revArr, netArr) {
     cum:  [...cum.map(cfc), ""],
   };
 }
-// Phase 2 build-to-core equity cash-flow rows from the engine
-function p2cfRows() {
-  const bcf = P2.bcf.map(r1);
-  const eq = [bcf[0], bcf[1], 0, 0, 0];
-  const op = [0, 0, bcf[2], r1(P2.bcStabLevCF), r1(P2.bcStabLevCF)];
-  const recap = [0, 0, 0, 0, r1(P2.bcXEq)];
-  let c = 0; const cum = bcf.map((v) => +(c += v).toFixed(1));
-  return {
-    eq:    [...eq.map(cfc), "(" + Math.abs(sumA(eq)).toFixed(1) + ")"],
-    op:    [...op.map(cfc), sumA(op).toFixed(1)],
-    recap: [...recap.map(cfc), sumA(recap).toFixed(1)],
-    net:   [...bcf.map(cfc), sumA(bcf).toFixed(1)],
-    cum:   [...cum.map(cfc), ""],
-  };
-}
 const MV = {
   netAc: Math.round(P1.netAc).toString(),
   lots: Math.round(P1.lots).toString(),
@@ -82,21 +67,13 @@ const MV = {
   allInPctProfit: fPt(P1.jalAllIn / P1.profit), retainerM: fMt(P1.retainerTotal),
   p1cf: cfRows(P1.revArr, P1.netCF),
   p1sens: [55000, 70000, 85000].map((px) => [240, 280, 320].map((l) => fM(MODEL.calcP1({ entitledPx: px, lots: l }).profit))),
-  hCost: fM(P2.hCost), rCost: fM(P2.rCost), pCost: fM(P2.pCost),
-  hNOI: fM(P2.hNOI), rNOI: fM(P2.rNOI), pNOI: fM(P2.pNOI),
-  hYoC: fP1(P2.hNOI / P2.hCost), rYoC: fP1(P2.rNOI / P2.rCost), pYoC: fP1(P2.pYoC),
-  bcNOI: fM(P2.bcNOI), bcYoC: fP1(P2.bcYoC), bcVal: fM0(P2.bcVal),
-  bcIRR: fPt(P2.bcIRR), bcEM: fXt(P2.bcEM), holdIRR: fPt(P2.irr2),
-  bcEq: fM(P2.bcEq), bcXEq: fM(P2.bcXEq),
-  p2cf: p2cfRows(),
-  p2sens: [0.10, 0.22, 0.35].map((u) => [0.07, 0.075, 0.08, 0.085].map((c) => fP1(MODEL.p2IRR(u, c)))),
 };
 
 // ----- Build-time guard: fail loudly if the deck↔model link is broken -------
 (function assertModelLink() {
-  for (const fn of ["calcP1", "calcP2", "p2IRR"])
+  for (const fn of ["calcP1"])
     if (typeof MODEL[fn] !== "function") throw new Error(`MODEL LINK BROKEN: MODEL.${fn} is not a function (deck and model are out of sync).`);
-  for (const o of ["P1", "P2", "IN"])
+  for (const o of ["P1", "IN"])
     if (!MODEL[o] || typeof MODEL[o] !== "object") throw new Error(`MODEL LINK BROKEN: MODEL.${o} missing.`);
   const bad = [];
   (function scan(v, path) {
@@ -125,7 +102,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 26;
+const TOTAL = 23;
 let PAGENO = 2; // auto page counter — cover is 1, chrome slides number themselves 2..N-1, Thank You is N
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
@@ -432,7 +409,7 @@ function theLandBank() {
   chrome(s, {
     eyebrow: "THE LAND BANK",
     title: "The upside is the land around the golf.",
-    desc: "The resort operates; the value-creation is entitling the non-conservation acreage and selling entitled lots to builders — capital-light, the builder funds the horizontal — additive to the hospitality.",
+    desc: "The resort operates; the value-creation is entitling the non-conservation acreage and selling entitled lots to builders — capital-light, the builder funds the horizontal — additive to the operating resort.",
     page: 4,
   });
   const cards = [
@@ -609,12 +586,12 @@ function renault() {
   chrome(s, {
     eyebrow: "OPPORTUNITY 2  ·  RENAULT WINERY",
     title: "Renault — opportunity two, and the site visit.",
-    desc: "Renault Winery (Egg Harbor City, NJ — ~25 min from Atlantic City) is the next opportunity after Queenstown, and where we'll meet in person. The township has offered land for ~34 lots overlooking the course, a +100–200-room hotel expansion is planned, and the architect is already mapping lots.",
+    desc: "Renault Winery (Egg Harbor City, NJ — ~25 min from Atlantic City) is the next opportunity after Queenstown, and where we'll meet in person. The township has offered land for ~34 lots overlooking the course, and the architect is already mapping them.",
     page: 9,
   });
   const cards = [
     ["~34 lots", "Township-offered land", "Overlooking the golf course"],
-    ["+100–200", "Hotel rooms planned", "Expansion off the back of the resort"],
+    ["Lake + venue", "Run profitably", "Operating upside beyond golf"],
     ["~25 min", "From Atlantic City", "Where I'll meet Bob & Josh"],
     ["In motion", "Architect mapping lots", "Underway since the last meeting"],
   ];
@@ -625,13 +602,13 @@ function renault() {
     "Josh's original property — the proof case for the playbook.",
     [
       "The township has offered additional land for ~34 lots; the architect is already boxing them out.",
-      "A required hotel expansion (+100–200 rooms) layers hospitality on top of the lot sales.",
+      "Beyond the ~34 lots, more developable land wraps the course and lake — room to grow the plan.",
       "The winery already runs a lake & campground profitably — operating upside beyond golf.",
       "Closest asset to walk — ~25 minutes from Atlantic City airport; the natural place to meet and see the playbook on the ground.",
     ]);
   s.addNotes(
     "Renault (NJ) is opportunity 2 (after Queenstown) and the site-visit location (Bob: 'an expansion down at Reno, which is where I'd meet you'). " +
-    "Township offered ~34 lots; +100–200 hotel rooms planned; architect already mapping. The capital-light entitled-lot playbook applies here too."
+    "Township offered ~34 lots; architect already mapping. The capital-light entitled-lot playbook applies here too."
   );
 }
 
@@ -651,7 +628,7 @@ function pipeline() {
   ];
   const rows = [
     ["Queenstown Harbor", "MD · opportunity 1 (this proposal)", "~280 entitled lots around the 36 holes (~1,000 ac, ~zero basis)"],
-    ["Renault Winery", "NJ · opportunity 2", "~34 township-offered lots + a +100–200-room hotel expansion"],
+    ["Renault Winery", "NJ · opportunity 2", "~34 township-offered lots; more developable land around the course & lake"],
     ["The Golf Club at South River", "MD · operating", "Profitable club — appraised ~2× the purchase price"],
     ["Kent Island", "MD · venue", "Clubhouse / event venue — Palantir rented it for a week"],
     ["Colorado course", "Off-market", "Not yet on the website; equity needed to acquire"],
@@ -856,7 +833,7 @@ function waterfall() {
 function sensitivity() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "SENSITIVITY  ·  PHASE 1 PROFIT",
+    eyebrow: "SENSITIVITY  ·  PROFIT",
     title: "How robust is the profit?",
     desc: `Net project profit ($M) across the entitled-lot price and the lot yield — the two swing factors. The base — ${MV.entPx} lots, ~${MV.lots} of them — pencils to ~${MV.profit}; even conservative pricing holds double-digit millions. Split 50/50.`,
     page: 13,
@@ -877,7 +854,7 @@ function sensitivity() {
   txt(s, "Net project profit ($M); each cell re-runs the model. Half flows to the property (investor liquidity), half to the development company. Illustrative.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
   s.addNotes(
-    `Sensitivity of Phase 1 net profit to entitled-lot price × lot yield. Base ${MV.entPx} / ${MV.lots} lots → ~${MV.profit}, split 50/50 ` +
+    `Sensitivity of net profit to entitled-lot price × lot yield. Base ${MV.entPx} / ${MV.lots} lots → ~${MV.profit}, split 50/50 ` +
     `(${MV.half} each). Even at $55K / 240 lots it clears ~$8M; $85K or 320 lots pushes toward $18–22M. Each cell re-runs the model.`
   );
 }
@@ -916,117 +893,12 @@ function builders() {
   );
 }
 
-// ===================================== SLIDE 13 — PHASE 2: HOSPITALITY
-function phase2() {
-  const s = pptx.addSlide();
-  chrome(s, {
-    eyebrow: "PHASE 2  ·  HOTEL REQUIRED  ·  ILLUSTRATIVE",
-    title: "Phase 2 — the hotel (a required component).",
-    desc: "The hotel is required (per Bob) — at Renault the plan is +100–200 rooms; at Queenstown a 120-key resort & spa is already designed (FILLAT+). VIVÂMEE operates; JAL leads capital formation. Build-to-core, recapitalizing at stabilization (~Yr 4), clears a mid-to-high-20s return.",
-    page: 15,
-  });
-  const costCols = [
-    { w: 3.95, color: C.navy, size: 9.5 },
-    { w: 1.55, color: C.navy, bold: true, font: HEAD, size: 9.5, align: "right" },
-  ];
-  const cost = [
-    [`Hotel (${MIN.hKeys} keys × ${fK(MIN.hCostKey)})`, MV.hCost],
-    [`Restaurants (${MIN.rSF / 1e3}K SF × $${MIN.rCostSF})`, MV.rCost],
-    ["Land — hospitality parcel", fM(MIN.pLand)],
-    ["Soft / FF&E / pre-opening", fM(MIN.pSoft)],
-    [{ text: "TOTAL DEVELOPMENT COST", bold: true, font: HEAD, color: C.navy },
-      { text: MV.pCost, bold: true, font: HEAD, color: C.aubergine, align: "right" }],
-  ];
-  table(s, ML, 2.0, costCols, ["DEVELOPMENT COST", ""], cost, { rowH: 0.48 });
-
-  const noiCols = [
-    { w: 1.95, color: C.navy, size: 9.5 },
-    { w: 0.65, color: C.aubergine, bold: true, font: HEAD, size: 9, align: "right" },
-    { w: 0.5, color: C.plum, size: 8, align: "right" },
-  ];
-  const noi = [
-    ["Hotel NOI", MV.hNOI, MV.hYoC],
-    ["Restaurant NOI", MV.rNOI, MV.rYoC],
-    [{ text: "STABILIZED NOI", bold: true, font: HEAD, color: C.navy },
-      { text: MV.pNOI, bold: true, font: HEAD, color: C.aubergine, align: "right" },
-      { text: MV.pYoC, color: C.plum, align: "right" }],
-  ];
-  table(s, 6.1, 2.0, noiCols, ["STABILIZED NOI", "", "YoC"], noi, { rowH: 0.48 });
-
-  rect(s, 6.1, 3.92, 3.1, 1.84, C.navy);
-  rect(s, 6.1, 3.92, 0.1, 1.84, C.aubergine);
-  txt(s, "KEY METRICS", 6.32, 4.02, 2.8, 0.25, { font: HEAD, size: 8.5, bold: true, color: C.mauve, spc: 2 });
-  txt(s, `Build-to-core: recap / sell ~Yr 4  ·  ${fP1(MIN.bcCap)} exit cap → ~${MV.bcVal}  ·  ${fP(MIN.bcLTC)} LTC  ·  premium NOI (VIVÂMEE)  ·  ~2.4-pt development spread  ·  land contributed`,
-    6.32, 4.3, 2.78, 1.4, { font: BODY, size: 8.5, color: C.cream, lh: 11.5, valign: "top" });
-
-  rect(s, 9.3, 2.0, 3.53, 3.76, C.navy);
-  rect(s, 9.3, 2.0, 0.12, 3.76, C.aubergine);
-  txt(s, "RETURNS", 9.55, 2.13, 3.2, 0.3, { font: HEAD, size: 10, bold: true, color: C.mauve, spc: 3 });
-  const mets = [
-    [MV.pCost, "Total project cost"],
-    [MV.bcNOI, "Premium NOI (build-to-core)"],
-    [MV.bcYoC, "Yield on cost (premium)"],
-    [MV.bcEM, "Equity multiple (~4-yr)"],
-    [MV.bcIRR, "Build-to-core IRR"],
-  ];
-  let my = 2.5;
-  mets.forEach(([v, l]) => {
-    txt(s, v, 9.55, my, 3.1, 0.32, { font: HEAD, size: 17, bold: true, color: C.white });
-    txt(s, l, 9.55, my + 0.31, 3.1, 0.22, { font: BODY, size: 8.5, color: C.mauve });
-    my += 0.63;
-  });
-
-  rect(s, ML, 5.95, CW, 0.45, C.aubergine);
-  txt(s, `Built to core (recap at stabilization), the hotel clears ${MV.bcIRR} IRR / ${MV.bcEM}. Held for income it's ${MV.holdIRR} — the spread is the contributed land + VIVÂMEE's premium NOI.`,
-    ML + 0.2, 5.95, CW - 0.4, 0.45, { font: BODY, size: 10.5, bold: true, color: C.white, align: "center" });
-  footnote(s, 6.55, [SRC.fillat, SRC.hvs, SRC.hcap, SRC.rcost]);
-  s.addNotes(
-    "Phase 2 = hospitality upside, VIVÂMEE-led; JAL leads capital formation. A 120-key resort & spa is already designed " +
-    `(FILLAT+ Architecture), validating the program. Two cases in the model: hold for income (~${fP(P2.pYoC)} YoC, ` +
-    `${MV.holdIRR} IRR — the floor) or BUILD-TO-CORE — recap/sell at stabilization (~Yr 4) at a ${fP1(MIN.bcCap)} cap, capturing the development ` +
-    `spread from the contributed land + premium NOI → ${MV.bcIRR} IRR / ${MV.bcEM}. Build-to-core lets JAL earn the development return ` +
-    "while VIVÂMEE keeps and operates the resort. Model is source of truth."
-  );
-}
-
-// ===================================== SLIDE 16 — PHASE 2 SENSITIVITY
-function phase2sens() {
-  const s = pptx.addSlide();
-  chrome(s, {
-    eyebrow: "SENSITIVITY  ·  PHASE 2 BUILD-TO-CORE",
-    title: "How robust is the hotel return?",
-    desc: `Build-to-core IRR (${fP(MIN.bcLTC)} LTC, recap at stabilization) across stabilized NOI and exit cap — the two biggest swing factors. Base (${MV.bcNOI} NOI, ${fP1(MIN.bcCap)} cap) → ${MV.bcIRR}; it holds in the mid-20s+ as long as NOI lands and caps stay sub-8%.`,
-    page: 16,
-  });
-  const cols = [
-    { w: 2.4, font: HEAD, bold: true, color: C.navy, size: 9.5 },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-    { w: 2.475, color: C.navy, size: 12, align: "center" },
-  ];
-  const rows = [
-    ["$4.2M NOI", MV.p2sens[0][0], MV.p2sens[0][1], MV.p2sens[0][2], MV.p2sens[0][3]],
-    ["$4.65M NOI  (base)", MV.p2sens[1][0], { text: MV.p2sens[1][1], bold: true, color: C.aubergine, font: HEAD }, MV.p2sens[1][2], MV.p2sens[1][3]],
-    ["$5.15M NOI", MV.p2sens[2][0], MV.p2sens[2][1], MV.p2sens[2][2], MV.p2sens[2][3]],
-  ];
-  table(s, ML, 2.3, cols, ["BUILD-TO-CORE IRR  (NOI / cap)", "7.0% cap", "7.5% cap", "8.0% cap", "8.5% cap"], rows, { rowH: 0.85, headSize: 9 });
-  callout(s, `Base ${MV.bcIRR}. Strong NOI + a sub-8% cap → low-to-high 30s; soft NOI or an 8.5% cap pulls it toward the high-teens / low-20s.`, 5.55);
-  txt(s, "Build-to-core project IRR (65% LTC, recap ~Yr 4). VIVÂMEE-led; JAL leads capital formation. Each cell re-runs the model. Illustrative.",
-    ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes(
-    `Phase 2 build-to-core IRR sensitized to stabilized NOI × exit cap (the development spread). Base ${MV.bcNOI} NOI / ${fP1(MIN.bcCap)} cap ` +
-    `→ ${MV.bcIRR}. Premium NOI or a 7% cap pushes it to the mid-30s; an 8.5% cap or soft NOI drops it to ~12–20%. ` +
-    `${fP(MIN.bcLTC)} LTC, recap at stabilization. Model is the source of truth.`
-  );
-}
-
 // ===================================== SLIDE 17 — PHASE 1 CASH FLOW
 function phase1cf() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "PHASE 1  ·  CASH FLOW",
-    title: "Phase 1 — entitled-lot cash flow.",
+    eyebrow: "PROJECT CASH FLOW",
+    title: "Entitled-lot cash flow.",
     desc: `Capital-light entitled-lot project cash flow ($M). We fund the soft costs to entitle (Yr 0–2); entitled lots sell as approvals land (Yr 2–4). Net profit ~${MV.profit}, then split 50/50. Illustrative.`,
     page: 17,
   });
@@ -1051,41 +923,7 @@ function phase1cf() {
   callout(s, `Net profit ~${MV.profit} on ~${MV.cost} of soft cost — ~${MV.roi} on cost, ${MV.irr} unlevered project IRR; the builder funds the horizontal. Costs repaid, then a straight 50/50.`, 5.8);
   txt(s, "Project cash flow; illustrative phasing. The builder funds the horizontal. Ties to the model's entitled-lot sheet. Figures subject to confirmation.",
     ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes(`Phase 1 entitled-lot project cash flow — ties to the model: ${MV.rev} revenue, ${MV.cost} soft cost, ${MV.profit} profit (~${MV.roi} on cost). We fund only soft costs Yr 0–2; entitled lots sell Yr 2–4; the builder funds the horizontal. Costs repaid, then a straight 50/50.`);
-}
-
-// ===================================== SLIDE 18 — PHASE 2 CASH FLOW
-function phase2cf() {
-  const s = pptx.addSlide();
-  chrome(s, {
-    eyebrow: "PHASE 2  ·  BUILD-TO-CORE CASH FLOW",
-    title: "Phase 2 — build-to-core equity cash flow.",
-    desc: `Hospitality build-to-core, levered equity cash flow ($M). Build to ~${MV.pCost} cost at ${fP(MIN.bcLTC)} LTC; stabilize at the premium NOI; recap / sell at ~Yr 4 (~${MV.bcVal} @ a ${fP1(MIN.bcCap)} cap). VIVÂMEE operates. Illustrative.`,
-    page: 18,
-  });
-  const cf = (label, vals, opts = {}) => [
-    opts.bold ? { text: label, bold: true, font: HEAD, color: C.navy } : label,
-    ...vals.slice(0, 5).map((v) => (opts.bold ? { text: v, bold: true, font: HEAD, color: C.navy, align: "center" } : v)),
-    { text: vals[5] || "", bold: true, font: HEAD, color: C.aubergine, align: "right" },
-  ];
-  const cols = [
-    { w: 3.4, font: HEAD, bold: true, color: C.navy, size: 9.5 },
-    { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.42, color: C.navy, size: 10, align: "center" },
-    { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.42, color: C.navy, size: 10, align: "center" },
-    { w: 1.42, color: C.navy, size: 10, align: "center" }, { w: 1.78, color: C.aubergine, bold: true, font: HEAD, size: 10, align: "right" },
-  ];
-  const rows = [
-    cf("Equity invested", MV.p2cf.eq),
-    cf("Operating cash flow (after debt)", MV.p2cf.op),
-    cf("Recap equity (sale − loan)", MV.p2cf.recap),
-    cf("Net equity cash flow", MV.p2cf.net, { bold: true }),
-    cf("Cumulative cash flow", MV.p2cf.cum),
-  ];
-  table(s, ML, 2.25, cols, ["$M", "Yr 0", "Yr 1", "Yr 2", "Yr 3", "Yr 4", "Total"], rows, { rowH: 0.6, headSize: 9 });
-  callout(s, `~${MV.bcEq} equity → ~$${Math.round(sumA(P2.bcf) / 1e6)}M net; build-to-core (${fP(MIN.bcLTC)} LTC) levered IRR ${MV.bcIRR} / ${MV.bcEM} at the Yr-4 recap (~${MV.bcVal} on ~${MV.pCost} cost). Ties to the model's build-to-core sheet.`, 5.8);
-  txt(s, `Levered equity cash flow — the line that drives the ${MV.bcIRR} IRR; recap / sale at stabilization. A 120-key resort & spa is already designed (FILLAT+). Illustrative.`,
-    ML, 6.55, CW, 0.28, { font: BODY, size: 7.5, color: C.plum });
-  s.addNotes(`Phase 2 build-to-core LEVERED EQUITY cash flow — ties cell-for-cell to the model's Phase 2 sheet: equity ${MV.bcEq} (split Yr 0–1), stabilized levered CF ${fM(P2.bcStabLevCF)} (NOI − debt; Yr 2 ramps at ~40%), exit equity ${MV.bcXEq} (recap ${MV.bcVal} − loan), net equity CF [${MV.p2cf.net.slice(0,5).join(", ")}], IRR ${MV.bcIRR} / ${MV.bcEM}. Project develops to ~${MV.pCost} cost, recaps ~${MV.bcVal} @ a ${fP1(MIN.bcCap)} cap.`);
+  s.addNotes(`Entitled-lot project cash flow — ties to the model: ${MV.rev} revenue, ${MV.cost} soft cost, ${MV.profit} profit (~${MV.roi} on cost). We fund only soft costs Yr 0–2; entitled lots sell Yr 2–4; the builder funds the horizontal. Costs repaid, then a straight 50/50.`);
 }
 
 // ===================================== SLIDE 19 — CAPITAL ACCESS
@@ -1360,10 +1198,7 @@ basis();
 waterfall();
 sensitivity();
 builders();
-phase2();
-phase2sens();
 phase1cf();
-phase2cf();
 capitalAccess();
 structure();
 engagement();

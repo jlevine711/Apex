@@ -44,23 +44,23 @@ embeds the brand fonts from `fonts/` (Montserrat & DM Sans, both
 
 **The deck is dynamically linked to the model.** `generate.js` does
 `require("./model")` and renders **every model-derived figure** — totals, the
-50/50 split, JAL's carry/all-in, both cash-flow tables, and both sensitivity
-grids — from the engine (via a small `MV` formatting layer). Nothing financial
+50/50 split, JAL's carry/all-in, the cash-flow table, and the sensitivity
+grid — from the engine (via a small `MV` formatting layer). Nothing financial
 is hardcoded in the deck, so the presentation and the workbook **cannot drift**:
 change an input in `model.js` and the next `npm run all` updates both. (`model.js`
 exports its engine and only writes the `.xlsx` when run directly.)
 
 `model.js` writes a backup financial model — `JAL_Queenstown_Harbor_Model.xlsx`
-— that is **fully dynamic and calculated**: a single `INPUTS` object drives two
-pure calc engines (`calcP1`, `calcP2`) that derive *every* figure — totals, the
-year-by-year cash flows, IRRs, the promote split and the sensitivity grids.
+— that is **fully dynamic and calculated**: a single `INPUTS` object drives a
+pure calc engine (`calcP1`) that derives *every* figure — totals, the
+year-by-year cash flow, the project IRR, the 50/50 split and the sensitivity grid.
 There are no hardcoded results. In the workbook the **INPUTS block plus the
 cash-flow timing vectors are the only typed numbers**; every other cell is a
 **live Excel formula** that references them (and the file is flagged to
 recalculate on open, so spreadsheet and engine always agree). Edit any input —
-in the code or in the sheet — and everything recomputes. Two sheets, **Phase 1**
-(entitled-lot, capital-light, with the straight 50/50 split and a finished-lot
-comparison) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
+in the code or in the sheet — and everything recomputes. One sheet: the
+**entitled-lot, capital-light** model with the straight 50/50 split and a
+finished-lot comparison. Outputs:
 
 - `JAL_Queenstown_Harbor_Proposal.pptx` · `JAL_Queenstown_Harbor_Proposal.pdf`
 - `JAL_Queenstown_Harbor_Model.xlsx`
@@ -83,16 +83,13 @@ comparison) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 14. The Deal — a straight 50/50, no waterfall
 15. Profit Sensitivity — net profit across entitled-lot price × lot yield
 16. Buyer Universe / Liquidity — named regional + national lot buyers (incl. Cole)
-17. Phase 2 — the Hotel (a required component) + restaurants *(illustrative)*
-18. Phase 2 Sensitivity — build-to-core IRR across stabilized NOI × exit cap
-19. Phase 1 Cash Flow — entitled-lot project cash flow, year by year *(illustrative)*
-20. Phase 2 Cash Flow — build-to-core equity cash flow *(illustrative)*
-21. Capital Access — JAL's debt & equity network
-22. The Structure — a development company under Capital H6 (50/50)
-23. Engagement & Compensation — $15K/mo retainer + reimbursed expenses, 1% debt / 2% equity placement, 30% of the dev-co 50% (~$2.1M carry; ~$2.7M all-in)
-24. Why JAL — Justin A. Levine
-25. The Path — diligence → Renault site visit (late Jul / early Aug) → mandate
-26. Thank You
+17. Cash Flow — entitled-lot project cash flow, year by year *(illustrative)*
+18. Capital Access — JAL's debt & equity network
+19. The Structure — a development company under Capital H6 (50/50)
+20. Engagement & Compensation — $15K/mo retainer + reimbursed expenses, 1% debt / 2% equity placement, 30% of the dev-co 50% (~$2.1M carry; ~$2.7M all-in)
+21. Why JAL — Justin A. Levine
+22. The Path — diligence → Renault site visit (late Jul / early Aug) → mandate
+23. Thank You
 
 ## Verified facts (public sources)
 
@@ -145,21 +142,20 @@ derived and internally consistent:
   but needs **~5× the capital** (~$25M) and all the horizontal execution +
   absorption risk for only a few $M more profit — so we stay light, and it's
   what the sponsor wants.
-- **Year-by-year cash flow** (slides 19–20): Phase 1 entitled-lot project cash
-  flow nets ~$14.3M on ~$5.3M soft cost; Phase 2 build-to-core levered equity
-  cash flow — ~$16.4M equity in, recap ~$62M @ a 7.5% cap → ~28% IRR / ~2.3×.
-  Both tie to the model.
+- **Year-by-year cash flow** (slide 17): the entitled-lot project cash flow nets
+  ~$14.3M on ~$5.3M soft cost (~86% unlevered IRR on a near-zero land basis); it
+  ties cell-for-cell to the model.
 
 `JAL_Queenstown_Harbor_Model.xlsx` is the live backup model behind these
-numbers — Phase 1 (entitled-lot, capital-light: **~$14.3M profit on ~$5.3M
-cost, ~2.7× on cost**, split a straight 50/50; with a profit sensitivity over
-entitled-lot price × lot yield, and a finished-lot comparison) **and** Phase 2
-hospitality (the **hotel is a required component**; ~$47M resort — hold-for-income
-~12% IRR, or **build-to-core** recap at stabilization **~28% IRR / ~2.3×**; hotel
-cost/key per HVS 2025, ~8% cap). The **entitled-lot price (~$70K) is the key
-assumption** — confirm against builder bids. A **120-key Queenstown Harbor Resort
-& Spa is already designed** (FILLAT+ Architecture). The 700 ac / density / haircuts
-are estimates — recalibrate against survey, easement and entitlement (Queen Anne's
-County) data before sharing externally.
+numbers — an **entitled-lot, capital-light** development: **~$14.3M profit on
+~$5.3M cost, ~2.7× on cost**, split a straight 50/50 (no pref, no promote), with
+a profit sensitivity over entitled-lot price × lot yield and a finished-lot
+comparison. The **entitled-lot price (~$70K) is the key assumption** — confirm
+against builder bids. The 700 ac / density / haircuts are estimates — recalibrate
+against survey, easement and entitlement (Queen Anne's County) data before
+sharing externally.
+
+> *Note: an earlier hospitality/hotel "Phase 2" has been removed — this proposal
+> is the land (entitled-lot) opportunity only.*
 
 > Confidential — for discussion purposes only.

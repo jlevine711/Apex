@@ -98,59 +98,13 @@ function calcP1(over = {}) {
     finRev, finHoriz, finCost, finProfit, finRoiCost };
 }
 
-// ---- Phase 2 engine (hospitality; hotel is a required component) ------------
-function calcP2(over = {}) {
-  const i = { ...IN, ...over };
-  const hCost = i.hKeys * i.hCostKey;
-  const hRoom = i.hKeys * 365 * i.hADR * i.hOcc;
-  const hRev = hRoom * i.hMult;
-  const hNOI = hRev * i.hMgn;
-  const rCost = i.rSF * i.rCostSF;
-  const rSales = i.rSF * i.rSalesSF;
-  const rNOI = rSales * i.rMgn;
-  const pCost = hCost + rCost + i.pLand + i.pSoft;
-  const pNOI = hNOI + rNOI;
-  const pYoC = pNOI / pCost;
-  const pLoan = pCost * i.pLTC;
-  const pEq = pCost - pLoan;
-  const stabLevCF = pNOI - pLoan * i.pRate;
-  const pCoC = stabLevCF / pEq;
-  const pXNOI = pNOI * Math.pow(1 + i.pGrow, 4);
-  const pXVal = pXNOI / i.pCap;
-  const pXEq = pXVal - pLoan;
-  const cf2 = [
-    -pEq * i.eqSplit, -pEq * (1 - i.eqSplit),
-    stabLevCF * i.rampYr2, stabLevCF,
-    stabLevCF * Math.pow(1 + i.pGrow, 1), stabLevCF * Math.pow(1 + i.pGrow, 2),
-    stabLevCF * Math.pow(1 + i.pGrow, 3), stabLevCF * Math.pow(1 + i.pGrow, 4) + pXEq,
-  ];
-  const irr2 = irr(cf2), em2 = cf2.slice(2).reduce((a, b) => a + b, 0) / -(cf2[0] + cf2[1]);
-  const bcNOI = pNOI * (1 + i.bcUp);
-  const bcVal = bcNOI / i.bcCap;
-  const bcLoan = pCost * i.bcLTC;
-  const bcEq = pCost - bcLoan;
-  const bcStabLevCF = bcNOI - bcLoan * i.pRate;
-  const bcYoC = bcNOI / pCost;
-  const bcXEq = bcVal - bcLoan;
-  const bcf = [
-    -bcEq * i.eqSplit, -bcEq * (1 - i.eqSplit),
-    bcStabLevCF * i.bcRampYr2, bcStabLevCF, bcStabLevCF + bcXEq,
-  ];
-  const bcIRR = irr(bcf), bcEM = bcf.slice(2).reduce((a, b) => a + b, 0) / -(bcf[0] + bcf[1]);
-  return { hCost, hRoom, hRev, hNOI, rCost, rSales, rNOI, pCost, pNOI, pYoC, pLoan,
-    pEq, stabLevCF, pCoC, pXNOI, pXVal, pXEq, cf2, irr2, em2,
-    bcNOI, bcVal, bcLoan, bcEq, bcStabLevCF, bcYoC, bcXEq, bcf, bcIRR, bcEM };
-}
-
 // sensitivity helpers reuse the engines (no duplicated constants)
 const p1Profit = (entitledPx, lots) => calcP1({ entitledPx, lots }).profit;
-const p2IRR = (bcUp, bcCap, bcLTC = IN.bcLTC) => calcP2({ bcUp, bcCap, bcLTC }).bcIRR;
 
 const P1 = calcP1();
-const P2 = calcP2();
 
 // The deck (generate.js) imports this engine, so deck and workbook can't drift.
-module.exports = { IN, irr, calcP1, calcP2, p1Profit, p2IRR, P1, P2 };
+module.exports = { IN, irr, calcP1, p1Profit, P1 };
 
 // ============================================================================
 // WORKBOOK  (rendered only when run directly: `node model.js` / npm run model)
@@ -367,156 +321,12 @@ r++;
   a.height = 42;
 }
 
-// ============== PHASE 2 — HOSPITALITY (HOTEL + RESTAURANTS) ==============
-const p2 = wb.addWorksheet("Phase 2 — Hospitality", { views: [{ showGridLines: false }] });
-p2.columns = [{ width: 42 }, { width: 16 }, { width: 14 }, { width: 12 }, { width: 12 }, { width: 12 }];
-let q = 0;
-const qrow = () => p2.getRow(++q);
-const Q = (i) => `B${i}`;
-function qband(t, sub) {
-  const a = qrow(); a.getCell(1).value = t; a.getCell(1).font = { name: "Calibri", bold: true, size: 16, color: { argb: WHITE } };
-  for (let c = 1; c <= 6; c++) a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; a.height = 24;
-  if (sub) { const b = qrow(); b.getCell(1).value = sub; b.getCell(1).font = { name: "Calibri", italic: true, size: 9, color: { argb: AUB } }; p2.mergeCells(q, 1, q, 6); }
-}
-function qheader(t) {
-  q++; const a = qrow(); a.getCell(1).value = t;
-  for (let c = 1; c <= 6; c++) { a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: AUB } }; a.getCell(c).font = { name: "Calibri", bold: true, size: 10, color: { argb: WHITE } }; }
-  a.getCell(1).alignment = { indent: 1 }; return q;
-}
-function qline(label, value, note, fmt, opts = {}) {
-  const a = qrow(); a.getCell(1).value = label; a.getCell(1).font = { name: "Calibri", size: 10, bold: !!opts.bold, color: { argb: opts.bold ? NAVY : "FF333333" } }; a.getCell(1).alignment = { indent: 1 };
-  const vc = a.getCell(2); vc.value = value; if (fmt) vc.numFmt = fmt; vc.font = { name: "Calibri", size: 10, bold: opts.bold !== false, color: { argb: opts.accent ? AUB : NAVY } }; vc.alignment = { horizontal: "right" };
-  if (note) { const nc = a.getCell(3); p2.mergeCells(q, 3, q, 6); nc.value = note; nc.font = { name: "Calibri", italic: true, size: 9, color: { argb: "FF6B5A6B" } }; }
-  if (opts.fill) for (let c = 1; c <= 2; c++) a.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } };
-  return q;
-}
-function qcf(label, items) {
-  const start = q + 1;
-  items.forEach((it, i) => {
-    const a = qrow(); a.getCell(1).value = label + " — Year " + i; a.getCell(1).alignment = { indent: 1 }; a.getCell(1).font = { name: "Calibri", size: 10, color: { argb: "FF333333" } };
-    const c = a.getCell(2); c.value = it; c.numFmt = money; c.font = { name: "Calibri", size: 10, color: { argb: NAVY } }; c.alignment = { horizontal: "right" };
-  });
-  return { start, end: q };
-}
-
-qband("Queenstown Harbor — Phase 2: Hospitality (Hotel + Restaurants)",
-  "Hotel is a REQUIRED component (per Bob). VIVÂMEE-led resort; JAL leads capital formation.  ·  Dynamic.  ·  ILLUSTRATIVE.");
-
-qheader("INPUTS  (edit these — everything below recalculates)");
-const hKeys = qline("Hotel — keys", IN.hKeys, "boutique resort lodge", "#,##0");
-const hCostKey = qline("Hotel — cost / key ($)", IN.hCostKey, "HVS 2025: select ~$223K, full-service ~$409K", money);
-const hADR = qline("Hotel — ADR ($)", IN.hADR, "upscale Eastern Shore resort (weddings / golf)", money);
-const hOcc = qline("Hotel — stabilized occupancy", IN.hOcc, "leisure / resort", pct);
-const hMult = qline("Hotel — total-revenue multiple (x rooms)", IN.hMult, "+ F&B, banquets, spa", "0.00");
-const hMgn = qline("Hotel — NOI margin", IN.hMgn, "stabilized", pct);
-const rSF = qline("Restaurants — GLA (SF)", IN.rSF, "a suite of destination restaurants", "#,##0");
-const rCostSF = qline("Restaurants — build cost / SF ($)", IN.rCostSF, "full-service ~$555/SF", money);
-const rSalesSF = qline("Restaurants — sales / SF ($)", IN.rSalesSF, "upscale destination dining", money);
-const rMgn = qline("Restaurants — NOI (% of sales)", IN.rMgn, "rent / operating contribution", pct);
-const pLand = qline("Land — hospitality parcel ($)", IN.pLand, "contributed by Capital H6", money);
-const pSoft = qline("Soft / FF&E / pre-opening ($)", IN.pSoft, "", money);
-const pCap = qline("Exit cap rate (hold case)", IN.pCap, "hotel cap ~8% (2025)", pct);
-const pLTC = qline("Construction loan (% of cost)", IN.pLTC, "", pct);
-const pRate = qline("Loan interest rate", IN.pRate, "", pct);
-const pGrow = qline("NOI growth / yr", IN.pGrow, "", pct);
-const eqSplit = qline("Equity drawn — Year 0 (balance Yr 1)", IN.eqSplit, "construction equity timing", pct);
-const rampYr2 = qline("First operating year ramp (hold)", IN.rampYr2, "Yr 2 opens partway through", pct);
-
-qheader("HOTEL  (required component)");
-const hCost = qline("Hotel development cost", { formula: `${Q(hKeys)}*${Q(hCostKey)}`, result: P2.hCost }, "keys × cost/key", money);
-const hRoom = qline("Room revenue", { formula: `${Q(hKeys)}*365*${Q(hADR)}*${Q(hOcc)}`, result: P2.hRoom }, "keys × 365 × ADR × occ", money);
-const hRev = qline("Total hotel revenue", { formula: `${Q(hRoom)}*${Q(hMult)}`, result: P2.hRev }, "× revenue multiple", money);
-const hNOI = qline("Hotel NOI (stabilized)", { formula: `${Q(hRev)}*${Q(hMgn)}`, result: P2.hNOI }, "× NOI margin", money, { bold: true, accent: true });
-
-qheader("RESTAURANTS  (a suite of nice restaurants)");
-const rCost = qline("Restaurant development cost", { formula: `${Q(rSF)}*${Q(rCostSF)}`, result: P2.rCost }, "SF × cost/SF", money);
-const rSales = qline("Restaurant sales", { formula: `${Q(rSF)}*${Q(rSalesSF)}`, result: P2.rSales }, "SF × sales/SF", money);
-const rNOI = qline("Restaurant NOI (to owner)", { formula: `${Q(rSales)}*${Q(rMgn)}`, result: P2.rNOI }, "rent / operating contribution", money, { bold: true, accent: true });
-
-qheader("TOTAL PROJECT  ->  STABILIZED");
-const pCost = qline("Total project cost", { formula: `${Q(hCost)}+${Q(rCost)}+${Q(pLand)}+${Q(pSoft)}`, result: P2.pCost }, "hotel + restaurants + land + soft", money, { bold: true, accent: true, fill: true });
-const pNOI = qline("Stabilized NOI", { formula: `${Q(hNOI)}+${Q(rNOI)}`, result: P2.pNOI }, "hotel + restaurant NOI", money, { bold: true, accent: true, fill: true });
-const pYoC = qline("Yield on cost", { formula: `${Q(pNOI)}/${Q(pCost)}`, result: P2.pYoC }, "NOI / cost", pct, { bold: true });
-const pLoan = qline("Construction loan", { formula: `${Q(pCost)}*${Q(pLTC)}`, result: P2.pLoan }, "% LTC", money);
-const pEq = qline("Equity (land + cash)", { formula: `${Q(pCost)}-${Q(pLoan)}`, result: P2.pEq }, "cost − loan", money);
-const stabLev = qline("Stabilized levered cash flow", { formula: `${Q(pNOI)}-${Q(pLoan)}*${Q(pRate)}`, result: P2.stabLevCF }, "NOI − loan interest", money, { bold: true });
-const pCoC = qline("Cash-on-cash (stabilized, levered)", { formula: `${Q(stabLev)}/${Q(pEq)}`, result: P2.pCoC }, "stabilized levered CF / equity", pct);
-
-qheader("EXIT  (hold case — sell at exit cap)");
-const pXNOI = qline("Exit-year NOI (+3%/yr × 4)", { formula: `${Q(pNOI)}*(1+${Q(pGrow)})^4`, result: P2.pXNOI }, "stabilized × growth", money);
-const pXVal = qline("Exit value (@ exit cap)", { formula: `${Q(pXNOI)}/${Q(pCap)}`, result: P2.pXVal }, "exit-year NOI / cap", money, { bold: true });
-const pXEq = qline("Exit equity (value − loan)", { formula: `${Q(pXVal)}-${Q(pLoan)}`, result: P2.pXEq }, "net of loan", money);
-
-qheader("HOLD-CASE EQUITY CASH FLOW  (Yr 0–7, levered $) & RETURNS");
-const cf2items = [
-  { formula: `-${Q(pEq)}*${Q(eqSplit)}`, result: P2.cf2[0] },
-  { formula: `-${Q(pEq)}*(1-${Q(eqSplit)})`, result: P2.cf2[1] },
-  { formula: `${Q(stabLev)}*${Q(rampYr2)}`, result: P2.cf2[2] },
-  { formula: `${Q(stabLev)}`, result: P2.cf2[3] },
-  { formula: `${Q(stabLev)}*(1+${Q(pGrow)})`, result: P2.cf2[4] },
-  { formula: `${Q(stabLev)}*(1+${Q(pGrow)})^2`, result: P2.cf2[5] },
-  { formula: `${Q(stabLev)}*(1+${Q(pGrow)})^3`, result: P2.cf2[6] },
-  { formula: `${Q(stabLev)}*(1+${Q(pGrow)})^4+${Q(pXEq)}`, result: P2.cf2[7] },
-];
-const cf2blk = qcf("Equity CF", cf2items);
-qline("Equity multiple (7-yr hold)", { formula: `SUM(B${cf2blk.start + 2}:B${cf2blk.end})/-(B${cf2blk.start}+B${cf2blk.start + 1})`, result: P2.em2 }, "distributions / equity", mult, { bold: true, accent: true });
-qline("Project IRR (levered, 7-yr hold)", { formula: `IRR(B${cf2blk.start}:B${cf2blk.end})`, result: P2.irr2 }, "income / hold — develops to ~cost", pct, { bold: true, accent: true });
-
-qheader("BUILD-TO-CORE CASE  (recap / sell at stabilization — path to mid–high 20s IRR)");
-const bcUp = qline("NOI uplift — premium execution", IN.bcUp, "VIVÂMEE experiential: ADR ~$275, occ ~63%, strong F&B / events", pct);
-const bcNOI = qline("Premium stabilized NOI", { formula: `${Q(pNOI)}*(1+${Q(bcUp)})`, result: P2.bcNOI }, "base NOI × (1 + uplift)", money, { bold: true, accent: true });
-const bcCap = qline("Exit cap (build-to-core)", IN.bcCap, "trophy / experiential resort", pct);
-const bcLTC = qline("Leverage (% of cost)", IN.bcLTC, "construction loan", pct);
-const bcRamp = qline("First operating year ramp (b-t-c)", IN.bcRampYr2, "Yr 2 opens partway through", pct);
-const bcYoC = qline("Yield on cost (premium)", { formula: `${Q(bcNOI)}/${Q(pCost)}`, result: P2.bcYoC }, "premium NOI / cost — vs 7.5% exit = the spread", pct, { bold: true });
-const bcVal = qline("Recap / sale value (~Yr 4)", { formula: `${Q(bcNOI)}/${Q(bcCap)}`, result: P2.bcVal }, "premium NOI / exit cap", money, { bold: true });
-const bcLoan = qline("Loan", { formula: `${Q(pCost)}*${Q(bcLTC)}`, result: P2.bcLoan }, "% of cost", money);
-const bcEq = qline("Equity", { formula: `${Q(pCost)}-${Q(bcLoan)}`, result: P2.bcEq }, "cost − loan", money);
-const bcStabLev = qline("Premium stabilized levered cash flow", { formula: `${Q(bcNOI)}-${Q(bcLoan)}*${Q(pRate)}`, result: P2.bcStabLevCF }, "premium NOI − loan interest", money);
-const bcXEq = qline("Exit equity (value − loan)", { formula: `${Q(bcVal)}-${Q(bcLoan)}`, result: P2.bcXEq }, "at recap / sale", money);
-
-qheader("BUILD-TO-CORE EQUITY CASH FLOW  (Yr 0–4, levered $) & RETURNS");
-const bcfItems = [
-  { formula: `-${Q(bcEq)}*${Q(eqSplit)}`, result: P2.bcf[0] },
-  { formula: `-${Q(bcEq)}*(1-${Q(eqSplit)})`, result: P2.bcf[1] },
-  { formula: `${Q(bcStabLev)}*${Q(bcRamp)}`, result: P2.bcf[2] },
-  { formula: `${Q(bcStabLev)}`, result: P2.bcf[3] },
-  { formula: `${Q(bcStabLev)}+${Q(bcXEq)}`, result: P2.bcf[4] },
-];
-const bcfblk = qcf("Equity CF", bcfItems);
-qline("Equity multiple (build-to-core)", { formula: `SUM(B${bcfblk.start + 2}:B${bcfblk.end})/-(B${bcfblk.start}+B${bcfblk.start + 1})`, result: P2.bcEM }, "distributions / equity, ~4-yr", mult, { bold: true, accent: true });
-qline("Project IRR (build-to-core, ~4-yr)", { formula: `IRR(B${bcfblk.start}:B${bcfblk.end})`, result: P2.bcIRR }, "recap / sell at stabilization", pct, { bold: true, accent: true });
-
-qheader("BUILD-TO-CORE IRR SENSITIVITY  (stabilized NOI  ×  exit cap)");
-const p2Up = [[0.10, "$4.2M NOI"], [0.22, "$4.65M NOI (base)"], [0.35, "$5.15M NOI"]];
-const p2Caps = [0.07, 0.075, 0.08, 0.085];
-const ph = qrow(); ph.getCell(1).value = "Stabilized NOI  /  exit cap"; ph.getCell(1).font = { bold: true, size: 9, color: { argb: WHITE } }; ph.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } };
-p2Caps.forEach((cp, i) => { const c = ph.getCell(2 + i); c.value = cp; c.numFmt = "0.0%"; c.font = { bold: true, size: 10, color: { argb: WHITE } }; c.alignment = { horizontal: "center" }; c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } }; });
-p2Up.forEach(([u, lbl]) => {
-  const rr = qrow(); rr.getCell(1).value = lbl; rr.getCell(1).font = { bold: true, size: 10, color: { argb: NAVY } }; rr.getCell(1).alignment = { indent: 1 };
-  p2Caps.forEach((cp, i) => { const v = p2IRR(u, cp); const c = rr.getCell(2 + i); c.value = v; c.numFmt = "0.0%"; const base = (u === IN.bcUp && cp === IN.bcCap); c.font = { size: 10, bold: base, color: { argb: base ? AUB : NAVY } }; c.alignment = { horizontal: "center" }; if (base) c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: CREAM } }; });
-});
-{
-  const a = qrow(); p2.mergeCells(a.number, 1, a.number, 6);
-  a.getCell(1).value = "Build-to-core project IRR at 65% LTC, recap at stabilization (~Yr 4). Base = $4.65M NOI / 7.5% cap (highlighted). Each cell re-runs the engine.";
-  a.getCell(1).font = { name: "Calibri", italic: true, size: 9, color: { argb: "FF6B5A6B" } };
-}
-
-q++;
-{
-  const a = qrow(); p2.mergeCells(q, 1, q, 6);
-  a.getCell(1).value = "Illustrative. The hotel is a required component (per Bob); at Renault the plan is +100–200 rooms. Hospitality develops to ~cost (income/hold ~12% IRR) unless you build to core and recap at stabilization (~28%). VIVÂMEE operates; JAL leads capital formation. The resort also lifts the lot values. Subject to confirmation.";
-  a.getCell(1).font = { name: "Calibri", italic: true, size: 8.5, color: { argb: "FF6B5A6B" } };
-  a.getCell(1).alignment = { wrapText: true, vertical: "top" }; a.height = 50;
-}
-
 wb.xlsx.writeFile("JAL_Queenstown_Harbor_Model.xlsx")
   .then(() => console.log(
     "Wrote model  P1 (entitled): rev $" + (P1.rev / 1e6).toFixed(1) + "M  cost $" + (P1.totCost / 1e6).toFixed(1) +
     "M  profit $" + (P1.profit / 1e6).toFixed(1) + "M  (" + P1.roiCost.toFixed(1) + "x on cost, " + (P1.margin * 100).toFixed(0) + "% margin)  IRR ~" + (P1.projIRR * 100).toFixed(0) + "%" +
     "\n             50/50: $" + (P1.propShare / 1e6).toFixed(1) + "M property (Josh ~$" + (P1.joshShare / 1e6).toFixed(1) + "M) / $" + (P1.devShare / 1e6).toFixed(1) + "M dev co" +
     "\n             P1 netCF($M): [" + P1.netCF.map((v) => (v / 1e6).toFixed(1)).join(", ") + "]" +
-    "\n             vs finished: profit $" + (P1.finProfit / 1e6).toFixed(1) + "M on $" + (P1.finCost / 1e6).toFixed(1) + "M cost (" + P1.finRoiCost.toFixed(1) + "x)" +
-    "\n             P2: hold ~" + (P2.irr2 * 100).toFixed(1) + "% / b-t-c ~" + (P2.bcIRR * 100).toFixed(1) + "% (" + P2.bcEM.toFixed(2) + "x)"))
+    "\n             vs finished: profit $" + (P1.finProfit / 1e6).toFixed(1) + "M on $" + (P1.finCost / 1e6).toFixed(1) + "M cost (" + P1.finRoiCost.toFixed(1) + "x)"))
   .catch((e) => { console.error(e); process.exit(1); });
 } // end require.main gate
