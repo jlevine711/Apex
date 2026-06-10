@@ -841,7 +841,7 @@ function waterfall() {
   txt(s, "50%", 7.05, 4.0, 5.6, 0.5, { font: HEAD, size: 22, bold: true, color: C.slate });
   txt(s, MV.half, 7.05, 4.46, 5.6, 0.55, { font: HEAD, size: 32, bold: true, color: C.navy });
   txt(s, `JAL's share  ${MV.carryPct}  →  ${MV.carry}`, 7.05, 5.04, 5.6, 0.3, { font: HEAD, size: 14, bold: true, color: C.aubergine });
-  txt(s, "Accountable Equity / Capital H6 · Bob · partners take the balance. JAL = sweat equity + $15K/mo — no capital required.",
+  txt(s, "Accountable Equity / Capital H6 · Bob · partners take the balance. JAL = sweat equity + a cash co-invest + $15K/mo — skin in the game.",
     7.05, 5.36, 5.6, 0.66, { font: BODY, size: 9, color: C.plum, lh: 11.5, valign: "top" });
 
   callout(s, "Costs repaid, then a straight 50/50 — half returns capital to your investors, half to the development company. No pref, no promote, no 50-page waterfall.", 6.5);
@@ -1174,11 +1174,11 @@ function structure() {
     ry += 0.72;
   });
 
-  callout(s, "JAL is a member of the development company — earning a share of its 50% (plus a $15K/mo retainer); intends to invest, sized in diligence.", 6.5);
+  callout(s, "JAL is a member of the development company — earning a share of its 50% (plus a $15K/mo retainer) and co-investing its own capital alongside you, sized in diligence.", 6.5);
   s.addNotes(
     "The structure (per Bob): the property contributes the land; the development company (Accountable Equity / Capital H6 · " +
     "Bob · JAL · partners) entitles and sells the lots; costs repaid, then a straight 50/50. JAL runs entitlement + capital " +
-    "formation + lot sales for a share of the dev-co 50% plus a $15K/mo retainer, and intends to invest (amount TBD in diligence). VIVÂMEE operates the resort."
+    "formation + lot sales for a share of the dev-co 50% plus a $15K/mo retainer, and will co-invest its own capital alongside you (amount sized in diligence). VIVÂMEE operates the resort."
   );
 }
 
@@ -1195,8 +1195,8 @@ function engagement() {
   rect(s, ML, 1.95, 0.12, 0.95, C.aubergine);
   txt(s, "Hybrid", ML + 0.35, 2.02, 3.0, 0.8, { font: HEAD, size: 30, bold: true, color: C.mauve });
   txt(s, `$15K/mo + expenses, then ${MV.carryPct} of the dev-co 50% (the carry)`, 3.6, 2.06, 5.85, 0.4, { font: HEAD, size: 13, bold: true, color: C.white });
-  txt(s, "Aligned to value created — and I intend to contribute capital to the dev co myself (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
-  txt(s, "Aligned\nupside", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
+  txt(s, "Aligned to value created — and I'll co-invest my own capital alongside you (amount sized in diligence).", 3.6, 2.44, 5.85, 0.42, { font: BODY, size: 10, color: C.cream, lh: 12, valign: "top" });
+  txt(s, "Skin in\nthe game", 9.6, 1.95, 3.23, 0.95, { font: HEAD, size: 13, bold: true, color: C.slate, align: "right", valign: "middle", lh: 15, margin: [2, 10, 2, 6] });
 
   const cols = [
     { w: 3.4, font: HEAD, bold: true, color: C.navy, size: 11 },
