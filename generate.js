@@ -1052,7 +1052,7 @@ function engagement() {
       { text: `${MV.carry} carry + ${MV.retainerM} retainer (~3 yrs) — ${MV.allInPctProfit} of profit, mostly the contingent carry`, color: C.navy }],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.58 });
-  callout(s, `Aligned, not double-dipping — most of the ${MV.allIn} is the contingent carry. And if it's not working, there's a clean off-ramp${ONEPAGER ? " (on request)" : " (next page)"}.`, 6.42);
+  callout(s, `Aligned, not double-dipping — most of the ${MV.allIn} is the contingent carry. And if it's not working, there's a clean off-ramp (next page).`, 6.42);
   s.addNotes(
     "Answers Bob's comp question (skin in the game over a big retainer) and shows how the pieces interplay — they stack, " +
     "but don't double-dip: (1) $15K/mo retainer funds the work (a cost); (2) expenses reimbursed; (3) a placement fee ONLY on " +
@@ -1222,9 +1222,10 @@ function thankYou() {
 // ----- Build ---------------------------------------------------------------
 let OUT_PPTX, OUT_PDF;
 if (ONEPAGER) {
-  // standalone one-pager: just the Engagement & Compensation slide
-  TOTAL = 1; PAGENO = 1;
+  // standalone leave-behind: Engagement & Compensation + the Off-Ramp / Exit
+  TOTAL = 2; PAGENO = 1;
   engagement();
+  offramp();
   OUT_PPTX = "JAL_Engagement_OnePager.pptx";
   OUT_PDF = "JAL_Engagement_OnePager.pdf";
 } else {
