@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node generate.js",
     "model": "node model.js",
+    "onepager": "node generate.js engagement",
     "all": "node generate.js && node model.js"
   },
   "dependencies": {

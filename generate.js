@@ -31,6 +31,7 @@ const nodePath = require("path");
 const MODEL = require("./model");
 const { P1 } = MODEL;
 const MIN = MODEL.IN;
+const ONEPAGER = (process.argv[2] || "") === "engagement"; // `node generate.js engagement` → one-pager
 const fM  = (x) => "$" + (x / 1e6).toFixed(1) + "M";    // $X.XM
 const fM0 = (x) => "$" + Math.round(x / 1e6) + "M";     // $XM
 const fMt = (x) => "~$" + (x / 1e6).toFixed(1) + "M";   // ~$X.XM
@@ -102,7 +103,7 @@ const PAGE_W = 13.333;
 const PAGE_H = 7.5;
 const ML = 0.5;
 const CW = 12.33;
-const TOTAL = 24;
+let TOTAL = 24;
 let PAGENO = 2; // auto page counter — cover is 1, chrome slides number themselves 2..N-1, Thank You is N
 
 const DECK_LABEL = "QUEENSTOWN HARBOR  ·  CONFIDENTIAL  ·  DISCUSSION DRAFT";
@@ -1051,7 +1052,7 @@ function engagement() {
       { text: `${MV.carry} carry + ${MV.retainerM} retainer (~3 yrs) — ${MV.allInPctProfit} of profit, mostly the contingent carry`, color: C.navy }],
   ];
   table(s, ML, 3.12, cols, ["Component", "Terms", "What it covers"], rows, { rowH: 0.58 });
-  callout(s, `Aligned, not double-dipping — most of the ${MV.allIn} is the contingent carry. And if it's not working, there's a clean off-ramp (next page).`, 6.42);
+  callout(s, `Aligned, not double-dipping — most of the ${MV.allIn} is the contingent carry. And if it's not working, there's a clean off-ramp${ONEPAGER ? " (on request)" : " (next page)"}.`, 6.42);
   s.addNotes(
     "Answers Bob's comp question (skin in the game over a big retainer) and shows how the pieces interplay — they stack, " +
     "but don't double-dip: (1) $15K/mo retainer funds the work (a cost); (2) expenses reimbursed; (3) a placement fee ONLY on " +
@@ -1219,33 +1220,41 @@ function thankYou() {
 }
 
 // ----- Build ---------------------------------------------------------------
-cover();
-opportunity();
-theAsset();
-theLandBank();
-playbook();
-mathLand();
-whySells();
-southRiver();
-renault();
-pipeline();
-capitalLight();
-proForma();
-basis();
-waterfall();
-sensitivity();
-builders();
-phase1cf();
-capitalAccess();
-structure();
-engagement();
-offramp();
-whyJAL();
-path();
-thankYou();
-
-const OUT_PPTX = "JAL_Queenstown_Harbor_Proposal.pptx";
-const OUT_PDF = "JAL_Queenstown_Harbor_Proposal.pdf";
+let OUT_PPTX, OUT_PDF;
+if (ONEPAGER) {
+  // standalone one-pager: just the Engagement & Compensation slide
+  TOTAL = 1; PAGENO = 1;
+  engagement();
+  OUT_PPTX = "JAL_Engagement_OnePager.pptx";
+  OUT_PDF = "JAL_Engagement_OnePager.pdf";
+} else {
+  cover();
+  opportunity();
+  theAsset();
+  theLandBank();
+  playbook();
+  mathLand();
+  whySells();
+  southRiver();
+  renault();
+  pipeline();
+  capitalLight();
+  proForma();
+  basis();
+  waterfall();
+  sensitivity();
+  builders();
+  phase1cf();
+  capitalAccess();
+  structure();
+  engagement();
+  offramp();
+  whyJAL();
+  path();
+  thankYou();
+  OUT_PPTX = "JAL_Queenstown_Harbor_Proposal.pptx";
+  OUT_PDF = "JAL_Queenstown_Harbor_Proposal.pdf";
+}
 
 // ----- Renderer: PPTX (replay recorded calls to pptxgenjs) -----------------
 function renderPptx(deck) {
