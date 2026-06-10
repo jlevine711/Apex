@@ -8,7 +8,8 @@ basis:** entitle the non-conservation acreage and sell **entitled lots** to
 builders — the builder funds the horizontal. Costs are repaid, then profit
 splits a simple **50/50** — half returning capital to the investors, half to
 the development company. (Reflects Bob's 6/9 call: capital-light, a straight
-50/50, no waterfall, and a repeatable pipeline — Renault is the first deal.)
+50/50, no waterfall, and a repeatable pipeline — Queenstown is opportunity 1
+(this proposal); Renault is opportunity 2 and the in-person site visit.)
 
 Queenstown Harbor is the 36-hole Eastern Shore waterfront resort that
 Accountable Equity / VIVÂMEE acquired via **Capital H6** in May 2026 (with The
@@ -74,7 +75,7 @@ comparison) and **Phase 2** (hospitality: hotel + restaurants). Outputs:
 6. The Math — 700 ac → ~280 entitled lots → ~$19.6M revenue *(illustrative)*
 7. Why It Sells — frontage, Bay Bridge demand, builder appetite
 8. South River — the sister H6 asset (Annapolis-side private club)
-9. Renault — the first deal & the site visit (NJ, near Atlantic City)
+9. Renault — Opportunity 2 & the site visit (NJ, near Atlantic City)
 10. The Pipeline — one playbook across the portfolio (not a one-off)
 11. Development Plan — entitle, sell entitled lots, stay capital-light
 12. Pro Forma & the 50/50 — entitled-lot budget, profit, return on cost *(illustrative)*

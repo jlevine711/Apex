@@ -603,13 +603,13 @@ function southRiver() {
   );
 }
 
-// ===================================== SLIDE 9 — RENAULT (THE FIRST DEAL)
+// ===================================== SLIDE 9 — RENAULT (OPPORTUNITY 2)
 function renault() {
   const s = pptx.addSlide();
   chrome(s, {
-    eyebrow: "THE FIRST DEAL  ·  RENAULT WINERY",
-    title: "Renault — the first deal, and the site visit.",
-    desc: "Renault Winery (Egg Harbor City, NJ — ~25 min from Atlantic City) is the lead property and where we'll meet. The township has offered land for ~34 lots overlooking the course, a +100–200-room hotel expansion is planned, and the architect is already mapping lots.",
+    eyebrow: "OPPORTUNITY 2  ·  RENAULT WINERY",
+    title: "Renault — opportunity two, and the site visit.",
+    desc: "Renault Winery (Egg Harbor City, NJ — ~25 min from Atlantic City) is the next opportunity after Queenstown, and where we'll meet in person. The township has offered land for ~34 lots overlooking the course, a +100–200-room hotel expansion is planned, and the architect is already mapping lots.",
     page: 9,
   });
   const cards = [
@@ -621,16 +621,16 @@ function renault() {
   let cy = 2.05;
   cards.forEach(([n, l, sub]) => { statCard(s, ML, cy, n, l, sub); cy += 1.07; });
 
-  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "WHY RENAULT FIRST",
+  sidePanel(s, 7.0, 2.05, 5.83, 4.5, "WHY RENAULT'S NEXT",
     "Josh's original property — the proof case for the playbook.",
     [
       "The township has offered additional land for ~34 lots; the architect is already boxing them out.",
       "A required hotel expansion (+100–200 rooms) layers hospitality on top of the lot sales.",
       "The winery already runs a lake & campground profitably — operating upside beyond golf.",
-      "Closest asset to walk — ~25 minutes from Atlantic City airport; the natural place to start.",
+      "Closest asset to walk — ~25 minutes from Atlantic City airport; the natural place to meet and see the playbook on the ground.",
     ]);
   s.addNotes(
-    "Renault (NJ) is the lead / first deal and the site-visit location (Bob: 'an expansion down at Reno, which is where I'd meet you'). " +
+    "Renault (NJ) is opportunity 2 (after Queenstown) and the site-visit location (Bob: 'an expansion down at Reno, which is where I'd meet you'). " +
     "Township offered ~34 lots; +100–200 hotel rooms planned; architect already mapping. The capital-light entitled-lot playbook applies here too."
   );
 }
@@ -650,8 +650,8 @@ function pipeline() {
     { w: 6.33, color: C.plum, size: 9, lh: 11 },
   ];
   const rows = [
-    ["Renault Winery", "NJ · first deal", "~34 township-offered lots + a +100–200-room hotel expansion"],
-    ["Queenstown Harbor", "MD · this proposal", "~280 entitled lots around the 36 holes (~1,000 ac, ~zero basis)"],
+    ["Queenstown Harbor", "MD · opportunity 1 (this proposal)", "~280 entitled lots around the 36 holes (~1,000 ac, ~zero basis)"],
+    ["Renault Winery", "NJ · opportunity 2", "~34 township-offered lots + a +100–200-room hotel expansion"],
     ["The Golf Club at South River", "MD · operating", "Profitable club — appraised ~2× the purchase price"],
     ["Kent Island", "MD · venue", "Clubhouse / event venue — Palantir rented it for a week"],
     ["Colorado course", "Off-market", "Not yet on the website; equity needed to acquire"],
@@ -660,7 +660,7 @@ function pipeline() {
   table(s, ML, 2.1, cols, ["Property", "Status", "The land opportunity"], rows, { rowH: 0.55 });
   callout(s, "A steady train of undervalued courses → monetizable land. Same capital-light playbook each time — and the buys are extraordinary (South River at half appraisal; tax-structured for ~50% bonus depreciation).", 6.35);
   s.addNotes(
-    "Bob: 'this isn't a one-off.' Pipeline — Renault (first), Queenstown, South River, Kent Island (Palantir), a Colorado " +
+    "Bob: 'this isn't a one-off.' Pipeline — Queenstown (this proposal, opp 1), Renault (opp 2), South River, Kent Island (Palantir), a Colorado " +
     "course (off-website), 1–2 in Virginia, plus family-owned courses regularly offered to Josh. He's negotiating development " +
     "rights across the properties. Buys are exceptional (South River at half appraisal; 90% to depreciable assets → ~50% bonus depreciation)."
   );
